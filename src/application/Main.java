@@ -199,7 +199,7 @@ public class Main extends Application
           		
           		// Generate ClassBlock object
           		ClassBlock newClass = data.generateClassBlock(i);
-          		makeClassDraggable(newClass, data, i, links);
+          		makeDraggable(newClass, data, i, links);
           		newClass.getStyleClass().add("classBlock");
           		classes.add(newClass);
 
@@ -372,7 +372,7 @@ public class Main extends Application
 		{
   		// Generate ClassBlock object
   		ClassBlock newClass = data.generateClassBlock(i);
-  		makeClassDraggable(newClass, data, i, links);
+  		makeDraggable(newClass, data, i, links);
   		newClass.getStyleClass().add("classBlock");
   		classes.add(newClass);
 
@@ -384,7 +384,7 @@ public class Main extends Application
 	}
 	
 	// Wrap nodes in this method to enable drag and drop
-	private void makeClassDraggable(ClassBlock node, Model data, int i, List<Link> links) 
+	private void makeDraggable(ClassBlock node, Model data, int i, List<Link> links) 
 	{
 		final Delta delta = new Delta();
 
