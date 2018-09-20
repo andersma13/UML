@@ -14,13 +14,6 @@ public class Model
 	{
 		
 		/*
-		 * stringData:
-		 * [Name] [Attributes] [Operations] [Descriptions]
-		 * The four elements in stringData should be pretty self 
-		 * 	explanatory.  Depending on how we need to display the 
-		 * 	data, it might be easier to have a lone string (Name) 
-		 * 	and an array[3] of linked lists, so the lists of entries 
-		 * 	can be expanded indefinitely.
 		 * intData:
 		 * [index] [Position (x)] [Position (y)] [Width] [Height]
 		 * Index is used for reference.
@@ -31,9 +24,18 @@ public class Model
 		 * Width and Height should be obvious as well.  They're using the
 		 * 	same formula as X and Y, so they should adhere to the grid
 		 * 	as well.
+		 * stringData:
+		 * [Name] [Attributes] [Operations] [Descriptions]
+		 * The four elements in stringData should be pretty self 
+		 * 	explanatory.  Depending on how we need to display the 
+		 * 	data, it might be easier to have a lone string (Name) 
+		 * 	and an array[3] of linked lists, so the lists of entries 
+		 * 	can be expanded indefinitely.
 		 */
-		private String[] stringData = new String[4];
 		private int[] intData = new int[5];
+		private String[] stringData = new String[4];
+		private List<Integer> linksStart = new ArrayList<>();
+		private List<Integer> linksEnd = new ArrayList<>();
 		private final int STEP = 10;
 		
 		// Full constructors
@@ -49,33 +51,8 @@ public class Model
 				stringData = stringsIn;
 			}
 		}
-		
-		public ClassModel(int i, int x, int y, int w, int h, 
-				String n, String a, String o, String d)
-		{
-			intData[0] = i;
-			intData[1] = x;
-			intData[2] = y;
-			intData[3] = w;
-			intData[4] = h;
-			stringData[0] = n;
-			stringData[1] = a;
-			stringData[2] = o;
-			stringData[3] = d;
-		}
-		
-		// Partial constructors
-		public ClassModel(int i, String n)
-		{
-			intData[0] = i;
-			stringData[0] = n;
-		}
-		
-		public ClassModel(int i)
-		{
-			intData[0] = i;
-		}
-		
+
+		// Setters
 		public void setXPos(int x)
 		{
 			if(x >= 0)
@@ -134,6 +111,17 @@ public class Model
 			stringData[3] = d;
 		}
 		
+		public void addLinkStart(int index)
+		{
+			linksStart.add(index);
+		}
+		
+		public void addLinkEnd(int index)
+		{
+			linksEnd.add(index);
+		}
+		
+		// Getters
 		public int getIndex()
 		{
 			return intData[0];
@@ -189,14 +177,24 @@ public class Model
 			return stringData;
 		}
 		
+		public List<Integer> getLinksStart()
+		{
+			return linksStart;
+		}
+		
+		public List<Integer> getLinksEnd()
+		{
+			return linksEnd;
+		}
+		
 	}
-
-	public class ConnectionModel
+	
+	public class LinkModel
 	{
 		/*
 		 * intData:
-		 * [Connection index] [Connection type] [Source] [Destination] 
-		 * 	[Source minimum] [Source maximum] [Destination minimum] 
+		 * [Connection index] [Connection type] [Source] [Dest]
+		 * 	[Source minimum][Source maximum] [Destination minimum] 
 		 * 	[Destination Maximum]
 		 * Index is used for reference
 		 * Connection type denotes the type of connection:
@@ -220,7 +218,7 @@ public class Model
 		private String label;
 		
 		// Full Constructors
-		public ConnectionModel(int[] data, String l)
+		public LinkModel(int[] data, String l)
 		{
 			if (data.length == 8)
 			{
@@ -228,29 +226,15 @@ public class Model
 			}
 			label = l;
 		}
-		
-		public ConnectionModel(int i, int t, int s, int d, int sMin, 
-				int sMax, int dMin, int dMax, String l)
-		{
-			intData[0] = i;
-			intData[1] = t;
-			intData[2] = s;
-			intData[3] = d;
-			intData[4] = sMin;
-			intData[5] = sMax;
-			intData[6] = dMin;
-			intData[7] = dMax;
-			label = l;
-		}
 
 		// Temporary constructors
-		public ConnectionModel(int i, String l)
+		public LinkModel(int i, String l)
 		{
 			intData[0] = i;
 			label = l;
 		}
 		
-		public ConnectionModel(int i)
+		public LinkModel(int i)
 		{
 			intData[0] = i;
 		}
@@ -342,7 +326,7 @@ public class Model
 	}	 
 	
 	private List<ClassModel> classList;
-	private List<ConnectionModel> connectionList;
+	private List<LinkModel> linkList;
 	
 	/*
 	 * This class uses the classList and connectionList classes
@@ -356,7 +340,7 @@ public class Model
 	public Model()
 	{
 		classList = new ArrayList<ClassModel>();
-		connectionList = new ArrayList<ConnectionModel>();
+		linkList = new ArrayList<LinkModel>();
 	}
 	
 	/**
@@ -365,11 +349,25 @@ public class Model
 	 * @return
 	 * 	an int corresponding with the tail of the list
 	 */
-	public int getTail()
+	public int getClassTail()
 	{
 		return classList.size();
 	}
 	
+	public int getLinkTail()
+	{
+		return classList.size();
+	}
+	
+	public ClassModel getClass(int i)
+	{
+		return classList.get(i);
+	}
+	
+	public LinkModel getLink(int i)
+	{
+		return linkList.get(i);
+	}
 	/**
 	 * Creates a new ClassModel object and places it at the end
 	 * 	of the list.
@@ -402,13 +400,13 @@ public class Model
 	 * @return
 	 * 	the index of the new ConnectionModel object
 	 */
-	public int addConnection(int[] ints, String label)
+	public int addLink(int[] ints, String label)
 	{
 		if(ints.length == 8)
 		{
-			connectionList.add(new ConnectionModel(ints, label));
+			linkList.add(new LinkModel(ints, label));
 		}
-		return (connectionList.size() - 1);
+		return (linkList.size() - 1);
 	}
 	
 	/**
@@ -499,21 +497,21 @@ public class Model
 			writer.write(classList.get(i).getDesc() + "\n\n");
 		}
 		writer.write("CLASSLIST_END\n");
-		writer.write("CONNECTIONLIST_BEGIN\n");
-		writer.write(connectionList.size() + "\n");
-		for(int i = 0; i != connectionList.size(); ++i)
+		writer.write("LINKLIST_BEGIN\n");
+		writer.write(linkList.size() + "\n");
+		for(int i = 0; i != linkList.size(); ++i)
 		{
-			writer.write(connectionList.get(i).getIndex() + "\n");
-			writer.write(connectionList.get(i).getType() + "\n");
-			writer.write(connectionList.get(i).getSource() + "\n");
-			writer.write(connectionList.get(i).getDest() + "\n");
-			writer.write(connectionList.get(i).getSourceMin() + "\n");
-			writer.write(connectionList.get(i).getSourceMax() + "\n");
-			writer.write(connectionList.get(i).getDestMin() + "\n");
-			writer.write(connectionList.get(i).getDestMax() + "\n");
-			writer.write(connectionList.get(i).getLabel() + "\n");
+			writer.write(linkList.get(i).getIndex() + "\n");
+			writer.write(linkList.get(i).getType() + "\n");
+			writer.write(linkList.get(i).getSource() + "\n");
+			writer.write(linkList.get(i).getDest() + "\n");
+			writer.write(linkList.get(i).getSourceMin() + "\n");
+			writer.write(linkList.get(i).getSourceMax() + "\n");
+			writer.write(linkList.get(i).getDestMin() + "\n");
+			writer.write(linkList.get(i).getDestMax() + "\n");
+			writer.write(linkList.get(i).getLabel() + "\n");
 		}
-		writer.write("CONNECTIONLIST_END\n");
+		writer.write("LINKLIST_END\n");
 		
 		writer.close();
 	}
@@ -554,15 +552,15 @@ public class Model
 		size = Integer.parseInt(reader.next().trim());
 		for(int i = 0; i != size; ++i)
 		{
-			connectionList.add(new ConnectionModel(Integer.parseInt(reader.next())));
-			connectionList.get(i).setType(Integer.parseInt(reader.next()));
-			connectionList.get(i).setSource(Integer.parseInt(reader.next()));
-			connectionList.get(i).setDest(Integer.parseInt(reader.next()));
-			connectionList.get(i).setSourceMin(Integer.parseInt(reader.next()));
-			connectionList.get(i).setSourceMax(Integer.parseInt(reader.next()));
-			connectionList.get(i).setDestMin(Integer.parseInt(reader.next()));
-			connectionList.get(i).setDestMax(Integer.parseInt(reader.next()));
-			connectionList.get(i).setLabel(reader.next());
+			linkList.add(new LinkModel(Integer.parseInt(reader.next())));
+			linkList.get(i).setType(Integer.parseInt(reader.next()));
+			linkList.get(i).setSource(Integer.parseInt(reader.next()));
+			linkList.get(i).setDest(Integer.parseInt(reader.next()));
+			linkList.get(i).setSourceMin(Integer.parseInt(reader.next()));
+			linkList.get(i).setSourceMax(Integer.parseInt(reader.next()));
+			linkList.get(i).setDestMin(Integer.parseInt(reader.next()));
+			linkList.get(i).setDestMax(Integer.parseInt(reader.next()));
+			linkList.get(i).setLabel(reader.next());
 		}
 		
 		reader.close();
@@ -574,7 +572,7 @@ public class Model
 	public void clear()
 	{
 		classList.clear();
-		connectionList.clear();
+		linkList.clear();
 	}
 	
 	// generateConnection(i)

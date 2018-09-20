@@ -2,11 +2,13 @@ package application;
 
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
-public class ClassBlock extends GridPane
+public class ClassBlock extends VBox
 {
 	
+	private GridPane main = new GridPane();
 	private Text name = new Text();
 	private HBox nameWrap = new HBox();
 	private GridPane attr = new GridPane();
@@ -15,12 +17,14 @@ public class ClassBlock extends GridPane
 	private HBox operWrap = new HBox();
 	private GridPane desc = new GridPane();
 	private HBox descWrap = new HBox();
+	private LinkNode node = new LinkNode();
 	
 	public ClassBlock(int[] intData, String[] stringData)
 	{
 		
 		// Set initial variables
-		this.getStyleClass().add("classBlock");	
+		main.getStyleClass().add("classBlock");
+		this.getStyleClass().add("classBlockBack");
 		this.setWidth((double)intData[3]);
 		this.setHeight((double)intData[4]);
 		
@@ -30,7 +34,7 @@ public class ClassBlock extends GridPane
 		nameWrap.getStyleClass().add("pad");
 		nameWrap.getStyleClass().add("classBlockTitle");
 		nameWrap.getChildren().add(name);	
-		this.add(nameWrap, 0, 0);
+		main.add(nameWrap, 0, 0);
 		
 		/*
 		 * Dynamically display blocks, ignoring trailing empty elements.
@@ -52,23 +56,31 @@ public class ClassBlock extends GridPane
 					desc.addColumn(0, new Text(stringData[3]));
 					descWrap.getStyleClass().add("pad");
 					descWrap.getChildren().add(desc);
-					this.add(descWrap, 0, 3);
+					main.add(descWrap, 0, 3);
 					
 				}
 				
 				oper.addColumn(0, new Text(stringData[2]));
 				operWrap.getStyleClass().add("pad");
 				operWrap.getChildren().add(oper);
-				this.add(operWrap, 0, 2);
+				main.add(operWrap, 0, 2);
 				
 			}
 			
 			attr.addColumn(0, new Text(stringData[1]));
 			attrWrap.getStyleClass().add("pad");
 			attrWrap.getChildren().add(attr);
-			this.add(attrWrap, 0, 1);
+			main.add(attrWrap, 0, 1);
 			
 		}
+		this.getChildren().add(main);
+		node.x = (intData[1] + (int)(this.getWidth() / 2));
+		node.y = (intData[2] + (int)(this.getHeight() / 2));
+	}
+	
+	public LinkNode getNode()
+	{
+		return node;
 	}
 	
 	public void addAttr(String attrIn) 
