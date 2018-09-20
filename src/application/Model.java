@@ -368,6 +368,7 @@ public class Model
 	{
 		return linkList.get(i);
 	}
+
 	/**
 	 * Creates a new ClassModel object and places it at the end
 	 * 	of the list.
@@ -573,6 +574,11 @@ public class Model
 	{
 		classList.clear();
 		linkList.clear();
+	}
+	
+	public String[] getStringData()
+	{
+		return this.getStringData();
 	}
 	
 	// generateConnection(i)
