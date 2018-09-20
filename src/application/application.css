@@ -16,6 +16,11 @@
 	-fx-vgap: 2;
 }
 
+.classBlockBack
+{
+	-fx-background-color: white;
+}
+
 .classBlockTitle
 {
 	-fx-alignment: center;
@@ -31,6 +36,11 @@
 .left
 {
 	-fx-max-width: 200;
+}
+
+.link
+{
+	-fx-stroke-width: 2;
 }
 
 .pad
