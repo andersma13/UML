@@ -19,6 +19,8 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
 import javafx.scene.control.TextFormatter.Change;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
@@ -235,6 +237,7 @@ public class Main extends Application
 				}
 			};
 			
+			
 			// Define Remove Class behavior
 			EventHandler<ActionEvent> removeClassEvent = new EventHandler<ActionEvent> () 
 			{
@@ -335,6 +338,24 @@ public class Main extends Application
 			node.setLayoutX(data.getXPos(i));
 			node.setLayoutY(data.getYPos(i));
 
+		});
+		
+		// Double click to edit
+		node.setOnMouseClicked(new EventHandler<MouseEvent>() {
+		    @Override
+		    public void handle(MouseEvent mouseEvent) {
+		        if(mouseEvent.getButton().equals(MouseButton.PRIMARY)){
+		            if(mouseEvent.getClickCount() == 2){
+		            	
+		            	System.out.println(data.getClass(i).getName());
+		                System.out.println(data.getClass(i).getAttr());
+		                System.out.println(data.getClass(i).getOper());
+		                System.out.println(data.getClass(i).getDesc());
+
+		           
+		            }
+		        }
+		    }
 		});
 	}
 	

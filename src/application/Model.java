@@ -370,6 +370,11 @@ public class Model
 		return classList.size();
 	}
 	
+	public ClassModel getClass(int i)
+    {
+        return classList.get(i);
+    }
+	
 	/**
 	 * Creates a new ClassModel object and places it at the end
 	 * 	of the list.
@@ -575,6 +580,11 @@ public class Model
 	{
 		classList.clear();
 		connectionList.clear();
+	}
+	
+	public String[] getStringData()
+	{
+		return this.getStringData();
 	}
 	
 	// generateConnection(i)
