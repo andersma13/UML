@@ -213,7 +213,9 @@ public class Main extends Application
           newClassOper.setPromptText("Class Operations...");
           newClassDesc.setPromptText("Class Description...");
           newClassX.setPromptText("Class X");
+          newClassX.setText("0");
           newClassY.setPromptText("Class Y");
+          newClassY.setText("0");
           
           newClassInterface.add(newClassTitle,  0, 0, 2, 1);
           newClassInterface.add(newClassName,   0, 1, 2, 1);
