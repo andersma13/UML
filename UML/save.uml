@@ -1,0 +1,51 @@
+CLASSLIST_START
+3
+0
+270
+180
+100
+100
+Test
+
+attr1
+attr2
+attr3
+
+oper1
+oper2
+
+desc1
+desc2
+
+1
+40
+180
+100
+100
+Test2
+
+Gotta
+
+Go
+
+Fast
+
+2
+20
+20
+100
+100
+Wake Up
+
+grab : brush
+putOn : makeup
+
+scars.hide()
+fadeAway(shakeUp)
+
+You wanted to
+
+CLASSLIST_END
+CONNECTIONLIST_BEGIN
+0
+CONNECTIONLIST_END
