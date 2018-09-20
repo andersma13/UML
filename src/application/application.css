@@ -1,0 +1,46 @@
+.center
+{
+	-fx-background-color: black, lightgrey;
+	-fx-background-insets: 0, 1 1 1 1;
+	-fx-background-repeat: repeat;
+	-fx-border-width: 1.5; 
+	-fx-min-height: 400;
+	-fx-min-width: 400;
+	-fx-padding: 15;
+}
+
+.classBlock
+{
+	-fx-border-color: black;
+	-fx-hgap: 2;
+	-fx-vgap: 2;
+}
+
+.classBlockTitle
+{
+	-fx-alignment: center;
+	-fx-min-width: 100;
+}
+
+.toolbarButtons
+{
+	-fx-max-height: 30;
+	-fx-min-width: 100;
+}
+
+.left
+{
+	-fx-max-width: 200;
+}
+
+.pad
+{
+	-fx-background-color: black, white ;
+    -fx-background-insets: 0, 0 1 1 0 ;
+    -fx-padding: 2;	
+}
+
+.root
+{
+	
+}
