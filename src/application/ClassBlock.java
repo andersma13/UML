@@ -74,8 +74,10 @@ public class ClassBlock extends VBox
 			
 		}
 		this.getChildren().add(main);
-		node.x = (intData[1] + (int)(this.getWidth() / 2));
-		node.y = (intData[2] + (int)(this.getHeight() / 2));
+		
+		node.setX(intData[1] + (int)(this.getWidth() / 2));
+		node.setY(intData[2] + (int)(this.getHeight() / 2));
+		
 	}
 	
 	public LinkNode getNode()

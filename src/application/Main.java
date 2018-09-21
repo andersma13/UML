@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.function.UnaryOperator;
 
 import javafx.application.Application;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.stage.Modality;
@@ -116,6 +118,8 @@ public class Main extends Application
 				{
 					center.getChildren().clear();
 					data.clear();
+					classes.clear();
+					links.clear();
 				}
 			};
 			
@@ -206,8 +210,8 @@ public class Main extends Application
           		classes.add(newClass);
 
           		// Place in the main window and close dialog
-          		newClass.setLayoutX((double)data.getXPos(i));
-          		newClass.setLayoutY((double)data.getYPos(i));
+          		newClass.setLayoutX((double)data.getClass(i).getXPos());
+          		newClass.setLayoutY((double)data.getClass(i).getYPos());
           		center.getChildren().add(newClass);
           		
           		newClassDialog.close();
@@ -298,10 +302,53 @@ public class Main extends Application
           		// Generate ClassBlock object
           		data.getClass(srcIn).addLinkStart(i);
           		data.getClass(destIn).addLinkEnd(i);
-          		Link newLink = new Link(classes.get(data.getLink(i).getSource()).getNode(),
-          				classes.get(data.getLink(i).getDest()).getNode());
+          		Link newLink = new Link(classes.get(srcIn).getNode(),
+          				classes.get(destIn).getNode());
           		links.add(newLink);
-
+          		classes.get(srcIn).getNode().getXProperty().addListener(
+          				new ChangeListener<Number>()
+          		{
+								@Override
+								public void changed(ObservableValue<? extends Number> observable, Number oldValue,
+										Number newValue) 
+								{
+									newLink.setStartX(gridify((int)newValue));
+								}
+       				});
+          		
+          		classes.get(srcIn).getNode().getYProperty().addListener(
+          				new ChangeListener<Number>()
+          		{
+								@Override
+								public void changed(ObservableValue<? extends Number> observable, Number oldValue,
+										Number newValue) 
+								{
+									newLink.setStartY(gridify((int)newValue));
+								}
+       				});
+          		
+          		classes.get(destIn).getNode().getXProperty().addListener(
+          				new ChangeListener<Number>()
+          		{
+								@Override
+								public void changed(ObservableValue<? extends Number> observable, Number oldValue,
+										Number newValue) 
+								{
+									newLink.setEndX(gridify((int)newValue));
+								}
+       				});
+          		
+          		classes.get(destIn).getNode().getYProperty().addListener(
+          				new ChangeListener<Number>()
+          		{
+								@Override
+								public void changed(ObservableValue<? extends Number> observable, Number oldValue,
+										Number newValue) 
+								{
+									newLink.setEndY(gridify((int)newValue));
+								}
+       				});
+          		
           		// Place in the main window and close dialog
           		center.getChildren().add(newLink);
           		newLink.toBack();
@@ -320,8 +367,8 @@ public class Main extends Application
           
           newLinkInterface.add(newLinkTitle,  0, 0, 2, 1);
           newLinkInterface.add(newLinkLabel,  0, 1, 2, 1);
-          newLinkInterface.add(newLinkSrc,      0, 5);
-          newLinkInterface.add(newLinkDest,      1, 5);
+          newLinkInterface.add(newLinkSrc,    0, 5);
+          newLinkInterface.add(newLinkDest,   1, 5);
           newLinkInterface.add(newLinkSubmit, 1, 6);
           
           // Show Dialog
@@ -339,7 +386,7 @@ public class Main extends Application
 				@Override
 				public void handle(ActionEvent e)
 				{
-					  
+					 
 				}
 			};
 			
@@ -381,9 +428,66 @@ public class Main extends Application
   		classes.add(newClass);
 
   		// Place in the main window and close dialog
-  		newClass.setLayoutX((double)data.getXPos(i));
-  		newClass.setLayoutY((double)data.getYPos(i));
+  		newClass.setLayoutX((double)data.getClass(i).getXPos());
+  		newClass.setLayoutY((double)data.getClass(i).getYPos());
   		center.getChildren().add(newClass);
+		}
+		
+		for(int i = 0; i != data.getLinkTail(); ++i)
+		{
+			// Generate Link object
+			int srcIn = data.getLink(i).getSource();
+			int destIn = data.getLink(i).getDest();
+			Link newLink = new Link(classes.get(srcIn).getNode(),
+  				classes.get(destIn).getNode());
+			links.add(newLink);
+  		classes.get(srcIn).getNode().getXProperty().addListener(
+  				new ChangeListener<Number>()
+  		{
+				@Override
+				public void changed(ObservableValue<? extends Number> observable, Number oldValue,
+						Number newValue) 
+				{
+					newLink.setStartX(gridify((int)newValue));
+				}
+				});
+  		
+  		classes.get(srcIn).getNode().getYProperty().addListener(
+  				new ChangeListener<Number>()
+  		{
+				@Override
+				public void changed(ObservableValue<? extends Number> observable, Number oldValue,
+						Number newValue) 
+				{
+					newLink.setStartY(gridify((int)newValue));
+				}
+				});
+  		
+  		classes.get(destIn).getNode().getXProperty().addListener(
+  				new ChangeListener<Number>()
+  		{
+				@Override
+				public void changed(ObservableValue<? extends Number> observable, Number oldValue,
+						Number newValue) 
+				{
+					newLink.setEndX(gridify((int)newValue));
+				}
+				});
+  		
+  		classes.get(destIn).getNode().getYProperty().addListener(
+  				new ChangeListener<Number>()
+  		{
+				@Override
+				public void changed(ObservableValue<? extends Number> observable, Number oldValue,
+						Number newValue) 
+				{
+					newLink.setEndY(gridify((int)newValue));
+				}
+				});
+  		
+  		// Place in the main window and close dialog
+  		center.getChildren().add(newLink);
+  		newLink.toBack();
 		}
 	}
 	
@@ -430,24 +534,14 @@ public class Main extends Application
 		// Update node position based on dragged position
 		node.setOnMouseDragged(me -> {
 			
-			data.setXPos(i, (int)(node.getLayoutX() + me.getX() - delta.x));
-			data.setYPos(i, (int)(node.getLayoutY() + me.getY() - delta.y));
-			node.getNode().x = (int)(data.getXPos(i) + (node.getWidth() / 2) + me.getX() - delta.x);
-			node.getNode().y = (int)(data.getYPos(i) + (node.getHeight() / 2) + me.getY() - delta.y);
-			List<Integer> classLinksStart = data.getClass(i).getLinksStart();
-			List<Integer> classLinksEnd = data.getClass(i).getLinksEnd();
-			for(int j = 0; j != classLinksStart.size(); ++j)
-			{
-				links.get(classLinksStart.get(j)).setStartX(gridify(node.getNode().x));
-				links.get(classLinksStart.get(j)).setStartY(gridify(node.getNode().y));
-			}
-			for(int j = 0; j != classLinksEnd.size(); ++j)
-			{
-				links.get(classLinksEnd.get(j)).setEndX(gridify(node.getNode().x));
-				links.get(classLinksEnd.get(j)).setEndY(gridify(node.getNode().y));
-			}
-			node.setLayoutX(data.getXPos(i));
-			node.setLayoutY(data.getYPos(i));
+			// set Model position
+			data.getClass(i).setXPos((int)(node.getLayoutX() + me.getX() - delta.x));
+			data.getClass(i).setYPos((int)(node.getLayoutY() + me.getY() - delta.y));
+			// Set link node position
+			node.getNode().setX((int)(data.getClass(i).getXPos() + (node.getWidth() / 2) + me.getX() - delta.x));
+			node.getNode().setY((int)(data.getClass(i).getYPos() + (node.getHeight() / 2) + me.getY() - delta.y));
+			node.setLayoutX(data.getClass(i).getXPos());
+			node.setLayoutY(data.getClass(i).getYPos());
 
 		});
 		
@@ -481,7 +575,7 @@ public class Main extends Application
   
   private int gridify(int i)
   {
-  	return (i % 10 < 5 ? i - (i % 10) : i + (10 - (i % 10)));
+  	return (i >= 10 ? (i % 10 < 5 ? i - (i % 10) : i + (10 - (i % 10))) : 10);
   }
 	
   // Launch the program

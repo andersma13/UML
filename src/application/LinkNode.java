@@ -1,20 +1,53 @@
 package application;
 
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+
 public class LinkNode
 {
 	
-	public int x;
-	public int y;
+	private IntegerProperty xPos = new SimpleIntegerProperty();
+	private IntegerProperty yPos = new SimpleIntegerProperty();
 	
 	public LinkNode()
 	{
 		
 	}
 	
-	public LinkNode(int xIn, int yIn)
+	public LinkNode(int x, int y)
 	{
-		x = xIn;
-		y = yIn;
+		xPos.set(x);
+		yPos.set(y);
+	}
+	
+	public void setX(int x)
+	{
+		xPos.set(x);
+	}
+
+	public void setY(int y)
+	{
+		yPos.set(y);
+	}
+	
+	public int getX()
+	{
+		return xPos.get();
+	}
+	
+	public int getY()
+	{
+		return yPos.get();
+	}
+	
+	public IntegerProperty getXProperty()
+	{
+		return xPos;
+	}
+	
+	public IntegerProperty getYProperty()
+	{
+		return yPos;
 	}
 	
 }

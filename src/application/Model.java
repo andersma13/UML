@@ -227,18 +227,6 @@ public class Model
 			label = l;
 		}
 
-		// Temporary constructors
-		public LinkModel(int i, String l)
-		{
-			intData[0] = i;
-			label = l;
-		}
-		
-		public LinkModel(int i)
-		{
-			intData[0] = i;
-		}
-
 		public void setType(int t)
 		{
 			intData[1] = t;
@@ -356,7 +344,7 @@ public class Model
 	
 	public int getLinkTail()
 	{
-		return classList.size();
+		return linkList.size();
 	}
 	
 	public ClassModel getClass(int i)
@@ -422,54 +410,6 @@ public class Model
 	{
 		return new ClassBlock(classList.get(i).getInts(), 
 				classList.get(i).getStrings());
-	}
-	
-	/**
-	 * Returns the X Position of the ClassModel stored at index i.
-	 * @param i
-	 * 	The index of the ClassModel to be queried.
-	 * @return
-	 * 	the X Position of the ClassModel
-	 */
-	public int getXPos(int i)
-	{
-		return classList.get(i).getXPos();
-	}
-	
-	/**
-	 * Returns the Y Position of the ClassModel stored at index i.
-	 * @param i
-	 * 	The index of the ClassModel to be queried.
-	 * @return
-	 * 	the Y Position of the ClassModel
-	 */
-	public int getYPos(int i)
-	{
-		return classList.get(i).getYPos();
-	}
-
-	/**
-	 * Sets the XPos value of a given element.
-	 * @param i
-	 * 	The index of the ClassModel to be modified.
-	 * @param x
-	 * 	The XPos value to set.
-	 */
-	public void setXPos(int i, int x)
-	{
-		classList.get(i).setXPos(x);
-	}
-	
-	/**
-	 * Sets the YPos value of a given element.
-	 * @param i
-	 * 	The index of the ClassModel to be modified.
-	 * @param y
-	 * 	The YPos value to set.
-	 */
-	public void setYPos(int i, int y)
-	{
-		classList.get(i).setYPos(y);
 	}
 	
 	/**
@@ -553,15 +493,15 @@ public class Model
 		size = Integer.parseInt(reader.next().trim());
 		for(int i = 0; i != size; ++i)
 		{
-			linkList.add(new LinkModel(Integer.parseInt(reader.next())));
-			linkList.get(i).setType(Integer.parseInt(reader.next()));
-			linkList.get(i).setSource(Integer.parseInt(reader.next()));
-			linkList.get(i).setDest(Integer.parseInt(reader.next()));
-			linkList.get(i).setSourceMin(Integer.parseInt(reader.next()));
-			linkList.get(i).setSourceMax(Integer.parseInt(reader.next()));
-			linkList.get(i).setDestMin(Integer.parseInt(reader.next()));
-			linkList.get(i).setDestMax(Integer.parseInt(reader.next()));
-			linkList.get(i).setLabel(reader.next());
+			int[] ints = {
+					Integer.parseInt(reader.next().trim()), Integer.parseInt(reader.next().trim()),
+					Integer.parseInt(reader.next().trim()), Integer.parseInt(reader.next().trim()),
+					Integer.parseInt(reader.next().trim()), Integer.parseInt(reader.next().trim()),
+					Integer.parseInt(reader.next().trim()), Integer.parseInt(reader.next().trim())};
+			String label = reader.next().trim();
+			
+			linkList.add(new LinkModel(ints, label));
+			reader.next();
 		}
 		
 		reader.close();
