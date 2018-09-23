@@ -522,7 +522,10 @@ public class Model
 	}
 	
 	// generateConnection(i)
-	// removeBlock(i)
+	public void removeBlock(int i)
+	{
+		classList.remove(i);
+	}
 	// removeConnection(i)
 
 }
