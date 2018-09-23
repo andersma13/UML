@@ -38,7 +38,12 @@ public class Model
 		private List<Integer> linksEnd = new ArrayList<>();
 		private final int STEP = 10;
 		
-		// Full constructors
+		/**
+		 * 
+		 * @constructor
+		 * @param intsIn
+		 * @param stringsIn
+		 */
 		public ClassModel(int[] intsIn, String[] stringsIn)
 		{
 			if (intsIn.length == 5)
@@ -53,6 +58,10 @@ public class Model
 		}
 
 		// Setters
+		/**
+		 * 
+		 * @param x
+		 */
 		public void setXPos(int x)
 		{
 			if(x >= 0)
@@ -66,6 +75,10 @@ public class Model
 			}
 		}
 		
+		/**
+		 * 
+		 * @param y
+		 */
 		public void setYPos(int y)
 		{
 			if(y >= 0)
@@ -79,109 +92,193 @@ public class Model
 			}
 		}
 		
+		/**
+		 * 
+		 * @param w
+		 */
 		public void setWidth(int w)
 		{
 			intData[3] = (w % STEP < (STEP / 2) ?
 					w - (w % STEP) : w + STEP - (w % STEP));;
 		}
 		
+		/**
+		 * 
+		 * @param h
+		 */
 		public void setHeight(int h)
 		{
 			intData[4] = (h % STEP < (STEP / 2) ?
 					h - (h % STEP) : h + STEP - (h % STEP));;
 		}
 		
+		/**
+		 * 
+		 * @param n
+		 */
 		public void setName(String n)
 		{
 			stringData[0] = n;
 		}
 		
+		/**
+		 * 
+		 * @param a
+		 */
 		public void setAttr(String a)
 		{
 			stringData[1] = a;
 		}
 		
+		/**
+		 * 
+		 * @param o
+		 */
 		public void setOper(String o)
 		{
 			stringData[2] = o;
 		}
 		
+		/**
+		 * 
+		 * @param d
+		 */
 		public void setDesc(String d)
 		{
 			stringData[3] = d;
 		}
 		
+		/**
+		 * 
+		 * @param index
+		 */
 		public void addLinkStart(int index)
 		{
 			linksStart.add(index);
 		}
 		
+		/**
+		 * 
+		 * @param index
+		 */
 		public void addLinkEnd(int index)
 		{
 			linksEnd.add(index);
 		}
 		
 		// Getters
+		/**
+		 * 
+		 * @return
+		 */
 		public int getIndex()
 		{
 			return intData[0];
 		}
 		
+		/**
+		 * 
+		 * @return
+		 */
 		public int getXPos()
 		{
 			return intData[1];
 		}
 		
+		/**
+		 * 
+		 * @return
+		 */
 		public int getYPos()
 		{
 			return intData[2];
 		}
 		
+		/**
+		 * 
+		 * @return
+		 */
 		public int getWidth()
 		{
 			return intData[3];
 		}
 		
+		/**
+		 * 
+		 * @return
+		 */
 		public int getHeight()
 		{
 			return intData[4];
 		}
 		
+		/**
+		 * 
+		 * @return
+		 */
 		public String getName()
 		{
 			return stringData[0];
 		}
 		
+		/**
+		 * 
+		 * @return
+		 */
 		public String getAttr()
 		{
 			return stringData[1];
 		}
 		
+		/**
+		 * 
+		 * @return
+		 */
 		public String getOper()
 		{
 			return stringData[2];
 		}
 		
+		/**
+		 * 
+		 * @return
+		 */
 		public String getDesc()
 		{
 			return stringData[3];
 		}
 		
+		/**
+		 * 
+		 * @return
+		 */
 		public int[] getInts()
 		{
 			return intData;
 		}
 		
+		/**
+		 * 
+		 * @return
+		 */
 		public String[] getStrings()
 		{
 			return stringData;
 		}
 		
+		/**
+		 * 
+		 * @return
+		 */
 		public List<Integer> getLinksStart()
 		{
 			return linksStart;
 		}
 		
+		/**
+		 * 
+		 * @return
+		 */
 		public List<Integer> getLinksEnd()
 		{
 			return linksEnd;
@@ -218,6 +315,12 @@ public class Model
 		private String label;
 		
 		// Full Constructors
+		/**
+		 * 
+		 * @constructor
+		 * @param data
+		 * @param l
+		 */
 		public LinkModel(int[] data, String l)
 		{
 			if (data.length == 8)
@@ -227,86 +330,154 @@ public class Model
 			label = l;
 		}
 
+		/**
+		 * 
+		 * @param t
+		 */
 		public void setType(int t)
 		{
 			intData[1] = t;
 		}
 		
+		/**
+		 * 
+		 * @param s
+		 */
 		public void setSource(int s)
 		{
 			intData[2] = s;
 		}
 		
+		/**
+		 * 
+		 * @param d
+		 */
 		public void setDest(int d)
 		{
 			intData[3] = d;
 		}
 		
+		/**
+		 * 
+		 * @param s
+		 */
 		public void setSourceMin(int s)
 		{
 			intData[4] = s;
 		}
 		
+		/**
+		 * 
+		 * @param s
+		 */
 		public void setSourceMax(int s)
 		{
 			intData[5] = s;
 		}
 		
+		/**
+		 * 
+		 * @param d
+		 */
 		public void setDestMin(int d)
 		{
 			intData[6] = d;
 		}
 		
+		/**
+		 * 
+		 * @param d
+		 */
 		public void setDestMax(int d)
 		{
 			intData[7] = d;
 		}
 		
+		/**
+		 * 
+		 * @param l
+		 */
 		public void setLabel(String l)
 		{
 			label = l;
 		}
 		
+		/**
+		 * 
+		 * @return
+		 */
 		public int getIndex() 
 		{
 			return intData[0];
 		}
 		
+		/**
+		 * 
+		 * @return
+		 */
 		public int getType()
 		{
 			return intData[1];
 		}
 		
+		/**
+		 * 
+		 * @return
+		 */
 		public int getSource()
 		{
 			return intData[2];
 		}
 		
+		/**
+		 * 
+		 * @return
+		 */
 		public int getDest()
 		{
 			return intData[3];
 		}
 		
+		/**
+		 * 
+		 * @return
+		 */
 		public int getSourceMin() 
 		{
 			return intData[4];
 		}
 		
+		/**
+		 * 
+		 * @return
+		 */
 		public int getSourceMax()
 		{
 			return intData[5];
 		}
 		
+		/**
+		 * 
+		 * @return
+		 */
 		public int getDestMin() 
 		{
 			return intData[6];
 		}
 		
+		/**
+		 * 
+		 * @return
+		 */
 		public int getDestMax()
 		{
 			return intData[7];
 		}
 		
+		/**
+		 * 
+		 * @return
+		 */
 		public String getLabel()
 		{
 			return label;
@@ -325,6 +496,10 @@ public class Model
 	 * 	relatively simple structure to dump and reload in order 
 	 * 	to save and load files.
 	 */
+	
+	/**
+	 * @constructor
+	 */
 	public Model()
 	{
 		classList = new ArrayList<ClassModel>();
@@ -342,16 +517,30 @@ public class Model
 		return classList.size();
 	}
 	
+	/**
+	 * 
+	 * @return
+	 */
 	public int getLinkTail()
 	{
 		return linkList.size();
 	}
 	
+	/**
+	 * 
+	 * @param i
+	 * @return
+	 */
 	public ClassModel getClass(int i)
 	{
 		return classList.get(i);
 	}
 	
+	/**
+	 * 
+	 * @param i
+	 * @return
+	 */
 	public LinkModel getLink(int i)
 	{
 		return linkList.get(i);
@@ -516,6 +705,10 @@ public class Model
 		linkList.clear();
 	}
 	
+	/**
+	 * 
+	 * @return
+	 */
 	public String[] getStringData()
 	{
 		return this.getStringData();

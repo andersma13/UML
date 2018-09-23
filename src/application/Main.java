@@ -414,7 +414,14 @@ public class Main extends Application
 	}
 	
 	
-	// Removes all nodes from main panel and redraws them from the Model
+	/**
+	 * Removes all nodes from main panel and redraws them from the Model
+	 * 
+	 * @param data
+	 * @param center
+	 * @param classes
+	 * @param links
+	 */
 	private void refresh(Model data, Pane center, List<ClassBlock> classes, List<Link> links)
 	{
 		center.getChildren().clear();
@@ -491,7 +498,14 @@ public class Main extends Application
 		}
 	}
 	
-	// Wrap nodes in this method to enable drag and drop
+	/**
+	 * Wrap nodes in this method to enable drag and drop
+	 * 
+	 * @param node
+	 * @param data
+	 * @param i
+	 * @param links
+	 */
 	private void makeDraggable(ClassBlock node, Model data, int i, List<Link> links) 
 	{
 		final Delta delta = new Delta();
@@ -564,7 +578,11 @@ public class Main extends Application
 		});
 	}
 	
-	// Used with the makeDraggable method
+  /**
+   * Used with the makeDraggable method 
+   * 
+   *
+   */
   private class Delta 
   {
   	
@@ -573,6 +591,11 @@ public class Main extends Application
     
   }
   
+  /**
+   * 
+   * @param i
+   * @return
+   */
   private int gridify(int i)
   {
   	return (i >= 10 ? (i % 10 < 5 ? i - (i % 10) : i + (10 - (i % 10))) : 10);

@@ -4,6 +4,12 @@ import javafx.scene.shape.Line;
 
 public class Link extends Line 
 {
+	/**
+	 * 
+	 * @constructor
+	 * @param src
+	 * @param dest
+	 */
 	public Link(LinkNode src, LinkNode dest)
 	{
 		this.getStyleClass().add("link");

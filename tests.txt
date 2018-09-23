@@ -1,0 +1,7 @@
+
+Test:
+removed initial X & Y coordinates from 'create new' inspector panel.
+Expected Result:
+Default values automatically inserted (?) or an error beep & highlight first necessary field.
+Actual Result:
+

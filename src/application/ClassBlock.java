@@ -19,6 +19,12 @@ public class ClassBlock extends VBox
 	private HBox descWrap = new HBox();
 	private LinkNode node = new LinkNode();
 	
+	/**
+	 * 
+	 * @constructor 
+	 * @param intData
+	 * @param stringData
+	 */
 	public ClassBlock(int[] intData, String[] stringData)
 	{
 		
@@ -80,11 +86,19 @@ public class ClassBlock extends VBox
 		
 	}
 	
+	/**
+	 * 
+	 * @return
+	 */
 	public LinkNode getNode()
 	{
 		return node;
 	}
 	
+	/**
+	 * 
+	 * @param attrIn
+	 */
 	public void addAttr(String attrIn) 
 	{
 		
@@ -93,6 +107,10 @@ public class ClassBlock extends VBox
 		
 	}
 	
+	/**
+	 * 
+	 * @param operIn
+	 */
 	public void addOper(String operIn)
 	{
 		
@@ -101,6 +119,10 @@ public class ClassBlock extends VBox
 		
 	}
 	
+	/**
+	 * 
+	 * @param descIn
+	 */
 	public void addDesc(String descIn)
 	{
 		
