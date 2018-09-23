@@ -501,7 +501,7 @@ public class Main extends Application
             	@Override
             	public void handle(ActionEvent e)
             	{
-            		data.removeBlock(edit);
+            		data.removeBlock(edit, true);
             		refresh(data, center, classes, links, primaryStage);
             		newClassDialog.close();
             		e.consume();
@@ -548,7 +548,20 @@ public class Main extends Application
           		
           		if (edit != -1)
           		{
-                	data.removeBlock(edit);
+          			for (int x = 0; x < links.size(); ++x)
+          			{
+          				if (data.getLink(x).getSource() == edit)
+          				{
+          					data.getLink(x).setSource(i);
+          				}
+          				
+          				if (data.getLink(x).getDest() == edit)
+          				{
+          					data.getLink(x).setDest(i);
+          				}
+          			}
+      
+                	data.removeBlock(edit, false);
                 	refresh(data, center, classes, links, primaryStage);
           		}
           		

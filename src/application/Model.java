@@ -522,10 +522,22 @@ public class Model
 	}
 	
 	// generateConnection(i)
-	public void removeBlock(int i)
+	public void removeBlock(int i, boolean removeLines)
 	{
 		classList.remove(i);
+		
+		if (removeLines)
+		{
+			//	Goes through each link and looks for references to given ClassBlock
+			for (int l = 0; l < linkList.size(); ++l)
+			{
+				if (linkList.get(l).getSource() == i || linkList.get(l).getDest() == i)
+				{
+					linkList.remove(l);
+					--l; //	This was necessary because if a link got removed, the size changed
+				}
+			}
+		}
 	}
-	// removeConnection(i)
 
 }
