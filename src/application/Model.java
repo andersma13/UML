@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -313,8 +314,8 @@ public class Model
 		}
 	}	 
 	
-	private List<ClassModel> classList;
-	private List<LinkModel> linkList;
+	private LinkedList<ClassModel> classList;
+	private LinkedList<LinkModel> linkList;
 	
 	/*
 	 * This class uses the classList and connectionList classes
@@ -327,8 +328,8 @@ public class Model
 	 */
 	public Model()
 	{
-		classList = new ArrayList<ClassModel>();
-		linkList = new ArrayList<LinkModel>();
+		classList = new LinkedList<ClassModel>();
+		linkList = new LinkedList<LinkModel>();
 	}
 	
 	/**
@@ -522,22 +523,18 @@ public class Model
 	}
 	
 	// generateConnection(i)
-	public void removeBlock(int i, boolean removeLines)
+	public void removeBlock(int i)
 	{
 		classList.remove(i);
 		
-		if (removeLines)
+		//	Goes through each link and looks for references to given ClassBlock
+		for (int l = 0; l < linkList.size(); ++l)
 		{
-			//	Goes through each link and looks for references to given ClassBlock
-			for (int l = 0; l < linkList.size(); ++l)
+			if (linkList.get(l).getSource() == i || linkList.get(l).getDest() == i)
 			{
-				if (linkList.get(l).getSource() == i || linkList.get(l).getDest() == i)
-				{
-					linkList.remove(l);
-					--l; //	This was necessary because if a link got removed, the size changed
-				}
+				linkList.remove(l);
+				--l; //	This was necessary because if a link got removed, the size changed
 			}
 		}
 	}
-
 }
