@@ -8,6 +8,9 @@ import javafx.scene.text.Text;
 public class ClassBlock extends VBox
 {
 	
+	/*
+	 * Private variables stored in the ClassBlock object
+	 */
 	private GridPane main = new GridPane();
 	private Text name = new Text();
 	private HBox nameWrap = new HBox();
@@ -20,10 +23,12 @@ public class ClassBlock extends VBox
 	private LinkNode node = new LinkNode();
 	
 	/**
-	 * 
+	 * Constructs an instance of ClassBlock
 	 * @constructor 
 	 * @param intData
+	 * 	data stored in the ClassModel object
 	 * @param stringData
+	 * 	data stored in the ClassModel object
 	 */
 	public ClassBlock(int[] intData, String[] stringData)
 	{
@@ -31,8 +36,8 @@ public class ClassBlock extends VBox
 		// Set initial variables
 		main.getStyleClass().add("classBlock");
 		this.getStyleClass().add("classBlockBack");
-		this.setWidth((double)intData[3]);
-		this.setHeight((double)intData[4]);
+		this.setHeight(20);
+		this.setWidth(100);
 		
 		// Generate and add title block
 		name.setText(stringData[0]);
@@ -79,6 +84,7 @@ public class ClassBlock extends VBox
 			main.add(attrWrap, 0, 1);
 			
 		}
+		
 		this.getChildren().add(main);
 		
 		node.setX(intData[1] + (int)(this.getWidth() / 2));
@@ -87,47 +93,12 @@ public class ClassBlock extends VBox
 	}
 	
 	/**
-	 * 
+	 * Returns the LinkNode to attach links to
 	 * @return
+	 * 	the LinkNode stored in the ClassBlock
 	 */
 	public LinkNode getNode()
 	{
 		return node;
-	}
-	
-	/**
-	 * 
-	 * @param attrIn
-	 */
-	public void addAttr(String attrIn) 
-	{
-		
-		attr.getStyleClass().add("pad");
-		attr.addColumn(0, new Text(attrIn));
-		
-	}
-	
-	/**
-	 * 
-	 * @param operIn
-	 */
-	public void addOper(String operIn)
-	{
-		
-		oper.getStyleClass().add("pad");
-		oper.addColumn(0, new Text(operIn));
-		
-	}
-	
-	/**
-	 * 
-	 * @param descIn
-	 */
-	public void addDesc(String descIn)
-	{
-		
-		desc.getStyleClass().add("pad");
-		desc.addColumn(0,  new Text(descIn));
-		
 	}
 }

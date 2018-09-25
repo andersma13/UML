@@ -13,7 +13,6 @@ import javafx.event.EventHandler;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.scene.Cursor;
-// import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Menu;
@@ -34,9 +33,15 @@ import javafx.scene.text.Text;
  * TODO:
  * - Bound class blocks in central pane (atm they can be dragged entirely out of the window.
  * - Select specific elements (perhaps this.getIndex() on click?)
- * - Draw connections
+ * - Factories
+ * --- Dialog box factory
+ * --- Move the generateClass and generateLink to a dedicated factory
+ * - Refactor (does anyone know how to move classes into subfolders on a java project?) 
+ * 
  * PARTIAL:
+ * - Draw connections
  * - Save and load Model data
+ * 
  * DONE:
  * - Drag and drop elements
  * - Make ClassBlock size dynamic (ie. removing unused cells) 
@@ -71,6 +76,24 @@ public class Main extends Application
 			
 			List<ClassBlock> classes = new ArrayList<ClassBlock> ();
 			List<Link> links = new ArrayList<Link> ();
+
+			// Add menu items to menus
+			file.getItems().add(save);
+			file.getItems().add(load);
+			edit.getItems().add(clear);
+			menu.getMenus().add(file);
+			menu.getMenus().add(edit);
+			
+			// Define tool panel
+			Button newClass = new Button("New class...");
+			Button removeClass = new Button("Delete...");
+			Button newLink = new Button("New link...");
+			newClass.getStyleClass().add("toolbarButtons");
+			removeClass.getStyleClass().add("toolbarButtons");
+			newLink.getStyleClass().add("toolbarButtons");
+			tools.add(newClass,    0, 0);
+			tools.add(removeClass, 0, 1);
+			tools.add(newLink,     0, 2);
 			
 			// Define save behavior
 			EventHandler<ActionEvent> saveEvent = new EventHandler<ActionEvent> ()
@@ -106,7 +129,7 @@ public class Main extends Application
 					{
 						System.err.println("IO Failure.");
 					}
-					refresh(data, center, classes, links);
+					refresh(data, center, classes, links, primaryStage);
 				}
 			};
 			
@@ -122,30 +145,7 @@ public class Main extends Application
 					links.clear();
 				}
 			};
-			
-			// Attach handlers to buttons
-			save.setOnAction(saveEvent);
-			load.setOnAction(loadEvent);
-			clear.setOnAction(clearEvent);
-			
-			// Add menu items to menus
-			file.getItems().add(save);
-			file.getItems().add(load);
-			edit.getItems().add(clear);
-			menu.getMenus().add(file);
-			menu.getMenus().add(edit);
-			
-			// Define tool panel
-			Button newClass = new Button("New class...");
-			Button removeClass = new Button("Delete...");
-			Button newLink = new Button("New link...");
-			newClass.getStyleClass().add("toolbarButtons");
-			removeClass.getStyleClass().add("toolbarButtons");
-			newLink.getStyleClass().add("toolbarButtons");
-			tools.add(newClass,    0, 0);
-			tools.add(removeClass, 0, 1);
-			tools.add(newLink,     0, 2);
-			
+
 			// Define New Class behavior
 			EventHandler<ActionEvent> newClassEvent = new EventHandler<ActionEvent> ()
 			{
@@ -154,97 +154,10 @@ public class Main extends Application
 				public void handle(ActionEvent e)
 				{
 					
-					// Define dialog stage
-          final Stage newClassDialog = new Stage();
-          newClassDialog.initModality(Modality.APPLICATION_MODAL);
-          newClassDialog.initOwner(primaryStage);
-
-          // Define interface
-          GridPane newClassInterface = new GridPane();
-          Text newClassTitle = new Text("New class...");
-          TextField newClassName = new TextField();
-          TextArea newClassAttr = new TextArea();
-          TextArea newClassOper = new TextArea();
-          TextArea newClassDesc = new TextArea();
-          TextField newClassX = new TextField();
-          TextField newClassY = new TextField();
-          Button newClassSubmit = new Button("Submit");
-          
-          // Declare a TextFormatter filter to ensure integer values
-    			UnaryOperator<Change> integers = change -> 
-    			{
-
-    				String text = change.getText();
-    				return (text.matches("[0-9]*") ? change : null);
-
-    			};
-          
-    			TextFormatter<String> forceIntX = new TextFormatter<>(integers);
-    			TextFormatter<String> forceIntY = new TextFormatter<>(integers);
-    			newClassX.setTextFormatter(forceIntX);
-    			newClassY.setTextFormatter(forceIntY);
-    			
-    			// Define behavior on Submit
-          EventHandler<ActionEvent> newClassEvent = new EventHandler<ActionEvent> ()
-          {
-          	
-          	@Override
-          	public void handle(ActionEvent e)
-          	{
-          		
-          		// Create a new ClassModel object out of the given values
-          		int i = data.addBlock(
-          				new int[] { data.getClassTail(),
-          						Integer.parseInt(newClassX.getText()),
-          						Integer.parseInt(newClassY.getText()),
-          						100, 100 },
-          				new String[] { newClassName.getText(),
-          					newClassAttr.getText(),
-          					newClassOper.getText(),
-          					newClassDesc.getText()} );
-          		
-          		// Generate ClassBlock object
-          		ClassBlock newClass = data.generateClassBlock(i);
-          		makeDraggable(newClass, data, i, links);
-          		newClass.getStyleClass().add("classBlock");
-          		classes.add(newClass);
-
-          		// Place in the main window and close dialog
-          		newClass.setLayoutX((double)data.getClass(i).getXPos());
-          		newClass.setLayoutY((double)data.getClass(i).getYPos());
-          		center.getChildren().add(newClass);
-          		
-          		newClassDialog.close();
-          		e.consume();
-          		
-          	}
-          };
-          
-          newClassSubmit.setOnAction(newClassEvent);
-          
-          // Place elements on Dialog
-          newClassName.setPromptText("Class name...");
-          newClassAttr.setPromptText("Class Attributes...");
-          newClassOper.setPromptText("Class Operations...");
-          newClassDesc.setPromptText("Class Description...");
-          newClassX.setPromptText("Class X");
-          newClassX.setText("0");
-          newClassY.setPromptText("Class Y");
-          newClassY.setText("0");
-          
-          newClassInterface.add(newClassTitle,  0, 0, 2, 1);
-          newClassInterface.add(newClassName,   0, 1, 2, 1);
-          newClassInterface.add(newClassAttr,   0, 2, 2, 1);
-          newClassInterface.add(newClassOper,   0, 3, 2, 1);
-          newClassInterface.add(newClassDesc,   0, 4, 2, 1);
-          newClassInterface.add(newClassX,      0, 5);
-          newClassInterface.add(newClassY,      1, 5);
-          newClassInterface.add(newClassSubmit, 1, 6);
-          
-          // Show Dialog
-          Scene dialogScene = new Scene(newClassInterface, 300, 230);
-          newClassDialog.setScene(dialogScene);
-          newClassDialog.show();
+					Stage newClassDialog = classDialog(data, center, classes, links, -1, primaryStage);
+			    newClassDialog.initModality(Modality.APPLICATION_MODAL);
+			    newClassDialog.initOwner(primaryStage);
+			    newClassDialog.show();
           e.consume();
           
 				}
@@ -291,69 +204,27 @@ public class Main extends Application
           	@Override
           	public void handle(ActionEvent e)
           	{
-          		int srcIn = Integer.parseInt(newLinkSrc.getText());
-          		int destIn = Integer.parseInt(newLinkDest.getText());
-          		// Create a new ClassModel object out of the given values
-          		int i = data.addLink(
-          				new int[] { data.getLinkTail(), 0, srcIn, 
-          						destIn, 0, 1, 0, 1 }, newLinkTitle.getText() 
-          				);
           		
-          		// Generate ClassBlock object
-          		data.getClass(srcIn).addLinkStart(i);
-          		data.getClass(destIn).addLinkEnd(i);
-          		Link newLink = new Link(classes.get(srcIn).getNode(),
-          				classes.get(destIn).getNode());
-          		links.add(newLink);
-          		classes.get(srcIn).getNode().getXProperty().addListener(
-          				new ChangeListener<Number>()
+          		try
           		{
-								@Override
-								public void changed(ObservableValue<? extends Number> observable, Number oldValue,
-										Number newValue) 
-								{
-									newLink.setStartX(gridify((int)newValue));
-								}
-       				});
+          			
+          			int srcIn = Integer.parseInt(newLinkSrc.getText());
+          			int destIn = Integer.parseInt(newLinkDest.getText());
+
+          			// Create a new ClassModel object out of the given values
+          			data.addLink(
+          					new int[] { data.getLinkTail(), 0, srcIn, 
+          							destIn, 0, 1, 0, 1 }, newLinkTitle.getText() 
+          					);
+
+          			refresh(data, center, classes, links, primaryStage);
+
+            		newLinkDialog.close();
+            		e.consume();
+            		
+          		}
           		
-          		classes.get(srcIn).getNode().getYProperty().addListener(
-          				new ChangeListener<Number>()
-          		{
-								@Override
-								public void changed(ObservableValue<? extends Number> observable, Number oldValue,
-										Number newValue) 
-								{
-									newLink.setStartY(gridify((int)newValue));
-								}
-       				});
-          		
-          		classes.get(destIn).getNode().getXProperty().addListener(
-          				new ChangeListener<Number>()
-          		{
-								@Override
-								public void changed(ObservableValue<? extends Number> observable, Number oldValue,
-										Number newValue) 
-								{
-									newLink.setEndX(gridify((int)newValue));
-								}
-       				});
-          		
-          		classes.get(destIn).getNode().getYProperty().addListener(
-          				new ChangeListener<Number>()
-          		{
-								@Override
-								public void changed(ObservableValue<? extends Number> observable, Number oldValue,
-										Number newValue) 
-								{
-									newLink.setEndY(gridify((int)newValue));
-								}
-       				});
-          		
-          		// Place in the main window and close dialog
-          		center.getChildren().add(newLink);
-          		newLink.toBack();
-          		newLinkDialog.close();
-          		e.consume();
+          		catch(NumberFormatException ex) {}
           		
           	}
           };
@@ -391,9 +262,12 @@ public class Main extends Application
 			};
 			
 			// Attach handlers to buttons
+			save.setOnAction(saveEvent);
+			load.setOnAction(loadEvent);
+			clear.setOnAction(clearEvent);
 			newClass.setOnAction(newClassEvent);
 			removeClass.setOnAction(removeClassEvent);
-			newLink.setOnAction(newLinkEvent);
+			newLink.setOnAction(newLinkEvent);	
 			
 			// Place elements on stage
 			root.setTop(menu);
@@ -413,7 +287,145 @@ public class Main extends Application
 		}
 	}
 	
-	
+	/**
+	 * Constructs and returns a new Class dialog screen
+	 * @param data
+	 * @param center
+	 * @param classes
+	 * @param links
+	 * @param edit
+	 * @param primaryStage
+	 * @return
+	 */
+	private Stage classDialog(Model data, Pane center, List<ClassBlock> classes, List<Link> links, int edit, Stage primaryStage)
+	{
+		
+		// Define dialog stage
+    final Stage newClassDialog = new Stage();
+
+    // Define interface
+    GridPane newClassInterface = new GridPane();
+    Text newClassTitle = new Text(edit == -1 ? "New class..." : "Edit Class...");
+    TextField newClassName = new TextField();
+    TextArea newClassAttr = new TextArea();
+    TextArea newClassOper = new TextArea();
+    TextArea newClassDesc = new TextArea();
+    TextField newClassX = new TextField();
+    TextField newClassY = new TextField();
+    Button newClassSubmit = new Button("Submit");
+    
+    if(edit != -1)
+    {
+    	Button deleteClass = new Button("Delete");
+    	newClassInterface.add(deleteClass, 0, 6);
+    	
+    	EventHandler<ActionEvent> deleteClassEvent = new EventHandler<ActionEvent> ()
+    	{
+    		@Override
+    		public void handle(ActionEvent e)
+    		{
+    			data.removeBlock(edit);
+    			refresh(data, center, classes, links, primaryStage);
+    			newClassDialog.close();
+    			e.consume();
+    		}
+   		};
+   		
+   		deleteClass.setOnAction(deleteClassEvent);
+    }
+    
+    // Declare a TextFormatter filter to ensure integer values
+		UnaryOperator<Change> integers = change -> 
+		{
+
+			String text = change.getText();
+			return (text.matches("[0-9]*") ? change : null);
+
+		};
+    
+		TextFormatter<String> forceIntX = new TextFormatter<>(integers);
+		TextFormatter<String> forceIntY = new TextFormatter<>(integers);
+		newClassX.setTextFormatter(forceIntX);
+		newClassY.setTextFormatter(forceIntY);
+		
+		// Define behavior on Submit
+    EventHandler<ActionEvent> newClassEvent = new EventHandler<ActionEvent> ()
+    {
+    	
+    	@Override
+    	public void handle(ActionEvent e)
+    	{
+    		
+    		if(edit == -1)
+    		{
+    			// Create a new ClassModel object out of the given values
+    			data.addBlock(
+    					new int[] { data.getClassTail(),
+    							Integer.parseInt(newClassX.getText()),
+    							Integer.parseInt(newClassY.getText()),
+    							100, 100 },
+    					new String[] { newClassName.getText(),
+    							newClassAttr.getText(),
+    							newClassOper.getText(),
+    							newClassDesc.getText()} );
+    		}
+    		else
+    		{
+    			data.getClass(edit).setName(newClassName.getText());
+    			data.getClass(edit).setAttr(newClassAttr.getText());
+    			data.getClass(edit).setOper(newClassOper.getText());
+    			data.getClass(edit).setDesc(newClassDesc.getText());
+    		}
+    	
+    		refresh(data, center, classes, links, primaryStage);
+    		
+    		newClassDialog.close();
+    		e.consume();
+    		
+    	}
+    };
+    
+    newClassSubmit.setOnAction(newClassEvent);
+    
+    // Place elements on Dialog
+    if(edit == -1)
+    {
+    	newClassName.setPromptText("Class name...");
+    	newClassAttr.setPromptText("Class Attributes...");
+    	newClassOper.setPromptText("Class Operations...");
+    	newClassDesc.setPromptText("Class Description...");
+    	newClassX.setPromptText("Class X");
+    	newClassX.setText("0");
+    	newClassY.setPromptText("Class Y");
+    	newClassY.setText("0");
+    }
+    else
+    {
+    	newClassName.setText(data.getClass(edit).getName());
+    	newClassAttr.setText(data.getClass(edit).getAttr());
+    	newClassOper.setText(data.getClass(edit).getOper());
+    	newClassDesc.setText(data.getClass(edit).getDesc());
+    	newClassX.setText(String.valueOf(data.getClass(edit).getXPos()));
+    	newClassY.setText(String.valueOf(data.getClass(edit).getYPos()));
+    }
+    
+    newClassInterface.add(newClassTitle,  0, 0, 2, 1);
+    newClassInterface.add(newClassName,   0, 1, 2, 1);
+    newClassInterface.add(newClassAttr,   0, 2, 2, 1);
+    newClassInterface.add(newClassOper,   0, 3, 2, 1);
+    newClassInterface.add(newClassDesc,   0, 4, 2, 1);
+    newClassInterface.add(newClassX,      0, 5);
+    newClassInterface.add(newClassY,      1, 5);
+    newClassInterface.add(newClassSubmit, 1, 6);
+    
+    // Show Dialog
+    Scene dialogScene = new Scene(newClassInterface, 300, 230);
+    newClassDialog.setScene(dialogScene);
+    return newClassDialog;
+    
+	}
+		
+
 	/**
 	 * Removes all nodes from main panel and redraws them from the Model
 	 * 
@@ -422,15 +434,18 @@ public class Main extends Application
 	 * @param classes
 	 * @param links
 	 */
-	private void refresh(Model data, Pane center, List<ClassBlock> classes, List<Link> links)
+	private void refresh(Model data, Pane center, List<ClassBlock> classes, List<Link> links, Stage primaryStage)
 	{
 		center.getChildren().clear();
+		classes.clear();
+		links.clear();
 		
 		for(int i = 0; i != data.getClassTail(); ++i)
 		{
+			
   		// Generate ClassBlock object
   		ClassBlock newClass = data.generateClassBlock(i);
-  		makeDraggable(newClass, data, i, links);
+  		makeDraggable(newClass, data, i, classes, links, center, primaryStage);
   		newClass.getStyleClass().add("classBlock");
   		classes.add(newClass);
 
@@ -438,6 +453,7 @@ public class Main extends Application
   		newClass.setLayoutX((double)data.getClass(i).getXPos());
   		newClass.setLayoutY((double)data.getClass(i).getYPos());
   		center.getChildren().add(newClass);
+  		
 		}
 		
 		for(int i = 0; i != data.getLinkTail(); ++i)
@@ -457,7 +473,7 @@ public class Main extends Application
 				{
 					newLink.setStartX(gridify((int)newValue));
 				}
-				});
+			});
   		
   		classes.get(srcIn).getNode().getYProperty().addListener(
   				new ChangeListener<Number>()
@@ -468,7 +484,7 @@ public class Main extends Application
 				{
 					newLink.setStartY(gridify((int)newValue));
 				}
-				});
+			});
   		
   		classes.get(destIn).getNode().getXProperty().addListener(
   				new ChangeListener<Number>()
@@ -479,7 +495,7 @@ public class Main extends Application
 				{
 					newLink.setEndX(gridify((int)newValue));
 				}
-				});
+			});
   		
   		classes.get(destIn).getNode().getYProperty().addListener(
   				new ChangeListener<Number>()
@@ -490,7 +506,7 @@ public class Main extends Application
 				{
 					newLink.setEndY(gridify((int)newValue));
 				}
-				});
+			});
   		
   		// Place in the main window and close dialog
   		center.getChildren().add(newLink);
@@ -498,6 +514,7 @@ public class Main extends Application
 		}
 	}
 	
+
 	/**
 	 * Wrap nodes in this method to enable drag and drop
 	 * 
@@ -506,7 +523,7 @@ public class Main extends Application
 	 * @param i
 	 * @param links
 	 */
-	private void makeDraggable(ClassBlock node, Model data, int i, List<Link> links) 
+	private void makeDraggable(ClassBlock node, Model data, int i, List<ClassBlock> classes, List<Link> links, Pane center, Stage primaryStage) 
 	{
 		final Delta delta = new Delta();
 
@@ -561,27 +578,28 @@ public class Main extends Application
 		
 		// Double click to edit
 		node.setOnMouseClicked(new EventHandler<MouseEvent>() {
-		    @Override
-		    public void handle(MouseEvent mouseEvent) {
-		        if(mouseEvent.getButton().equals(MouseButton.PRIMARY)){
-		            if(mouseEvent.getClickCount() == 2){
-		            	
-		            	System.out.println(data.getClass(i).getName());
-		                System.out.println(data.getClass(i).getAttr());
-		                System.out.println(data.getClass(i).getOper());
-		                System.out.println(data.getClass(i).getDesc());
-
-		           
-		            }
-		        }
-		    }
+			@Override
+			public void handle(MouseEvent mouseEvent) {
+				if(mouseEvent.getButton().equals(MouseButton.PRIMARY))
+				{
+					if(mouseEvent.getClickCount() == 2)
+					{
+						Stage newClassDialog = classDialog(data, center, classes, links, i, primaryStage);
+						newClassDialog.initModality(Modality.APPLICATION_MODAL);
+						newClassDialog.initOwner(primaryStage);
+						newClassDialog.show();
+						mouseEvent.consume();	
+					}
+				}
+			}
 		});
 	}
 	
-  /**
-   * Used with the makeDraggable method 
-   * 
-   *
+
+	/**
+   * Used with the makeDraggable method
+   * Stores the x and y values on mouse down so they
+   * can be removed from the final position
    */
   private class Delta 
   {
@@ -591,16 +609,19 @@ public class Main extends Application
     
   }
   
+
   /**
-   * 
+   * Snaps the given values to a grid
    * @param i
+   * 	the value to be rounded
    * @return
+   * 	the given value rounded to the nearest 10
    */
   private int gridify(int i)
   {
   	return (i >= 10 ? (i % 10 < 5 ? i - (i % 10) : i + (10 - (i % 10))) : 10);
   }
-	
+
   // Launch the program
 	public static void main(String[] args) 
 	{

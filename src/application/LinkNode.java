@@ -10,6 +10,7 @@ public class LinkNode
 	private IntegerProperty yPos = new SimpleIntegerProperty();
 	
 	/**
+	 * Constructs an instance of LinkNode
 	 * @constructor
 	 */
 	public LinkNode()
@@ -18,9 +19,12 @@ public class LinkNode
 	}
 	
 	/**
+	 * Constructs an instance of LinkNode
 	 * @constructor
-	 * @param x
+	 * @param x	
+	 * 	the x position of the LinkNode
 	 * @param y
+	 * 	the y position of the LinkNode
 	 */
 	public LinkNode(int x, int y)
 	{
@@ -29,8 +33,9 @@ public class LinkNode
 	}
 	
 	/**
-	 * 
+	 * Sets the x position of the LinkNode
 	 * @param x
+	 * 	the x position to be set
 	 */
 	public void setX(int x)
 	{
@@ -38,8 +43,9 @@ public class LinkNode
 	}
 
 	/**
-	 * 
+	 * Sets the y position of the LinkNode
 	 * @param y
+	 * 	the y position to be set
 	 */
 	public void setY(int y)
 	{
@@ -47,8 +53,9 @@ public class LinkNode
 	}
 	
 	/**
-	 * 
+	 * Returns the x position of the LinkNode
 	 * @return
+	 * 	the x position of the LinkNode
 	 */
 	public int getX()
 	{
@@ -56,8 +63,9 @@ public class LinkNode
 	}
 	
 	/**
-	 * 
+	 * Returns the y position of the LinkNode
 	 * @return
+	 * 	the y position of the LinkNode
 	 */
 	public int getY()
 	{
@@ -65,8 +73,9 @@ public class LinkNode
 	}
 	
 	/**
-	 * 
+	 * Returns the xPos property of the LinkNode
 	 * @return
+	 * 	the LinkNode's xPos property
 	 */
 	public IntegerProperty getXProperty()
 	{
@@ -74,12 +83,12 @@ public class LinkNode
 	}
 	
 	/**
-	 * 
+	 * Returns the yPos property of the LinkNode
 	 * @return
+	 * 	the LinkNode's yPos property
 	 */
 	public IntegerProperty getYProperty()
 	{
 		return yPos;
 	}
-	
 }
