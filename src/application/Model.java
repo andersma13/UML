@@ -96,7 +96,6 @@ public class Model {
 		 */
 		public void setWidth(int w) {
 			intData[3] = (w % STEP < (STEP / 2) ? w - (w % STEP) : w + STEP - (w % STEP));
-			;
 		}
 
 		/**
@@ -107,7 +106,6 @@ public class Model {
 		 */
 		public void setHeight(int h) {
 			intData[4] = (h % STEP < (STEP / 2) ? h - (h % STEP) : h + STEP - (h % STEP));
-			;
 		}
 
 		/**

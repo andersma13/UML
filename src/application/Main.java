@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.UnaryOperator;
-
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -51,9 +50,9 @@ import javafx.scene.text.Text;
 public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
-        final int DEFAULT_HEIGHT = 600;
-        final int DEFAULT_WIDTH = 660;
-		
+		final int DEFAULT_HEIGHT = 600;
+		final int DEFAULT_WIDTH = 660;
+
 		try {
 			// Set up the stage
 			primaryStage.setMinHeight(DEFAULT_HEIGHT);
@@ -250,7 +249,7 @@ public class Main extends Application {
 			root.setTop(menu);
 			root.setLeft(tools);
 			sp.setContent(center);
-			sp.setPannable(true);
+			//sp.setPannable(true);
 			root.setCenter(sp);
 			Scene scene = new Scene(root, DEFAULT_WIDTH, DEFAULT_HEIGHT);
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
