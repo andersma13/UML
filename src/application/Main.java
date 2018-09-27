@@ -342,7 +342,7 @@ public class Main extends Application {
 				}
 
 				refresh(data, center, classes, links, primaryStage);
-
+				
 				newClassDialog.close();
 				e.consume();
 
@@ -412,6 +412,9 @@ public class Main extends Application {
 			newClass.setLayoutY((double) data.getClass(i).getYPos());
 			center.getChildren().add(newClass);
 
+			center.applyCss();
+			center.layout();
+			newClass.initWidthHeight();
 		}
 
 		for (int i = 0; i != data.getLinkTail(); ++i) {

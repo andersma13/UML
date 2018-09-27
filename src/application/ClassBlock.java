@@ -83,9 +83,10 @@ public class ClassBlock extends VBox {
 
 		this.getChildren().add(main);
 
-		node.setX(intData[1] + (int) (this.getWidth() / 2));
-		node.setY(intData[2] + (int) (this.getHeight() / 2));
-
+		//node.setX(intData[1] + (int) (this.getWidth() / 2));
+		//node.setY(intData[2] + (int) (this.getHeight() / 2));
+		node.setX(intData[1]);
+		node.setY(intData[2]);
 	}
 
 	/**
@@ -95,5 +96,14 @@ public class ClassBlock extends VBox {
 	 */
 	public LinkNode getNode() {
 		return node;
+	}
+	
+	/**
+	 * Updates the ClassBlock's LinkNode with correct height & width, now that it has been displayed
+	 * 
+	 */
+	public void initWidthHeight() {
+		node.setX(node.getX() + (int) (this.getWidth() / 2));
+		node.setY(node.getY() + (int) (this.getHeight() / 2));
 	}
 }
