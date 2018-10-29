@@ -115,12 +115,6 @@ public class Main extends Application {
 
 								// Declare delta to be used with click events
 								final Delta delta = new Delta();
-								
-								// Set the bounds of the ClassBlock within the LinkNode
-								newClass.getNode().setBounds((int) (added.getXPos()),
-										(int) (added.getXPos() + newClass.getWidth()),
-										(int) (added.getYPos()),
-										(int) (added.getYPos() + newClass.getHeight()));
 
 								/*****************************
 								 * SET UP LISTENERS
@@ -261,6 +255,12 @@ public class Main extends Application {
 								newClass.toFront();
 								window.applyCss();
 								newClass.initWidthHeight();
+								
+								// Set the bounds of the ClassBlock within the LinkNode
+								newClass.getNode().setBounds((int) (added.getXPos()),
+										(int) (added.getXPos() + newClass.getWidth()),
+										(int) (added.getYPos()),
+										(int) (added.getYPos() + newClass.getHeight()));
 							}
 						}
 
