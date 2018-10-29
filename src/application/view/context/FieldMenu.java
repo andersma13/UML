@@ -8,32 +8,28 @@ import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.stage.Modality;
 
-public class FieldMenu extends ContextMenu
-{
-	
+public class FieldMenu extends ContextMenu {
+
 	Model data;
-	
+
 	MenuItem newClass = new MenuItem("New Class Block...");
 	MenuItem newLink = new MenuItem("New Link...");
-	
-	EventHandler<ActionEvent> newClassEvent = new EventHandler<ActionEvent> ()
-	{
+
+	EventHandler<ActionEvent> newClassEvent = new EventHandler<ActionEvent>() {
 		@Override
-		public void handle(ActionEvent e)
-		{
+		public void handle(ActionEvent e) {
 			NewClassWindow dialog = new NewClassWindow(-1, data);
 			dialog.initModality(Modality.APPLICATION_MODAL);
 			dialog.show();
 			e.consume();
 		}
 	};
-	
-	public FieldMenu(Model dataIn)
-	{
+
+	public FieldMenu(Model dataIn) {
 		data = dataIn;
-		
+
 		newClass.setOnAction(newClassEvent);
-		
+
 		this.getItems().add(newClass);
 		this.getItems().add(newLink);
 	}

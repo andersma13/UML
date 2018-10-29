@@ -14,9 +14,8 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-public class NewLinkWindow extends Stage
-{
-	
+public class NewLinkWindow extends Stage {
+
 	// Dialog box elements
 	private GridPane newLinkInterface = new GridPane();
 	private Text newLinkTitle = new Text("Create Link");
@@ -24,7 +23,7 @@ public class NewLinkWindow extends Stage
 	private TextField newLinkSrc = new TextField();
 	private TextField newLinkDest = new TextField();
 	private Button newLinkSubmit = new Button("Submit");
-	
+
 	// Filter input for integral values
 	private UnaryOperator<Change> integers = change -> {
 
@@ -32,64 +31,58 @@ public class NewLinkWindow extends Stage
 		return (text.matches("[0-9]*") ? change : null);
 
 	};
-	
+
 	private TextFormatter<String> forceIntSrc = new TextFormatter<>(integers);
 	private TextFormatter<String> forceIntDest = new TextFormatter<>(integers);
-	
+
 	/**
 	 * Constructs a NewLinkWindow instance
 	 * 
-	 * @param data	The model to write data to
+	 * @param data
+	 *            The model to write data to
 	 */
-	public NewLinkWindow(Model data)
-	{
+	public NewLinkWindow(Model data) {
 		// Link formatters
 		newLinkSrc.setTextFormatter(forceIntSrc);
 		newLinkDest.setTextFormatter(forceIntDest);
-		
+
 		// Place elements on Dialog
-		newLinkInterface.add(newLinkTitle,  0, 0, 2, 1);
-		newLinkInterface.add(newLinkLabel,  0, 1, 2, 1);
-		newLinkInterface.add(newLinkSrc,    0, 5);
-		newLinkInterface.add(newLinkDest,   1, 5);
+		newLinkInterface.add(newLinkTitle, 0, 0, 2, 1);
+		newLinkInterface.add(newLinkLabel, 0, 1, 2, 1);
+		newLinkInterface.add(newLinkSrc, 0, 5);
+		newLinkInterface.add(newLinkDest, 1, 5);
 		newLinkInterface.add(newLinkSubmit, 1, 6);
 		newLinkLabel.setPromptText("Link label...");
 		newLinkSrc.setPromptText("Link Source");
 		newLinkDest.setPromptText("Link Dest");
-		
+
 		// Handler to submit a new Link
-		EventHandler<ActionEvent> submitLinkEvent = new EventHandler<ActionEvent> ()
-		{
+		EventHandler<ActionEvent> submitLinkEvent = new EventHandler<ActionEvent>() {
 			@Override
-			public void handle(ActionEvent e)
-			{
-				try
-				{
+			public void handle(ActionEvent e) {
+				try {
 					int srcIn = Integer.parseInt(newLinkSrc.getText());
 					int destIn = Integer.parseInt(newLinkDest.getText());
-						
-					data.addLinkModel(new int[] {
-							data.getLinkTail(), 0, srcIn, destIn,
-							0, 1, 0, 1 }, newLinkTitle.getText());
+
+					data.addLinkModel(new int[] { data.getLinkTail(), 0, srcIn, destIn, 0, 1, 0, 1 },
+							newLinkTitle.getText());
+				} catch (NumberFormatException ex) {
 				}
-				catch (NumberFormatException ex)
-				{}
 				closeWindow();
 				e.consume();
 			}
 		};
 		newLinkSubmit.setOnAction(submitLinkEvent);
-		
+
 		// Display dialog
 		Scene scene = new Scene(newLinkInterface);
 		this.setScene(scene);
 	}
-	
+
 	/**
 	 * Closes the dialog box
 	 */
-	private void closeWindow()
-	{
+	private void closeWindow() {
 		this.close();
 	}
 }
