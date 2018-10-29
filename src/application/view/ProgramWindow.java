@@ -180,7 +180,7 @@ public class ProgramWindow extends Stage {
 		root.setCenter(center);
 		root.getCenter().getStyleClass().add("pad");
 		Scene scene = new Scene(root, DEFAULT_WIDTH, DEFAULT_HEIGHT);
-		scene.getStylesheets().add(getClass().getResource("../include/application.css").toExternalForm());
+		scene.getStylesheets().add(getClass().getResource("/application/include/application.css").toExternalForm());
 		this.setScene(scene);
 	}
 
