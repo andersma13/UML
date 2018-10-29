@@ -117,7 +117,6 @@ public class Main extends Application {
 								final Delta delta = new Delta();
 								
 								// Set the bounds of the ClassBlock within the LinkNode
-								// not 100% sure this is necessary here
 								newClass.getNode().setBounds((int) (added.getXPos()),
 										(int) (added.getXPos() + newClass.getWidth()),
 										(int) (added.getYPos()),
