@@ -1,4 +1,4 @@
-package application;
+package application.objects;
 
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -13,8 +13,8 @@ public class LinkNode {
 	 * 
 	 * @constructor
 	 */
-	public LinkNode() {
-
+	public LinkNode() 
+	{
 	}
 
 	/**
@@ -26,7 +26,8 @@ public class LinkNode {
 	 * @param y
 	 *            the y position of the LinkNode
 	 */
-	public LinkNode(int x, int y) {
+	public LinkNode(int x, int y) 
+	{
 		xPos.set(x);
 		yPos.set(y);
 	}
@@ -37,7 +38,8 @@ public class LinkNode {
 	 * @param x
 	 *            the x position to be set
 	 */
-	public void setX(int x) {
+	public void setX(int x) 
+	{
 		xPos.set(x);
 	}
 
@@ -47,7 +49,8 @@ public class LinkNode {
 	 * @param y
 	 *            the y position to be set
 	 */
-	public void setY(int y) {
+	public void setY(int y) 
+	{
 		yPos.set(y);
 	}
 
@@ -56,7 +59,8 @@ public class LinkNode {
 	 * 
 	 * @return the x position of the LinkNode
 	 */
-	public int getX() {
+	public int getX() 
+	{
 		return xPos.get();
 	}
 
@@ -65,7 +69,8 @@ public class LinkNode {
 	 * 
 	 * @return the y position of the LinkNode
 	 */
-	public int getY() {
+	public int getY() 
+	{
 		return yPos.get();
 	}
 
@@ -74,7 +79,8 @@ public class LinkNode {
 	 * 
 	 * @return the LinkNode's xPos property
 	 */
-	public IntegerProperty getXProperty() {
+	public IntegerProperty getXProperty() 
+	{
 		return xPos;
 	}
 
@@ -83,7 +89,8 @@ public class LinkNode {
 	 * 
 	 * @return the LinkNode's yPos property
 	 */
-	public IntegerProperty getYProperty() {
+	public IntegerProperty getYProperty() 
+	{
 		return yPos;
 	}
 }

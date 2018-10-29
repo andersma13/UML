@@ -1,4 +1,4 @@
-package application;
+package application.include;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -8,8 +8,21 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class Model {
-	public class ClassModel {
+import application.objects.ClassBlock;
+import application.objects.Link;
+import javafx.beans.Observable;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.util.Callback;
+
+public class Model
+{
+	public class ClassModel
+	{
 
 		/*
 		 * intData: [index] [Position (x)] [Position (y)] [Width] [Height] Index is used
@@ -24,25 +37,32 @@ public class Model {
 		 * lists of entries can be expanded indefinitely.
 		 */
 		private int[] intData = new int[5];
-		private String[] stringData = new String[4];
+ 		private StringProperty name = new SimpleStringProperty();
+ 		private StringProperty attr = new SimpleStringProperty();
+ 		private StringProperty oper = new SimpleStringProperty();
+ 		private StringProperty desc = new SimpleStringProperty();
 		private final int STEP = 10;
 
 		/**
 		 * Constructs an instance of ClassModel
 		 * 
 		 * @constructor
-		 * @param intsIn
-		 *            the array of ints to be stored in the model
-		 * @param stringsIn
-		 *            the array of Strings to be stored in the model
+		 * @param intsIn    the array of ints to be stored in the model
+		 * @param stringsIn the array of Strings to be stored in the model
 		 */
-		public ClassModel(int[] intsIn, String[] stringsIn) {
-			if (intsIn.length == 5) {
+		public ClassModel(int[] intsIn, String[] stringsIn)
+		{
+			if (intsIn.length == 5)
+			{
 				intData = intsIn;
 			}
 
-			if (stringsIn.length == 4) {
-				stringData = stringsIn;
+			if (stringsIn.length == 4)
+			{
+				name.set(stringsIn[0]);
+				attr.set(stringsIn[1]);
+				oper.set(stringsIn[2]);
+				desc.set(stringsIn[3]);
 			}
 		}
 
@@ -53,23 +73,25 @@ public class Model {
 		/**
 		 * Sets the index value of the ClassModel
 		 * 
-		 * @param i
-		 *            the index to be stored
+		 * @param i the index to be stored
 		 */
-		public void setIndex(int i) {
+		public void setIndex(int i)
+		{
 			intData[0] = i;
 		}
 
 		/**
 		 * Sets the x position value of the ClassModel
 		 * 
-		 * @param x
-		 *            the x position value to be stored
+		 * @param x the x position value to be stored
 		 */
-		public void setXPos(int x) {
-			if (x >= 0) {
+		public void setXPos(int x)
+		{
+			if (x >= 0)
+			{
 				intData[1] = (x % STEP < (STEP / 2) ? x - (x % STEP) : x + STEP - (x % STEP));
-			} else {
+			} else
+			{
 				intData[1] = 0;
 			}
 		}
@@ -77,13 +99,15 @@ public class Model {
 		/**
 		 * Sets the y position value of the ClassModel
 		 * 
-		 * @param y
-		 *            the y position value to be stored
+		 * @param y the y position value to be stored
 		 */
-		public void setYPos(int y) {
-			if (y >= 0) {
+		public void setYPos(int y)
+		{
+			if (y >= 0)
+			{
 				intData[2] = (y % STEP < (STEP / 2) ? y - (y % STEP) : y + STEP - (y % STEP));
-			} else {
+			} else
+			{
 				intData[2] = 0;
 			}
 		}
@@ -91,61 +115,61 @@ public class Model {
 		/**
 		 * Sets the width value of the ClassModel
 		 * 
-		 * @param w
-		 *            the width value to be stored
+		 * @param w the width value to be stored
 		 */
-		public void setWidth(int w) {
+		public void setWidth(int w)
+		{
 			intData[3] = (w % STEP < (STEP / 2) ? w - (w % STEP) : w + STEP - (w % STEP));
 		}
 
 		/**
 		 * Sets the height value of the ClassModel
 		 * 
-		 * @param h
-		 *            the height value to be stored
+		 * @param h the height value to be stored
 		 */
-		public void setHeight(int h) {
+		public void setHeight(int h)
+		{
 			intData[4] = (h % STEP < (STEP / 2) ? h - (h % STEP) : h + STEP - (h % STEP));
 		}
 
 		/**
 		 * Sets the name value of the ClassModel
 		 * 
-		 * @param n
-		 *            the name value to be stored
+		 * @param n the name value to be stored
 		 */
-		public void setName(String n) {
-			stringData[0] = n;
+		public void setName(String n)
+		{
+			name.set(n);
 		}
 
 		/**
 		 * Sets the attributes value of the ClassModel
 		 * 
-		 * @param a
-		 *            the attributes value to be stored
+		 * @param a the attributes value to be stored
 		 */
-		public void setAttr(String a) {
-			stringData[1] = a;
+		public void setAttr(String a)
+		{
+			attr.set(a);
 		}
 
 		/**
 		 * Sets the operations value of the ClassModel
 		 * 
-		 * @param o
-		 *            the operations valie to be stored
+		 * @param o the operations valie to be stored
 		 */
-		public void setOper(String o) {
-			stringData[2] = o;
+		public void setOper(String o)
+		{
+			oper.set(o);
 		}
 
 		/**
 		 * Sets the description value of the ClassModel
 		 * 
-		 * @param d
-		 *            the desctiption model to be stored
+		 * @param d the desctiption model to be stored
 		 */
-		public void setDesc(String d) {
-			stringData[3] = d;
+		public void setDesc(String d)
+		{
+			desc.set(d);
 		}
 
 		/*****************************
@@ -157,7 +181,8 @@ public class Model {
 		 * 
 		 * @return the index value of the ClassModel
 		 */
-		public int getIndex() {
+		public int getIndex()
+		{
 			return intData[0];
 		}
 
@@ -166,7 +191,8 @@ public class Model {
 		 * 
 		 * @return the x position value of the ClassModel
 		 */
-		public int getXPos() {
+		public int getXPos()
+		{
 			return intData[1];
 		}
 
@@ -175,7 +201,8 @@ public class Model {
 		 * 
 		 * @return the y position value of the ClassModel
 		 */
-		public int getYPos() {
+		public int getYPos()
+		{
 			return intData[2];
 		}
 
@@ -184,7 +211,8 @@ public class Model {
 		 * 
 		 * @return the width value of the ClassModel
 		 */
-		public int getWidth() {
+		public int getWidth()
+		{
 			return intData[3];
 		}
 
@@ -193,7 +221,8 @@ public class Model {
 		 * 
 		 * @return the height value of the ClassModel
 		 */
-		public int getHeight() {
+		public int getHeight()
+		{
 			return intData[4];
 		}
 
@@ -202,8 +231,9 @@ public class Model {
 		 * 
 		 * @return the name value of the ClassModel
 		 */
-		public String getName() {
-			return stringData[0];
+		public String getName()
+		{
+			return name.get();
 		}
 
 		/**
@@ -211,8 +241,9 @@ public class Model {
 		 * 
 		 * @return the attributes value of the ClassModel
 		 */
-		public String getAttr() {
-			return stringData[1];
+		public String getAttr()
+		{
+			return attr.get();
 		}
 
 		/**
@@ -220,8 +251,9 @@ public class Model {
 		 * 
 		 * @return the operations value of the ClassModel
 		 */
-		public String getOper() {
-			return stringData[2];
+		public String getOper()
+		{
+			return oper.get();
 		}
 
 		/**
@@ -229,31 +261,54 @@ public class Model {
 		 * 
 		 * @return the description value of the ClassModel
 		 */
-		public String getDesc() {
-			return stringData[3];
+		public String getDesc()
+		{
+			return desc.get();
+		}
+		
+		/**
+		 * Returns the StringProperty associated with the ClassModel's name
+		 * 
+		 * @return the StringProperty associated with the ClassModel's name
+		 */
+		public StringProperty getNameProp()
+		{
+			return name;
+		}
+		
+		/**
+		 * Returns the StringProperty associated with the ClassModel's attributes
+		 * 
+		 * @return the StringProperty associated with the ClassModel's attributes
+		 */
+		public StringProperty getAttrProp()
+		{
+			return attr;
 		}
 
 		/**
-		 * Returns the full array of integral data in the ClassModel
+		 * Returns the StringProperty associated with the ClassModel's operations
 		 * 
-		 * @return the full array of integral data in the ClassModel
+		 * @return the StringProperty associated with the ClassModel's operations
 		 */
-		public int[] getInts() {
-			return intData;
+		public StringProperty getOperProp()
+		{
+			return oper;
 		}
-
+		
 		/**
-		 * Returns the full array of String data in the ClassModel
+		 * Returns the StringProperty associated with the ClassModel's description
 		 * 
-		 * @return the full array of String data in the ClassModel
+		 * @return the StringProperty associated with the ClassModel's description
 		 */
-		public String[] getStrings() {
-			return stringData;
+		public StringProperty getDescProp() 
+		{
+			return desc;
 		}
-
 	}
 
-	public class LinkModel {
+	public class LinkModel
+	{
 		/*
 		 * intData: [Connection index] [Connection type] [Source] [Dest] [Source
 		 * minimum][Source maximum] [Destination minimum] [Destination Maximum] Index is
@@ -266,21 +321,31 @@ public class Model {
 		 * destination maximum denote the cardinality of the connection with the
 		 * destination block. Same rules apply. Label is pretty straightforward.
 		 */
-		private int[] intData = new int[8];
+		private int[] intData = new int[6];
+		private IntegerProperty src = new SimpleIntegerProperty();
+		private IntegerProperty dest = new SimpleIntegerProperty();
 		private String label;
 
 		/**
 		 * Constructs an instance of LinkModel
 		 * 
 		 * @constructor
-		 * @param data
-		 *            the integral data to be stored
-		 * @param l
-		 *            the label to be stored
+		 * @param data the integral data to be stored
+		 * @param l    the label to be stored
 		 */
-		public LinkModel(int[] data, String l) {
-			if (data.length == 8) {
-				intData = data;
+		public LinkModel(int[] data, String l)
+		{
+			if (data.length == 8)
+			{
+				intData[0] = data[0];
+				intData[1] = data[1];
+				src.set(data[2]);
+				dest.set(data[3]);
+				intData[2] = data[4];
+				intData[3] = data[5];
+				intData[4] = data[6];
+				intData[5] = data[7];
+				
 			}
 			label = l;
 		}
@@ -292,90 +357,90 @@ public class Model {
 		/**
 		 * Sets the index value of the LinkModel
 		 * 
-		 * @param i
-		 *            the index value to be stored
+		 * @param i the index value to be stored
 		 */
-		public void setIndex(int i) {
+		public void setIndex(int i)
+		{
 			intData[0] = i;
 		}
 
 		/**
 		 * Sets the type value of the LinkModel
 		 * 
-		 * @param t
-		 *            the type value to be stored
+		 * @param t the type value to be stored
 		 */
-		public void setType(int t) {
+		public void setType(int t)
+		{
 			intData[1] = t;
 		}
 
 		/**
 		 * Sets the source index of the LinkModel
 		 * 
-		 * @param s
-		 *            the source index to be stored
+		 * @param s the source index to be stored
 		 */
-		public void setSource(int s) {
-			intData[2] = s;
+		public void setSource(int s)
+		{
+			src.set(s);
 		}
 
 		/**
 		 * Sets the destination index of the LinkModel
 		 * 
-		 * @param d
-		 *            the destination index to be stored
+		 * @param d the destination index to be stored
 		 */
-		public void setDest(int d) {
-			intData[3] = d;
+		public void setDest(int d)
+		{
+			dest.set(d);
 		}
 
 		/**
 		 * Sets the source minimum value of the LinkModel
 		 * 
-		 * @param s
-		 *            the source minimum value to be stored
+		 * @param s the source minimum value to be stored
 		 */
-		public void setSourceMin(int s) {
-			intData[4] = s;
+		public void setSourceMin(int s)
+		{
+			intData[2] = s;
 		}
 
 		/**
 		 * Sets the source maximum value of the LinkModel
 		 * 
-		 * @param s
-		 *            the source maximum value to be stored
+		 * @param s the source maximum value to be stored
 		 */
-		public void setSourceMax(int s) {
-			intData[5] = s;
+		public void setSourceMax(int s)
+		{
+			intData[3] = s;
 		}
 
 		/**
 		 * Sets the destination minimum value of the LinkModel
 		 * 
-		 * @param d
-		 *            the destination minimum value to be stored
+		 * @param d the destination minimum value to be stored
 		 */
-		public void setDestMin(int d) {
-			intData[6] = d;
+		public void setDestMin(int d)
+		{
+			intData[4] = d;
 		}
 
 		/**
 		 * Sets the destination maximum value of the LinkModel
 		 * 
-		 * @param d
-		 *            the destination maximum value to be stored
+		 * @param d the destination maximum value to be stored
 		 */
-		public void setDestMax(int d) {
-			intData[7] = d;
+		public void setDestMax(int d)
+		{
+			intData[5] = d;
 		}
 
 		/**
 		 * Sets the label of the LinkModel
 		 * 
-		 * @param l
-		 *            the label to be stored
+		 * @param l the label to be stored
 		 */
-		public void setLabel(String l) {
+		public void setLabel(String l)
+		{
 			label = l;
 		}
 
@@ -388,7 +453,8 @@ public class Model {
 		 * 
 		 * @return the index value of the LinkModel
 		 */
-		public int getIndex() {
+		public int getIndex()
+		{
 			return intData[0];
 		}
 
@@ -397,7 +463,8 @@ public class Model {
 		 * 
 		 * @return the type value of the LinkModel
 		 */
-		public int getType() {
+		public int getType()
+		{
 			return intData[1];
 		}
 
@@ -406,8 +473,9 @@ public class Model {
 		 * 
 		 * @return the source index of the LinkModel
 		 */
-		public int getSource() {
-			return intData[2];
+		public int getSource()
+		{
+			return src.get();
 		}
 
 		/**
@@ -415,8 +483,9 @@ public class Model {
 		 * 
 		 * @return the destination index of the LinkModel
 		 */
-		public int getDest() {
-			return intData[3];
+		public int getDest()
+		{
+			return dest.get();
 		}
 
 		/**
@@ -424,8 +493,9 @@ public class Model {
 		 * 
 		 * @return the source minimum value of the LinkModel
 		 */
-		public int getSourceMin() {
-			return intData[4];
+		public int getSourceMin()
+		{
+			return intData[2];
 		}
 
 		/**
@@ -433,8 +503,9 @@ public class Model {
 		 * 
 		 * @return the source maximum value of the LinkModel
 		 */
-		public int getSourceMax() {
-			return intData[5];
+		public int getSourceMax()
+		{
+			return intData[3];
 		}
 
 		/**
@@ -442,8 +513,9 @@ public class Model {
 		 * 
 		 * @return the destination minimum value of the LinkModel
 		 */
-		public int getDestMin() {
-			return intData[6];
+		public int getDestMin()
+		{
+			return intData[4];
 		}
 
 		/**
@@ -451,8 +523,9 @@ public class Model {
 		 * 
 		 * @return the destination maximum value of the LinkModel
 		 */
-		public int getDestMax() {
-			return intData[7];
+		public int getDestMax()
+		{
+			return intData[5];
 		}
 
 		/**
@@ -460,13 +533,36 @@ public class Model {
 		 * 
 		 * @return the label of the LinkModel
 		 */
-		public String getLabel() {
+		public String getLabel()
+		{
 			return label;
 		}
+		
+		/**
+		 * Returns the IntegerProperty associated with the LinkModel's source
+		 * 
+		 * @return the IntegerProperty associated with the LinkModel's source
+		 */
+		public IntegerProperty getSourceProp()
+		{
+			return src;
+		}
+		
+		/**
+		 * Returns the IntegerProperty associated with the LinkModel's destination
+		 * 
+		 * @return the IntegerProperty associated with the LinkModel's destination
+		 */
+		public IntegerProperty getDestProp()
+		{
+			return dest;
+		}
 	}
-
-	private List<ClassModel> classList;
-	private List<LinkModel> linkList;
+	
+	private ObservableList<ClassModel> classList;
+	private ObservableList<LinkModel> linkList;
+	private List<ClassBlock> classes;
+	private List<Link> links;
 
 	/*
 	 * This class uses the classList and connectionList classes to represent all the
@@ -481,17 +577,67 @@ public class Model {
 	 * 
 	 * @constructor
 	 */
-	public Model() {
-		classList = new ArrayList<ClassModel>();
-		linkList = new ArrayList<LinkModel>();
+	public Model()
+	{
+		classList = FXCollections.observableArrayList(
+				new Callback<ClassModel, Observable[]>()
+		{
+			@Override
+			public Observable[] call(ClassModel param)
+			{
+				return new Observable[] {
+						param.getNameProp(),
+						param.getAttrProp(),
+						param.getOperProp(),
+						param.getDescProp()
+				};
+			}
+		});
+		
+		linkList = FXCollections.observableArrayList(
+				new Callback<LinkModel, Observable[]>()
+		{
+			@Override
+			public Observable[] call(LinkModel param)
+			{
+				return new Observable[] {
+						param.getSourceProp(),
+						param.getDestProp()
+				};
+			}
+		});
+		
+		classes = new ArrayList<ClassBlock> ();
+		links = new ArrayList<Link> ();
 	}
 
+	/**
+	 * Returns the classList property
+	 * 
+	 * @return classList
+	 */
+	public ObservableList<ClassModel> getClassProperty()
+	{
+		return classList;
+	}
+	
+	/**
+	 * Returns the linkList property
+	 * 
+	 * @return linkList
+	 */
+	public ObservableList<LinkModel> getLinkProperty()
+	{
+		return linkList;
+	}
+	
 	/**
 	 * Returns the smallest index that isn't presently storing a ClassModel object.
 	 * 
 	 * @return an int corresponding with the tail of the list
 	 */
-	public int getClassTail() {
+ 	public int getClassTail()
+	{
 		return classList.size();
 	}
 
@@ -500,92 +646,179 @@ public class Model {
 	 * 
 	 * @return an int corresponding with the tail of the list
 	 */
-	public int getLinkTail() {
+	public int getLinkTail()
+	{
 		return linkList.size();
 	}
 
 	/**
 	 * Returns the ClassModel object stored at index i
 	 * 
-	 * @param i
-	 *            the index of the ClassModel object to be returned
+	 * @param i the index of the ClassModel object to be returned
 	 * @return the ClassModel object stored at index i
 	 */
-	public ClassModel getClass(int i) {
+	public ClassModel getClassModel(int i)
+	{
 		return classList.get(i);
 	}
 
 	/**
 	 * Returns the LinkModel object stored at index i
 	 * 
-	 * @param i
-	 *            the index of the LinkModel object to be returned
+	 * @param i the index of the LinkModel object to be returned
 	 * @return the LinkModel object stored at index i
 	 */
-	public LinkModel getLink(int i) {
+	public LinkModel getLinkModel(int i)
+	{
 		return linkList.get(i);
 	}
 
 	/**
+	 * Returns the ClassBlock object stored at index i
+	 * 
+	 * @param i the index of the ClassBlock object to be returned
+	 * @return the ClassBlock object stored at index i
+	 */
+	public ClassBlock getClass(int i)
+	{
+		return classes.get(i);
+	}
+	
+	/**
+	 * Returns the Link object stored at index i
+	 * 
+	 * @param i the index of the Link object to be returned
+	 * @return the Link object stored at index i
+	 */
+	public Link getLink(int i)
+	{
+		return links.get(i);
+	}
+	
+	/**
 	 * Creates a new ClassModel object and places it at the end of the list.
 	 * 
-	 * @param ints
-	 *            A list of int arguments to be passed to the ClassModel
-	 *            constructor.
-	 * @param strings
-	 *            A list of String arguments to be passed to the ClassModel
-	 *            constructor.
+	 * @param ints    A list of int arguments to be passed to the ClassModel
+	 *                constructor.
+	 * @param strings A list of String arguments to be passed to the ClassModel
+	 *                constructor.
 	 * @return the index of the new ClassModel object
 	 */
-	public int addBlock(int[] ints, String[] strings) {
-		if (ints.length == 5 && strings.length == 4) {
+	public int addClassModel(int[] ints, String[] strings)
+	{
+		if (ints.length == 5 && strings.length == 4)
+		{
 			classList.add(new ClassModel(ints, strings));
 		}
 		return (classList.size() - 1);
 	}
+	
+	/**
+	 * Removes the ClassModel object stored at index i and updates the linkList to
+	 * reflect the index changes.
+	 * 
+	 * @param i the index of the ClassModel to be removed
+	 */
+	public void removeClassModel(int i)
+	{
+		classList.remove(i);
+	}
+	
+	/**
+	 * Removes the LinkModel object stored at index i and decrements later indices
+	 * 
+	 * @param i the index of the LinkModel to be removed
+	 */
+	public void removeLinkModel(int i)
+	{
+		linkList.remove(i);
+		for(int l = i; l != linkList.size(); ++l)
+		{
+			linkList.get(l).setIndex(l);
+		}
+	}
 
 	/**
-	 * Creates a new ConnectionModel object and places it at the end of the list.
+	 * Creates a new LinkModel object and places it at the end of the list.
 	 * 
-	 * @param ints
-	 *            A list of int arguments to be passed to the ConnectionModel
-	 *            constructor.
-	 * @param label
-	 *            The label to be passed to the ConnectionModel constructor.
+	 * @param ints  A list of int arguments to be passed to the ConnectionModel
+	 *              constructor.
+	 * @param label The label to be passed to the ConnectionModel constructor.
 	 * @return the index of the new ConnectionModel object
 	 */
-	public int addLink(int[] ints, String label) {
-		if (ints.length == 8) {
+	public int addLinkModel(int[] ints, String label)
+	{
+		if (ints.length == 8)
+		{
 			linkList.add(new LinkModel(ints, label));
 		}
 		return (linkList.size() - 1);
 	}
 
 	/**
-	 * Generates a ClassBlock object based on the ClassModel stored at index i.
+	 * Stores a Class Block object in the classes list
 	 * 
-	 * @param i
-	 *            The index of the ClassModel object to be generated.
-	 * @return a ClassBlock with the parameters stored at index i
+	 * @param in	The Class Block to be stored
+	 * 
 	 */
-	public ClassBlock generateClassBlock(int i) {
-		return new ClassBlock(classList.get(i).getInts(), classList.get(i).getStrings());
+	public void addClass(ClassBlock in)
+	{
+		classes.add(in);
 	}
-
+	
+	/**
+	 * Removes the ClassBlock object stored at index i
+	 * 
+	 * @param i		The index of the ClassBlock to be removed
+	 */
+	public void removeClass(int i)
+	{
+		classes.remove(i);
+	}
+	
+	/**
+	 * Stores a Link object in the links list
+	 * 
+	 * @param in	The Link object to be stored
+	 * 
+	 */
+	public void addLink(Link in)
+	{
+		links.add(in);
+	}
+	
+	/**
+	 * Removes the Link object stored at index i
+	 * 
+	 * @param i		The index of the Link to be removed
+	 */
+	public void removeLink(int i)
+	{
+		links.remove(i);
+	}
+	
+	/**
+	 * Clears all Links from the links list
+	 */
+	public void clearLinks()
+	{
+		links.clear();
+	}
+	
 	/**
 	 * Saves the model data in a format that can be reread later.
 	 * 
-	 * @param filename
-	 *            The file to be written to.
-	 * @throws IOException
-	 *             Throws if the file can't be written to.
+	 * @param file The file to be written to.
+	 * @throws IOException Throws if the file can't be written to.
 	 */
-	public void save(String filename) throws IOException {
-		BufferedWriter writer = new BufferedWriter(new FileWriter(filename));
+	public void save(File file) throws IOException
+	{
+		BufferedWriter writer = new BufferedWriter(new FileWriter(file));
 
 		writer.write("CLASSLIST_START\n");
 		writer.write(classList.size() + "\n");
-		for (int i = 0; i != classList.size(); ++i) {
+		for (int i = 0; i != classList.size(); ++i)
+		{
 			writer.write(classList.get(i).getIndex() + " ");
 			writer.write(classList.get(i).getXPos() + " ");
 			writer.write(classList.get(i).getYPos() + " ");
@@ -599,7 +832,8 @@ public class Model {
 		writer.write("CLASSLIST_END\n");
 		writer.write("LINKLIST_BEGIN\n");
 		writer.write(linkList.size() + "\n");
-		for (int i = 0; i != linkList.size(); ++i) {
+		for (int i = 0; i != linkList.size(); ++i)
+		{
 			writer.write(linkList.get(i).getIndex() + " ");
 			writer.write(linkList.get(i).getType() + " ");
 			writer.write(linkList.get(i).getSource() + " ");
@@ -618,17 +852,17 @@ public class Model {
 	/**
 	 * Reads in the model data and rebuilds the model.
 	 * 
-	 * @param filename
-	 *            The file to be read from.
-	 * @throws IOException
-	 *             Throws if the file can't be read from.
+	 * @param file The file to be read from.
+	 * @throws IOException Throws if the file can't be read from.
 	 */
-	public void load(String filename) throws IOException {
-		Scanner reader = new Scanner(new File(filename));
+	public void load(File file) throws IOException
+	{	
+		Scanner reader = new Scanner(file);
 		reader.next();
 
 		int size = Integer.parseInt(reader.next().trim());
-		for (int i = 0; i != size; ++i) {
+		for (int i = 0; i != size; ++i)
+		{
 
 			reader.useDelimiter(" ");
 
@@ -649,7 +883,8 @@ public class Model {
 		// From here down will almost certainly need to be rewritten once links are
 		// implemented.
 		size = Integer.parseInt(reader.next().trim());
-		for (int i = 0; i != size; ++i) {
+		for (int i = 0; i != size; ++i)
+		{
 			reader.useDelimiter(" ");
 			int[] ints = { Integer.parseInt(reader.next().trim()), Integer.parseInt(reader.next().trim()),
 					Integer.parseInt(reader.next().trim()), Integer.parseInt(reader.next().trim()),
@@ -668,44 +903,11 @@ public class Model {
 	/**
 	 * Clears the model of all data.
 	 */
-	public void clear() {
+	public void clear()
+	{
 		classList.clear();
+		classes.clear();
 		linkList.clear();
-	}
-
-	/**
-	 * Removes the ClassModel object stored at index i and updates the linkList to
-	 * reflect the index changes.
-	 * 
-	 * @param i
-	 *            the index of the ClassModel to be removed
-	 */
-	public void removeBlock(int i) {
-
-		// Remove block i
-		classList.remove(i);
-
-		int bound = linkList.size();
-
-		// Clear links
-		for (int l = 0; l != bound; ++l) {
-			if (linkList.get(l).getSource() == i || linkList.get(l).getDest() == i) {
-				linkList.remove(l);
-				--l;
-				--bound;
-			} else {
-				if (linkList.get(l).getSource() > i) {
-					linkList.get(l).setSource(linkList.get(l).getSource() - 1);
-				}
-				if (linkList.get(l).getDest() > i) {
-					linkList.get(l).setDest(linkList.get(l).getDest() - 1);
-				}
-			}
-		}
-
-		// Update remaining block indices
-		for (int l = i; l != classList.size(); ++l) {
-			classList.get(l).setIndex(l);
-		}
+		links.clear();
 	}
 }

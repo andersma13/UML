@@ -1,51 +1,46 @@
 CLASSLIST_START
 3
-0
-270
-180
-100
-100
-Test
+0 450 310 100 100 
+Test 0
 
+attr0
 attr1
 attr2
-attr3
 
-oper1
-oper2
+oper1()
+oper2()
 
-desc1
-desc2
+Description of the class
 
-1
-40
-180
-100
-100
-Test2
+1 260 310 100 100 
+Rap Snitches
 
-Gotta
+telling all they business
 
-Go
+sit in the court
+be they own star witness
 
-Fast
+Do you see the perpetrator?
+Yea I'm right here
 
-2
-20
-20
-100
-100
+2 280 120 100 100 
 Wake Up
 
-grab : brush
-putOn : makeup
+grab : Brush
+makeup.putOn
 
 scars.hide()
-fadeAway(shakeUp)
+fadeAway(ShakeUp)
 
-You wanted to
+You Wanted To
 
 CLASSLIST_END
-CONNECTIONLIST_BEGIN
-0
-CONNECTIONLIST_END
+LINKLIST_BEGIN
+3
+0 0 1 0 0 1 0 1 
+Create Link
+1 0 2 1 0 1 0 1 
+Create Link
+2 0 2 0 0 1 0 1 
+Create Link
+LINKLIST_END
