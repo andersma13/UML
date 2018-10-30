@@ -1,12 +1,10 @@
 package application.view;
 
-import java.awt.AWTException;
-import java.awt.Robot;
 import java.util.function.UnaryOperator;
-
 import application.include.Model;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
@@ -42,27 +40,29 @@ public class NewClassWindow extends Stage {
 	private TextFormatter<String> forceIntY = new TextFormatter<>(integers);
 
 	// Override tab presses for field traversal
+	
 	private EventHandler<KeyEvent> tabTraverse = new EventHandler<KeyEvent>() {
 		@Override
-		public void handle(KeyEvent e) {
-			KeyCode code = e.getCode();
+		public void handle(KeyEvent event) {
+		    KeyCode code = event.getCode();
 
-			if (code == KeyCode.TAB && !e.isShiftDown() && !e.isControlDown()) {
-				e.consume();
-				e.getSource();
-				try {
-					Robot robot = new Robot();
-					robot.keyPress(KeyCode.CONTROL.getCode());
-					robot.keyPress(KeyCode.TAB.getCode());
-					robot.delay(10);
-					robot.keyRelease(KeyCode.TAB.getCode());
-					robot.keyRelease(KeyCode.CONTROL.getCode());
-				} catch (AWTException ex) {
-				}
-			}
-		}
+		    if (code == KeyCode.TAB && !event.isShiftDown() && !event.isControlDown()) {
+		        event.consume();
+		        Node node = (Node) event.getSource();            
+		        KeyEvent newEvent 
+		          = new KeyEvent(event.getSource(),
+		                     event.getTarget(), event.getEventType(),
+		                     event.getCharacter(), event.getText(),
+		                     event.getCode(), event.isShiftDown(),
+		                     true, event.isAltDown(),
+		                     event.isMetaDown());
+
+		        node.fireEvent(newEvent);            
+		        }
+		    }
 	};
 
+	
 	/**
 	 * Constructs a NewClassWindow instance
 	 * 
