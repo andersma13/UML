@@ -1,5 +1,7 @@
 package application.objects;
 
+import java.util.ArrayList;
+import java.util.List;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 
@@ -7,14 +9,19 @@ public class LinkNode {
 
 	private IntegerProperty xPos = new SimpleIntegerProperty();
 	private IntegerProperty yPos = new SimpleIntegerProperty();
+	private List<Link> connectedLinks;
+	private IntegerProperty xPosL = new SimpleIntegerProperty();
+	private IntegerProperty xPosR = new SimpleIntegerProperty();
+	private IntegerProperty yPosU = new SimpleIntegerProperty();
+	private IntegerProperty yPosD = new SimpleIntegerProperty();
 
 	/**
 	 * Constructs an instance of LinkNode
 	 * 
 	 * @constructor
 	 */
-	public LinkNode() 
-	{
+	public LinkNode() {
+		connectedLinks = new ArrayList<Link>();
 	}
 
 	/**
@@ -26,10 +33,11 @@ public class LinkNode {
 	 * @param y
 	 *            the y position of the LinkNode
 	 */
-	public LinkNode(int x, int y) 
-	{
+	public LinkNode(int x, int y) {
 		xPos.set(x);
 		yPos.set(y);
+
+		connectedLinks = new ArrayList<Link>();
 	}
 
 	/**
@@ -38,8 +46,7 @@ public class LinkNode {
 	 * @param x
 	 *            the x position to be set
 	 */
-	public void setX(int x) 
-	{
+	public void setX(int x) {
 		xPos.set(x);
 	}
 
@@ -49,8 +56,7 @@ public class LinkNode {
 	 * @param y
 	 *            the y position to be set
 	 */
-	public void setY(int y) 
-	{
+	public void setY(int y) {
 		yPos.set(y);
 	}
 
@@ -59,8 +65,7 @@ public class LinkNode {
 	 * 
 	 * @return the x position of the LinkNode
 	 */
-	public int getX() 
-	{
+	public int getX() {
 		return xPos.get();
 	}
 
@@ -69,8 +74,7 @@ public class LinkNode {
 	 * 
 	 * @return the y position of the LinkNode
 	 */
-	public int getY() 
-	{
+	public int getY() {
 		return yPos.get();
 	}
 
@@ -79,8 +83,7 @@ public class LinkNode {
 	 * 
 	 * @return the LinkNode's xPos property
 	 */
-	public IntegerProperty getXProperty() 
-	{
+	public IntegerProperty getXProperty() {
 		return xPos;
 	}
 
@@ -89,8 +92,95 @@ public class LinkNode {
 	 * 
 	 * @return the LinkNode's yPos property
 	 */
-	public IntegerProperty getYProperty() 
-	{
+	public IntegerProperty getYProperty() {
 		return yPos;
+	}
+
+	/**
+	 * add the parent Link to the list of Links that originate from this LinkNode
+	 * 
+	 * @param one
+	 *            of the Links that uses this LinkNode
+	 */
+	public void giveParent(Link dad) {
+		if (!connectedLinks.contains(dad))
+			connectedLinks.add(dad);
+	}
+
+	/**
+	 * Sets the 4 bounds of the LinkNode
+	 * 
+	 * @param xL
+	 *            the left bound to be set
+	 * @param xR
+	 *            the right bound to be set
+	 * @param yU
+	 *            the top bound to be set
+	 * @param yD
+	 *            to bottom bound to be set
+	 */
+	public void setBounds(int xL, int xR, int yU, int yD) {
+		xPosL.set(xL);
+		xPosR.set(xR);
+		yPosU.set(yU);
+		yPosD.set(yD);
+	}
+
+	/**
+	 * Returns the left bound of the LinkNode
+	 * 
+	 * @return the left bound of the LinkNode
+	 */
+	public int getL() {
+		return xPosL.get();
+	}
+
+	/**
+	 * Returns the right bound of the LinkNode
+	 * 
+	 * @return the right bound of the LinkNode
+	 */
+	public int getR() {
+		return xPosR.get();
+	}
+
+	/**
+	 * Returns the upper bound of the LinkNode
+	 * 
+	 * @return the upper bound of the LinkNode
+	 */
+	public int getU() {
+		return yPosU.get();
+	}
+
+	/**
+	 * Returns the lower bound of the LinkNode
+	 * 
+	 * @return the lower bound of the LinkNode
+	 */
+	public int getD() {
+		return yPosD.get();
+	}
+
+	/**
+	 * Tell each parent Link to update its line coordinates
+	 * 
+	 */
+	public void updateLink() {
+		for (Link link : connectedLinks)
+			if (link != null)
+				link.updateLine();
+	}
+
+	/**
+	 * Link will be removed from model, remove all instances of link
+	 * 
+	 * @param link
+	 *            to be removed
+	 */
+	public void removeMe(Link link) {
+		while (connectedLinks.contains(link))
+			connectedLinks.remove(link);
+
 	}
 }
