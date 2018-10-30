@@ -7,7 +7,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.Stack;
 
+import application.include.Model.classStackData;
 import application.objects.ClassBlock;
 import application.objects.Link;
 import javafx.beans.Observable;
@@ -20,6 +22,30 @@ import javafx.collections.ObservableList;
 import javafx.util.Callback;
 
 public class Model {
+	private Stack<classStackData> classUndoStack = new Stack<classStackData>();
+	private Stack<classStackData> classRedoStack = new Stack<classStackData>();
+	private Stack<Integer> classUndoStackSize = new Stack<Integer>();
+	private Stack<Integer> classRedoStackSize = new Stack<Integer>();
+	private Stack<linkStackData> linkUndoStack = new Stack<linkStackData>();
+	private Stack<linkStackData> linkRedoStack = new Stack<linkStackData>();
+	private Stack<Integer> linkUndoStackSize = new Stack<Integer>();
+	private Stack<Integer> linkRedoStackSize = new Stack<Integer>();
+
+	private Boolean duringUndo = false;
+
+	public class classStackData {
+		private int[] intData = new int[5];
+		private String name;
+		private String attr;
+		private String oper;
+		private String desc;
+	}
+
+	public class linkStackData {
+		private int[] intData = new int[8];
+		private String label;
+	}
+
 	public class ClassModel {
 
 		/*
@@ -755,6 +781,91 @@ public class Model {
 			linky.warnLinkNodes();
 
 		links.clear();
+	}
+
+	/**
+	 * 
+	 * Saves an undoState onto the classUndoStack
+	 * 
+	 */
+	public void saveUndoState() {
+		if (!duringUndo) {
+			classStackData state = new classStackData();
+			linkStackData lstate = new linkStackData();
+
+			classUndoStackSize.push(classList.size());
+
+			for (int i = 0; i != classList.size(); ++i) {
+				System.out.println("Saving a ClassBlock state");
+
+				state.intData[0] = classList.get(i).getIndex();
+				state.intData[1] = classList.get(i).getXPos();
+				state.intData[2] = classList.get(i).getYPos();
+				state.intData[3] = classList.get(i).getWidth();
+				state.intData[4] = classList.get(i).getHeight();
+				state.name = classList.get(i).getName();
+				state.attr = classList.get(i).getAttr();
+				state.oper = classList.get(i).getOper();
+				state.desc = classList.get(i).getDesc();
+
+				classUndoStack.push(state);
+			}
+
+			linkUndoStackSize.push(linkList.size());
+
+			for (int i = 0; i != linkList.size(); ++i) {
+				lstate.intData[0] = linkList.get(i).getIndex();
+				lstate.intData[1] = linkList.get(i).getType();
+				lstate.intData[2] = linkList.get(i).getSource();
+				lstate.intData[3] = linkList.get(i).getDest();
+				lstate.intData[4] = linkList.get(i).getSourceMin();
+				lstate.intData[5] = linkList.get(i).getSourceMax();
+				lstate.intData[6] = linkList.get(i).getDestMin();
+				lstate.intData[7] = linkList.get(i).getDestMax();
+				lstate.label = linkList.get(i).getLabel();
+
+				linkUndoStack.push(lstate);
+			}
+		}
+	}
+
+	public void undo() {
+		duringUndo = true;
+
+		if (!classUndoStack.isEmpty()) {
+
+			int size = classUndoStackSize.pop();
+			classStackData state = new classStackData();
+
+			for (int i = 0; i != size; ++i) {
+				state = classUndoStack.pop();
+
+				System.out.println("Undoing a classBlock");
+
+				int[] ints = { state.intData[0], state.intData[1], state.intData[2], state.intData[3],
+						state.intData[4] };
+
+				String[] strings = { state.name, state.attr, state.oper, state.desc };
+				classList.add(new ClassModel(ints, strings));
+			}
+		}
+
+		if (!linkUndoStack.isEmpty()) {
+
+			int size = linkUndoStackSize.pop();
+			linkStackData lstate = new linkStackData();
+
+			for (int i = 0; i != size; ++i) {
+				lstate = linkUndoStack.pop();
+
+				int[] ints = { lstate.intData[0], lstate.intData[1], lstate.intData[2], lstate.intData[3],
+						lstate.intData[4], lstate.intData[5], lstate.intData[6], lstate.intData[7] };
+
+				String label = lstate.label;
+				linkList.add(new LinkModel(ints, label));
+			}
+		}
+		duringUndo = false;
 	}
 
 	/**

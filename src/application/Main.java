@@ -64,7 +64,7 @@ public class Main extends Application {
 		 * modified to perform that action.
 		 */
 		data.getLinkProperty().addListener(linkListener());
-
+		
 		try {
 			/**
 			 * Make the main window visible
@@ -311,6 +311,8 @@ public class Main extends Application {
 						}
 					}
 				}
+				
+				data.saveUndoState();
 			}
 		};
 		return classListener;
@@ -378,7 +380,6 @@ public class Main extends Application {
 								newLink.toBack();
 							}
 						} else if (c.wasRemoved()) {
-
 						}
 					}
 				}
