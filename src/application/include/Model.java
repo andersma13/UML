@@ -796,7 +796,10 @@ public class Model {
 			classUndoStackSize.push(classList.size());
 
 			for (int i = 0; i != classList.size(); ++i) {
-				System.out.println("Saving a ClassBlock state");
+				System.out.println("Saving a ClassBlock state with data " + classList.get(i).getIndex() + " " + classList.get(i).getXPos() +
+						" " + classList.get(i).getYPos() + " " + classList.get(i).getWidth() + " " + classList.get(i).getHeight () +
+						" " + classList.get(i).getName() + " " + classList.get(i).getAttr() + " " + classList.get(i).getOper() + 
+						" " + classList.get(i).getDesc() );
 
 				state.intData[0] = classList.get(i).getIndex();
 				state.intData[1] = classList.get(i).getXPos();
@@ -810,6 +813,8 @@ public class Model {
 
 				classUndoStack.push(state);
 			}
+			
+			System.out.println("SaveUndo: Stack size is now " + classUndoStack.size());
 
 			linkUndoStackSize.push(linkList.size());
 
@@ -833,14 +838,22 @@ public class Model {
 		duringUndo = true;
 
 		if (!classUndoStack.isEmpty()) {
-
+			//throw away the data that was just put on the stack first (saveUndo has run an extra time due to clear(), which means
+			//  it's fine to pop a classUndoStackSize as well)
+			int throwaway = classUndoStackSize.pop();
+			for (int i = 0; i != throwaway; ++i)
+				classUndoStack.pop();			
+			
 			int size = classUndoStackSize.pop();
-			classStackData state = new classStackData();
 
+			System.out.println("Undo: Stack size is now " + classUndoStack.size());
+			
 			for (int i = 0; i != size; ++i) {
-				state = classUndoStack.pop();
+				classStackData state = classUndoStack.pop();
 
-				System.out.println("Undoing a classBlock");
+				System.out.println("Undoing " + i + "th classBlock with data " + state.intData[0] + " " + state.intData[1] + " " +
+				 state.intData[2] + " " + state.intData[3] + " " + state.intData[4] + " " + state.name + " " + state.attr + " " +
+						state.oper + " " + state.desc );
 
 				int[] ints = { state.intData[0], state.intData[1], state.intData[2], state.intData[3],
 						state.intData[4] };

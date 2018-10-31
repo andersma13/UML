@@ -198,6 +198,7 @@ public class Main extends Application {
 										if (!e.isPrimaryButtonDown()) {
 											newClass.getScene().setCursor(Cursor.DEFAULT);
 										}
+										data.saveUndoState();
 									}
 								});
 
