@@ -52,8 +52,7 @@ public class Link extends Line {
 	}
 
 	/**
-	 *
-	 * tell each connected LinkNode that this Link will soon be deleted.
+	 * Tell each connected LinkNode that this Link will soon be deleted.
 	 *
 	 */
 	public void warnLinkNodes() {
@@ -63,8 +62,7 @@ public class Link extends Line {
 	}
 
 	/**
-	 *
-	 * update the source and destinations of the Link (Line) to appropriate sides
+	 * Update the source and destinations of the Link (Line) to appropriate sides
 	 * and offsets
 	 *
 	 */
