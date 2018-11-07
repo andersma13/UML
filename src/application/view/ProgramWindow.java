@@ -52,6 +52,7 @@ public class ProgramWindow extends Stage {
 	public Button removeClass = new Button("Delete...");
 	public Button newLink = new Button("New link...");
 	public Button undo = new Button("Undo...");
+	public Button redo = new Button("Redo...");
 
 	public ProgramWindow(Model dataIn) {
 		Stage ref = this;
@@ -75,10 +76,12 @@ public class ProgramWindow extends Stage {
 		removeClass.getStyleClass().add("toolbarButtons");
 		newLink.getStyleClass().add("toolbarButtons");
 		undo.getStyleClass().add("toolbarButtons");
+		redo.getStyleClass().add("toolbarButtons");
 		tools.add(newClass, 0, 0);
 		tools.add(removeClass, 0, 1);
 		tools.add(newLink, 0, 2);
 		tools.add(undo, 0, 3);
+		tools.add(redo, 0, 4);
 
 		// Creates a new class dialog upon click
 		EventHandler<ActionEvent> newClassEvent = new EventHandler<ActionEvent>() {
@@ -117,6 +120,16 @@ public class ProgramWindow extends Stage {
 				data.clear();
 				mainPanel.getChildren().clear();
 				data.undo();
+			}
+		};
+		
+		EventHandler<ActionEvent> redoEvent = new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent e) {
+				data.saveUndoState();
+				data.clear();
+				mainPanel.getChildren().clear();
+				data.redo();
 			}
 		};
 		
@@ -183,6 +196,7 @@ public class ProgramWindow extends Stage {
 		newLink.setOnAction(newLinkEvent);
 		clear.setOnAction(clearEvent);
 		undo.setOnAction(undoEvent);
+		redo.setOnAction(redoEvent);
 		save.setOnAction(saveEvent);
 		load.setOnAction(loadEvent);
 		export.setOnAction(exportEvent);

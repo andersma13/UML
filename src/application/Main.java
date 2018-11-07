@@ -384,6 +384,7 @@ public class Main extends Application {
 						}
 					}
 				}
+				data.saveUndoState();
 			}
 		};
 		return linkListener;
