@@ -83,7 +83,7 @@ public class Main extends Application {
 	private ListChangeListener<ClassModel> classListener() {
 		ListChangeListener<ClassModel> classListener = new ListChangeListener<ClassModel>() {
 			@Override
-			public void onChanged(Change<? extends ClassModel> c) {
+			public void onChanged(Change<? extends ClassModel> c) {	
 				while (c.next()) {
 
 					/*****************************
@@ -100,7 +100,6 @@ public class Main extends Application {
 
 						}
 					} else {
-
 						/*****************************
 						 * ELEMENT ADDED
 						 *****************************/
@@ -182,6 +181,8 @@ public class Main extends Application {
 								newClass.setOnMousePressed(new EventHandler<MouseEvent>() {
 									@Override
 									public void handle(MouseEvent e) {
+										if (data.safeToSave() )
+											data.saveUndoState();
 										if (e.isPrimaryButtonDown()) {
 											newClass.getScene().setCursor(Cursor.DEFAULT);
 										}
@@ -198,7 +199,8 @@ public class Main extends Application {
 										if (!e.isPrimaryButtonDown()) {
 											newClass.getScene().setCursor(Cursor.DEFAULT);
 										}
-										data.saveUndoState();
+										/*if (data.safeToSave())
+											   data.saveUndoState();*/
 									}
 								});
 
@@ -312,8 +314,8 @@ public class Main extends Application {
 						}
 					}
 				}
-				
-				data.saveUndoState();
+				/*if (data.safeToSave() )
+					data.saveUndoState();*/
 			}
 		};
 		return classListener;
@@ -384,7 +386,8 @@ public class Main extends Application {
 						}
 					}
 				}
-				data.saveUndoState();
+				/*if (data.safeToSave())
+				   data.saveUndoState();*/
 			}
 		};
 		return linkListener;

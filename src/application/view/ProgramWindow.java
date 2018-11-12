@@ -56,6 +56,7 @@ public class ProgramWindow extends Stage {
 
 	public ProgramWindow(Model dataIn) {
 		Stage ref = this;
+		ref.setTitle("teamTeam UML Designer Pro [registered version]");
 		data = dataIn;
 		this.setMinHeight(DEFAULT_HEIGHT);
 		this.setMinWidth(DEFAULT_WIDTH);
@@ -117,6 +118,8 @@ public class ProgramWindow extends Stage {
 		EventHandler<ActionEvent> undoEvent = new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent e) {
+				data.setUndoState();
+				data.saveRedoState();
 				data.clear();
 				mainPanel.getChildren().clear();
 				data.undo();
@@ -126,10 +129,12 @@ public class ProgramWindow extends Stage {
 		EventHandler<ActionEvent> redoEvent = new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent e) {
+				data.setRedoState();
 				data.saveUndoState();
 				data.clear();
 				mainPanel.getChildren().clear();
 				data.redo();
+				//data.saveUndoState();
 			}
 		};
 		

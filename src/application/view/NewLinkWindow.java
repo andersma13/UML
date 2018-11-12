@@ -60,6 +60,7 @@ public class NewLinkWindow extends Stage {
 		EventHandler<ActionEvent> submitLinkEvent = new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent e) {
+				data.saveUndoState();
 				try {
 					int srcIn = Integer.parseInt(newLinkSrc.getText());
 					int destIn = Integer.parseInt(newLinkDest.getText());

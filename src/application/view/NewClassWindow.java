@@ -98,11 +98,13 @@ public class NewClassWindow extends Stage {
 			@Override
 			public void handle(ActionEvent e) {
 				if (editIndex == -1) {
+					data.saveUndoState();
 					data.addClassModel(
 							new int[] { data.getClassTail(), 0, 0, 100, 100 },
 							new String[] { newClassName.getText(), newClassAttr.getText(), newClassOper.getText(),
 									newClassDesc.getText() });
 				} else {
+					data.saveUndoState();
 					data.getClassModel(editIndex).setName(newClassName.getText());
 					data.getClassModel(editIndex).setAttr(newClassAttr.getText());
 					data.getClassModel(editIndex).setOper(newClassOper.getText());
