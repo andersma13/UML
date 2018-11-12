@@ -123,9 +123,11 @@ public class ProgramWindow extends Stage {
 				data.clear();
 				mainPanel.getChildren().clear();
 				data.undo();
+				if (data.emptyUndo())
+					undo.setDisable(true);
 			}
 		};
-		
+
 		EventHandler<ActionEvent> redoEvent = new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent e) {
@@ -134,10 +136,11 @@ public class ProgramWindow extends Stage {
 				data.clear();
 				mainPanel.getChildren().clear();
 				data.redo();
-				//data.saveUndoState();
+				if (data.emptyRedo())
+					redo.setDisable(true);
 			}
 		};
-		
+
 		// Saves the current state of the Model
 		EventHandler<ActionEvent> saveEvent = new EventHandler<ActionEvent>() {
 			@Override
@@ -205,6 +208,9 @@ public class ProgramWindow extends Stage {
 		save.setOnAction(saveEvent);
 		load.setOnAction(loadEvent);
 		export.setOnAction(exportEvent);
+
+		redo.setDisable(true);
+		undo.setDisable(true);
 
 		// Place items on stage
 		root.setTop(menu);

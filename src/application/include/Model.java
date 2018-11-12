@@ -788,6 +788,14 @@ public class Model {
 	}
 
 	/**
+	 * 
+	 * @return returns the index of the highest numbered class
+	 */
+	public int maxLink() {
+		return classList.size() - 1;
+	}
+
+	/**
 	 * Tells if it is safe to saveUndoState
 	 * 
 	 * @return is false if model is in the middle of a undo or redo
@@ -797,7 +805,7 @@ public class Model {
 	}
 
 	/**
-	 * 
+	 * Sets flag that undo is in process
 	 */
 	public void setUndoState() {
 		duringUndo = true;
@@ -805,17 +813,53 @@ public class Model {
 	}
 
 	/**
-	 * 
+	 * Sets flag that redo is in process
 	 */
 	public void setRedoState() {
 		duringRedo = true;
 	}
+
 	/**
 	 * 
-	 * @return
+	 * @return returns true if Redo was just executed
 	 */
 	public Boolean getJustRedid() {
 		return justRedid;
+	}
+
+	/**
+	 * clears the entire Redo stack (because of a branch in user choices)
+	 * 
+	 */
+	public void clearRedoState() {
+		while (!classRedoStackSize.isEmpty()) {
+			int size = classRedoStackSize.pop();
+			for (int i = 0; i != size; ++i)
+				classRedoStack.pop();
+		}
+
+		while (!linkRedoStackSize.isEmpty()) {
+			int size = linkRedoStackSize.pop();
+
+			for (int i = 0; i != size; ++i)
+				linkRedoStack.pop();
+		}
+	}
+
+	/**
+	 * 
+	 * @return returns true if the Undo Stack is empty
+	 */
+	public Boolean emptyUndo() {
+		return classUndoStackSize.size() == 0 ? true : false;
+	}
+
+	/**
+	 * 
+	 * @return returns true if the Redo stack is empty
+	 */
+	public Boolean emptyRedo() {
+		return classRedoStackSize.size() == 0 ? true : false;
 	}
 
 	/**
@@ -827,7 +871,7 @@ public class Model {
 		if (classList.size() != 0) {
 			classUndoStackSize.push(classList.size());
 
-			for (int i = 0; i != classList.size(); ++i) {
+			for (int i = classList.size() - 1; i != -1; --i) {
 				classStackData state = new classStackData();
 
 				state.intData[0] = classList.get(i).getIndex();
@@ -845,7 +889,7 @@ public class Model {
 
 			linkUndoStackSize.push(linkList.size());
 
-			for (int i = 0; i != linkList.size(); ++i) {
+			for (int i = linkList.size() - 1; i != -1; --i) {
 				linkStackData lstate = new linkStackData();
 
 				lstate.intData[0] = linkList.get(i).getIndex();
@@ -860,11 +904,6 @@ public class Model {
 
 				linkUndoStack.push(lstate);
 			}
-
-			System.out.println("Saved state. Undo stacks:");
-			System.out.println(classUndoStackSize.toString());
-			System.out.println(linkUndoStackSize.toString());
-
 			justRestoredState = false;
 			justUndid = false;
 			justRedid = false;
@@ -872,13 +911,13 @@ public class Model {
 	}
 
 	/**
-	 * 
+	 * Saves the current model state to the Redo Stack
 	 */
 	public void saveRedoState() {
 		if (classList.size() != 0) {
 			classRedoStackSize.push(classList.size());
 
-			for (int i = 0; i != classList.size(); ++i) {
+			for (int i = classList.size() - 1; i != -1; --i) {
 				classStackData state = new classStackData();
 
 				state.intData[0] = classList.get(i).getIndex();
@@ -896,7 +935,7 @@ public class Model {
 
 			linkRedoStackSize.push(linkList.size());
 
-			for (int i = 0; i != linkList.size(); ++i) {
+			for (int i = linkList.size() - 1; i != -1; --i) {
 				linkStackData lstate = new linkStackData();
 
 				lstate.intData[0] = linkList.get(i).getIndex();
@@ -911,79 +950,45 @@ public class Model {
 
 				linkRedoStack.push(lstate);
 			}
-
-			System.out.println("Saved REDO state. REDO stacks:");
-			System.out.println(classRedoStackSize.toString());
-			System.out.println(linkRedoStackSize.toString());
 		}
 	}
-	
+
+	/**
+	 * Undoes the latest action done by the user
+	 */
 	public void undo() {
 		this.saveRedoState();
-		
+
 		if (!classUndoStackSize.isEmpty()) {
-			// first erase the state that was JUST saved (what the user wants to get rid of)
-			/*
-			if (!justRestoredState) {
-				int throwaway = classUndoStackSize.pop();
+			// now actually restore the previous state
+			int size = classUndoStackSize.pop();
+			// classRedoStackSize.push(size);
 
-				// unique case
-				if (classUndoStackSize.isEmpty()) {
-					classRedoStackSize.push(throwaway);
-					for (int i = 0; i != throwaway; ++i)
-						classRedoStack.push(classUndoStack.pop());
-				} else
-					for (int i = 0; i != throwaway; ++i)
-						classUndoStack.pop();
+			for (int i = 0; i != size; ++i) {
+				classStackData state = classUndoStack.pop();
+				// classRedoStack.push(state);
 
-			}*/
+				int[] ints = { state.intData[0], state.intData[1], state.intData[2], state.intData[3],
+						state.intData[4] };
 
-			if (!classUndoStackSize.isEmpty()) {
-				// now actually restore the previous state
-				int size = classUndoStackSize.pop();
-				//classRedoStackSize.push(size);
-
-				for (int i = 0; i != size; ++i) {
-					classStackData state = classUndoStack.pop();
-					//classRedoStack.push(state);
-
-					int[] ints = { state.intData[0], state.intData[1], state.intData[2], state.intData[3],
-							state.intData[4] };
-
-					String[] strings = { state.name, state.attr, state.oper, state.desc };
-					classList.add(new ClassModel(ints, strings));
-				}
+				String[] strings = { state.name, state.attr, state.oper, state.desc };
+				classList.add(new ClassModel(ints, strings));
 			}
 		}
 
 		if (!linkUndoStackSize.isEmpty()) {
-			// now erase the state that was JUST saved (what the user wants to get rid of)
-			/*if (!justRestoredState) {
-				int throwaway = linkUndoStackSize.pop();
-				// unique case
-				if (linkUndoStackSize.isEmpty()) {
-					linkRedoStackSize.push(throwaway);
-					for (int i = 0; i != throwaway; ++i)
-						linkRedoStack.push(linkUndoStack.pop());
-				} else
-					for (int i = 0; i != throwaway; ++i)
-						linkUndoStack.pop();
-			}*/
+			int size = linkUndoStackSize.pop();
+			// linkRedoStackSize.push(size);
 
-			if (!linkUndoStackSize.isEmpty()) {
-				int size = linkUndoStackSize.pop();
-				//linkRedoStackSize.push(size);
+			for (int i = 0; i != size; ++i) {
+				linkStackData lstate = linkUndoStack.pop();
+				// linkRedoStack.push(lstate);
 
-				for (int i = 0; i != size; ++i) {
-					linkStackData lstate = linkUndoStack.pop();
-					//linkRedoStack.push(lstate);
+				int[] ints = { lstate.intData[0], lstate.intData[1], lstate.intData[2], lstate.intData[3],
+						lstate.intData[4], lstate.intData[5], lstate.intData[6], lstate.intData[7] };
 
-					int[] ints = { lstate.intData[0], lstate.intData[1], lstate.intData[2], lstate.intData[3],
-							lstate.intData[4], lstate.intData[5], lstate.intData[6], lstate.intData[7] };
-
-					String label = lstate.label;
-					linkList.add(new LinkModel(ints, label));
-				}
+				String label = lstate.label;
+				linkList.add(new LinkModel(ints, label));
 			}
 		}
 
@@ -991,21 +996,13 @@ public class Model {
 		justRestoredState = true;
 		justUndid = true;
 		justRedid = false;
-		
-		System.out.println("Undid. Undo stacks: ");
-		System.out.println(classUndoStackSize.toString());
-		System.out.println(linkUndoStackSize.toString());
-		System.out.println("Redo stacks: ");
-		System.out.println(classRedoStackSize.toString());
-		System.out.println(linkRedoStackSize.toString());
 	}
 
 	/**
-	 * 
+	 * Re-does what the user choose to undo
 	 * 
 	 */
 	public void redo() {
-		System.out.println(classRedoStack.isEmpty());
 		if (!classRedoStackSize.isEmpty()) {
 			int size = classRedoStackSize.pop();
 
@@ -1037,13 +1034,6 @@ public class Model {
 		justRestoredState = true;
 		justUndid = false;
 		justRedid = true;
-
-		System.out.println("Redid. Undo stacks: ");
-		System.out.println(classUndoStackSize.toString());
-		System.out.println(linkUndoStackSize.toString());
-		System.out.println("Redo stacks: ");
-		System.out.println(classRedoStackSize.toString());
-		System.out.println(linkRedoStackSize.toString());
 
 	}
 
@@ -1099,6 +1089,8 @@ public class Model {
 	 *             Throws if the file can't be read from.
 	 */
 	public void load(File file) throws IOException {
+		this.clearRedoState();
+		
 		Scanner reader = new Scanner(file);
 		reader.next();
 

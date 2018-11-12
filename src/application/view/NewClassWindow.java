@@ -26,29 +26,24 @@ public class NewClassWindow extends Stage {
 	public Button deleteClass = new Button("Delete");
 
 	// Override tab presses for field traversal
-	
+
 	private EventHandler<KeyEvent> tabTraverse = new EventHandler<KeyEvent>() {
 		@Override
 		public void handle(KeyEvent event) {
-		    KeyCode code = event.getCode();
+			KeyCode code = event.getCode();
 
-		    if (code == KeyCode.TAB && !event.isShiftDown() && !event.isControlDown()) {
-		        event.consume();
-		        Node node = (Node) event.getSource();            
-		        KeyEvent newEvent 
-		          = new KeyEvent(event.getSource(),
-		                     event.getTarget(), event.getEventType(),
-		                     event.getCharacter(), event.getText(),
-		                     event.getCode(), event.isShiftDown(),
-		                     true, event.isAltDown(),
-		                     event.isMetaDown());
+			if (code == KeyCode.TAB && !event.isShiftDown() && !event.isControlDown()) {
+				event.consume();
+				Node node = (Node) event.getSource();
+				KeyEvent newEvent = new KeyEvent(event.getSource(), event.getTarget(), event.getEventType(),
+						event.getCharacter(), event.getText(), event.getCode(), event.isShiftDown(), true,
+						event.isAltDown(), event.isMetaDown());
 
-		        node.fireEvent(newEvent);            
-		        }
-		    }
+				node.fireEvent(newEvent);
+			}
+		}
 	};
 
-	
 	/**
 	 * Constructs a NewClassWindow instance
 	 * 
@@ -97,14 +92,14 @@ public class NewClassWindow extends Stage {
 		EventHandler<ActionEvent> submitClassEvent = new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent e) {
+				data.saveUndoState();
+				data.clearRedoState();
+
 				if (editIndex == -1) {
-					data.saveUndoState();
-					data.addClassModel(
-							new int[] { data.getClassTail(), 0, 0, 100, 100 },
+					data.addClassModel(new int[] { data.getClassTail(), 0, 0, 100, 100 },
 							new String[] { newClassName.getText(), newClassAttr.getText(), newClassOper.getText(),
 									newClassDesc.getText() });
 				} else {
-					data.saveUndoState();
 					data.getClassModel(editIndex).setName(newClassName.getText());
 					data.getClassModel(editIndex).setAttr(newClassAttr.getText());
 					data.getClassModel(editIndex).setOper(newClassOper.getText());
