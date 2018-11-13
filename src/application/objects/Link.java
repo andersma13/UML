@@ -21,8 +21,9 @@ public class Link extends Line {
 	public Link(LinkNode src, LinkNode dest, int arrowType) {
 		this.getStyleClass().add("link");
 		
-		
-		
+		if (arrowType == 0)
+		  this.getStrokeDashArray().addAll(10d);
+		  
 		source = src;
 		destination = dest;
 		setArrowType(arrowType);

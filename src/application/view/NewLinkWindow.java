@@ -61,8 +61,8 @@ public class NewLinkWindow extends Stage {
 
 		// Place elements on Dialog
 		newLinkInterface.add(newLinkTitle, 0, 0, 2, 1);
-		newLinkInterface.add(newLinkLabel, 0, 2, 2, 1);
 		newLinkInterface.add(newLinkArrow, 0, 1, 2, 1);
+		newLinkInterface.add(newLinkLabel, 0, 2, 2, 1);
 		newLinkInterface.add(newLinkSrc, 0, 5);
 		newLinkInterface.add(newLinkDest, 1, 5);
 		newLinkInterface.add(newLinkSubmit, 1, 6);
