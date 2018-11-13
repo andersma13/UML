@@ -393,6 +393,8 @@ public class Main extends Application {
 												newLink.setEndY((int) newValue);
 											}
 										});
+								
+								newLink.setArrowType(added.getType());
 								addLink(newLink);
 								newLink.toBack();
 							}

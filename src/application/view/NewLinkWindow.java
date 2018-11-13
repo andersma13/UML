@@ -26,16 +26,17 @@ public class NewLinkWindow extends Stage {
 	private TextField newLinkSrc = new TextField();
 	private TextField newLinkDest = new TextField();
 	private Button newLinkSubmit = new Button("Submit");
+	
 	ObservableList<String> options = 
 		    FXCollections.observableArrayList(
-		        "Dependency",
-		        "Association",
-		        "Generalization",
-		        "Aggregate",
-		        "Composition"
+		    		"Dependency",
+		    		"Assocation",
+		    		"Generalization",
+		    		"Aggregate",
+		    		"Composition"
 		    );
-	private ComboBox newLinkArrow = new ComboBox(options);
-
+	private ComboBox<String> newLinkArrow = new ComboBox<String>(options);
+	
 	// Filter input for integral values
 	private UnaryOperator<Change> integers = change -> {
 
@@ -76,13 +77,13 @@ public class NewLinkWindow extends Stage {
 			public void handle(ActionEvent e) {
 				data.saveUndoState();
 				data.clearRedoState();
-				try {
+				try {					
 					int srcIn = Integer.parseInt(newLinkSrc.getText());
 					int destIn = Integer.parseInt(newLinkDest.getText());
 
 					if (srcIn <= data.maxLink() && srcIn >= 0 && destIn <= data.maxLink() && destIn >= 0) {
-						data.addLinkModel(new int[] { data.getLinkTail(), 0, srcIn, destIn, 0, 1, 0, 1 },
-								newLinkTitle.getText());
+						data.addLinkModel(new int[] { data.getLinkTail(), newLinkArrow.getSelectionModel().getSelectedIndex(), srcIn, destIn, 0, 1, 0, 1 },
+								newLinkLabel.getText());
 					}
 				} catch (NumberFormatException ex) {
 				}
