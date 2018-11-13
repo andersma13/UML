@@ -356,7 +356,7 @@ public class Main extends Application {
 								int destIndex = added.getDest();
 
 								Link newLink = new Link(data.getClass(srcIndex).getNode(),
-										data.getClass(destIndex).getNode());
+										data.getClass(destIndex).getNode(),added.getType());
 
 								data.getClass(srcIndex).getNode().getXProperty()
 										.addListener(new ChangeListener<Number>() {

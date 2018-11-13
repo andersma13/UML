@@ -16,14 +16,16 @@ public class Link extends Line {
 	 *            the LinkNode that connects to the source of the Link
 	 * @param dest
 	 *            the LinkNode that connects to the destination of the Link
+	 * @param arrowType 
 	 */
-	public Link(LinkNode src, LinkNode dest) {
+	public Link(LinkNode src, LinkNode dest, int arrowType) {
 		this.getStyleClass().add("link");
 		
 		
 		
 		source = src;
 		destination = dest;
+		setArrowType(arrowType);
 		this.updateLine();
 		
 		src.giveParent(this);
