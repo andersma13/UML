@@ -356,7 +356,7 @@ public class Main extends Application {
 								int destIndex = added.getDest();
 
 								Link newLink = new Link(data.getClass(srcIndex).getNode(),
-										data.getClass(destIndex).getNode(),added.getType());
+										data.getClass(destIndex).getNode(), added.getType());
 
 								data.getClass(srcIndex).getNode().getXProperty()
 										.addListener(new ChangeListener<Number>() {
@@ -393,8 +393,7 @@ public class Main extends Application {
 												newLink.setEndY((int) newValue);
 											}
 										});
-								
-								newLink.setArrowType(added.getType());
+
 								addLink(newLink);
 								newLink.toBack();
 							}
@@ -451,6 +450,7 @@ public class Main extends Application {
 	private void addLink(Link in) {
 		data.addLink(in);
 		window.addLink(in);
+		window.addArrow(in.getArrow());
 	}
 
 	public static void main(String[] args) {

@@ -111,6 +111,8 @@ public class ProgramWindow extends Stage {
 		EventHandler<ActionEvent> clearEvent = new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent e) {
+				data.saveUndoState();
+				data.clearRedoState();
 				data.clear();
 				mainPanel.getChildren().clear();
 			}
