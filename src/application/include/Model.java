@@ -713,6 +713,7 @@ public class Model {
 		linkList.remove(i);
 		for (int l = i; l != linkList.size(); ++l) {
 			linkList.get(l).setIndex(l);
+			links.get(i).warnLinkNodes();
 		}
 	}
 

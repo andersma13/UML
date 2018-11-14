@@ -396,6 +396,8 @@ public class Main extends Application {
 
 								addLink(newLink);
 								newLink.toBack();
+								
+								newLink.updateLine();
 							}
 						} else if (c.wasRemoved()) {
 						}

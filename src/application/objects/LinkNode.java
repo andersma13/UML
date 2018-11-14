@@ -184,7 +184,16 @@ public class LinkNode {
 
 	}
 
+	/**
+	 *  returns an appropriate offset for the Link based on its index in the list of links connected to this LinkNode
+	 *    ( offsets go 0, 1, -1, 2, -2, ... )
+	 * 
+	 * @param link
+	 * @return
+	 */
 	public int askNum(Link link) {
-		return connectedLinks.indexOf(link);
+		int x = connectedLinks.indexOf(link);
+		
+		return (int) Math.ceil(((double)x)/((double)x%2==0?-2:2));
 	}
 }

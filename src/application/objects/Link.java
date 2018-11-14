@@ -7,8 +7,8 @@ public class Link extends Line {
 	private LinkNode source;
 	private LinkNode destination;
 	private Arrow arrow;
-	final int srcOffsetMul;
-	final int destOffsetMul;
+	private int srcOffsetMul;
+	private int destOffsetMul;
 
 	// which direction is arrow pointing?
 	enum arrowFacing { UP, RIGHT, DOWN, LEFT }; 
@@ -68,12 +68,14 @@ public class Link extends Line {
 	/**
 	 *
 	 * tell each connected LinkNode that this Link will soon be deleted.
+	 *   also tell the arrowheads to clear themselves while you're at it.
 	 *
 	 */
 	public void warnLinkNodes() {
 		source.removeMe(this);
 		destination.removeMe(this);
 
+		arrow.eraseArrowheads();
 	}
 
 	/**
@@ -89,7 +91,11 @@ public class Link extends Line {
 		// to make it look like the lines are always connecting to a box or an arrowhead
 		final int arrowheadOffset = -10;
 		final int correctnessOffset = 5;
-
+		
+		// needs to be updated in case links have been removed
+		destOffsetMul=destination.askNum(this);
+		srcOffsetMul=source.askNum(this);
+		
 		int deltaX = source.getX() - destination.getX();
 		int deltaY = source.getY() - destination.getY();
 
@@ -103,8 +109,7 @@ public class Link extends Line {
 					this.setStartY(source.getU() + correctnessOffset);
 					this.setEndX(destination.getX() + (destOffsetMul * destOffset));
 					this.setEndY(destination.getD() - arrowheadOffset);
-					arrow.updateLocation(destination.getX(), destination.getD(), arrowFacing.UP, arrowheadOffset,
-							destOffsetMul * destOffset);
+					arrow.updateLocation(destination.getX() + (destOffsetMul * destOffset), destination.getD(), arrowFacing.UP, arrowheadOffset);
 				}
 				// draw on left of source, on right of destination
 				else {
@@ -112,8 +117,7 @@ public class Link extends Line {
 					this.setStartY(source.getY() + (srcOffsetMul * srcOffset));
 					this.setEndX(destination.getR() - arrowheadOffset);
 					this.setEndY(destination.getY() + (destOffsetMul * destOffset));
-					arrow.updateLocation(destination.getR(), destination.getY(), arrowFacing.LEFT, arrowheadOffset,
-							destOffsetMul * destOffset);
+					arrow.updateLocation(destination.getR(), destination.getY() + (destOffsetMul * destOffset), arrowFacing.LEFT, arrowheadOffset);
 				}
 			}
 			// source is above destination
@@ -124,8 +128,7 @@ public class Link extends Line {
 					this.setStartY(source.getD() - correctnessOffset);
 					this.setEndX(destination.getX() + (destOffsetMul * destOffset));
 					this.setEndY(destination.getU() + arrowheadOffset);
-					arrow.updateLocation(destination.getX(), destination.getU(), arrowFacing.DOWN, arrowheadOffset,
-							destOffsetMul * destOffset);
+					arrow.updateLocation(destination.getX() + (destOffsetMul * destOffset), destination.getU(), arrowFacing.DOWN, arrowheadOffset);
 				}
 				// draw on left of source, on right of destination
 				else {
@@ -133,8 +136,7 @@ public class Link extends Line {
 					this.setStartY(source.getY() + (srcOffsetMul * srcOffset));
 					this.setEndX(destination.getR() - arrowheadOffset);
 					this.setEndY(destination.getY() + (destOffsetMul * destOffset));
-					arrow.updateLocation(destination.getR(), destination.getY(), arrowFacing.LEFT, arrowheadOffset,
-							destOffsetMul * destOffset);
+					arrow.updateLocation(destination.getR(), destination.getY() + (destOffsetMul * destOffset), arrowFacing.LEFT, arrowheadOffset);
 				}
 
 			}
@@ -150,8 +152,7 @@ public class Link extends Line {
 					this.setStartY(source.getU() + correctnessOffset);
 					this.setEndX(destination.getX() + (destOffsetMul * destOffset));
 					this.setEndY(destination.getD() - arrowheadOffset);
-					arrow.updateLocation(destination.getX(), destination.getD(), arrowFacing.UP, arrowheadOffset,
-							destOffsetMul * destOffset);
+					arrow.updateLocation(destination.getX() + (destOffsetMul * destOffset), destination.getD(), arrowFacing.UP, arrowheadOffset);
 				}
 				// draw on right of source, on left of destination
 				else {
@@ -159,8 +160,7 @@ public class Link extends Line {
 					this.setStartY(source.getY() + (srcOffsetMul * srcOffset));
 					this.setEndX(destination.getL() + arrowheadOffset);
 					this.setEndY(destination.getY() + (destOffsetMul * destOffset));
-					arrow.updateLocation(destination.getL(), destination.getY(), arrowFacing.RIGHT, arrowheadOffset,
-							destOffsetMul * destOffset);
+					arrow.updateLocation(destination.getL(), destination.getY() + (destOffsetMul * destOffset), arrowFacing.RIGHT, arrowheadOffset);
 				}
 			}
 			// source is above destination
@@ -171,8 +171,7 @@ public class Link extends Line {
 					this.setStartY(source.getD() - correctnessOffset);
 					this.setEndX(destination.getX() + (destOffsetMul * destOffset));
 					this.setEndY(destination.getU() + arrowheadOffset);
-					arrow.updateLocation(destination.getX(), destination.getU(), arrowFacing.DOWN, arrowheadOffset,
-							destOffsetMul * destOffset);
+					arrow.updateLocation(destination.getX() + (destOffsetMul * destOffset), destination.getU(), arrowFacing.DOWN, arrowheadOffset);
 				}
 				// draw on right of source, on left of destination
 				else {
@@ -180,8 +179,7 @@ public class Link extends Line {
 					this.setStartY(source.getY() + (srcOffsetMul * srcOffset));
 					this.setEndX(destination.getL() + arrowheadOffset);
 					this.setEndY(destination.getY() + (destOffsetMul * destOffset));
-					arrow.updateLocation(destination.getL(), destination.getY(), arrowFacing.RIGHT, arrowheadOffset,
-							destOffsetMul * destOffset);
+					arrow.updateLocation(destination.getL(), destination.getY() + (destOffsetMul * destOffset), arrowFacing.RIGHT, arrowheadOffset);
 				}
 
 			}
