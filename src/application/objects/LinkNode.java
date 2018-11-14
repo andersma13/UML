@@ -183,4 +183,8 @@ public class LinkNode {
 			connectedLinks.remove(link);
 
 	}
+
+	public int askNum(Link link) {
+		return connectedLinks.indexOf(link);
+	}
 }
