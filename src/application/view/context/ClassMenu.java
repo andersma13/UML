@@ -41,6 +41,8 @@ public class ClassMenu extends ContextMenu {
 
 	/*
 	 * Constructs a ClassMenu instance
+	 * 
+	 * WARNING: index contains stale data (index is never updated, no easy way to update)
 	 */
 	public ClassMenu(int i, Model dataIn) {
 		index = i;
@@ -51,5 +53,9 @@ public class ClassMenu extends ContextMenu {
 
 		this.getItems().add(edit);
 		this.getItems().add(delete);
+	}
+
+	public void updateIndex(int l) {
+		index = l;		
 	}
 }

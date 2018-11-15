@@ -119,6 +119,7 @@ public class Main extends Application {
 								newClass.setLayoutX((double) added.getXPos());
 								newClass.setLayoutY((double) added.getYPos());
 								ClassMenu classContextMenu = new ClassMenu(added.getIndex(), data);
+								//data.addMenu(added.getIndex(), classContextMenu);
 
 								// Declare delta to be used with click events
 								final Delta delta = new Delta();

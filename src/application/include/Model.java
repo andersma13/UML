@@ -12,6 +12,7 @@ import java.util.Stack;
 import application.include.Model.classStackData;
 import application.objects.ClassBlock;
 import application.objects.Link;
+import application.view.context.ClassMenu;
 import javafx.beans.Observable;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -22,6 +23,8 @@ import javafx.collections.ObservableList;
 import javafx.util.Callback;
 
 public class Model {
+	private List<menuData> menus = new ArrayList<menuData>();
+	
 	private Stack<classStackData> classUndoStack = new Stack<classStackData>();
 	private Stack<classStackData> classRedoStack = new Stack<classStackData>();
 	private Stack<Integer> classUndoStackSize = new Stack<Integer>();
@@ -33,7 +36,6 @@ public class Model {
 
 	private Boolean duringUndo = false;
 	private Boolean duringRedo = false;
-	//private Boolean justRedid = false;
 
 	public class classStackData {
 		private int[] intData = new int[5];
@@ -46,6 +48,11 @@ public class Model {
 	public class linkStackData {
 		private int[] intData = new int[8];
 		private String label;
+	}
+	
+	public class menuData {
+		private int index;
+		private ClassMenu menu;
 	}
 
 	public class ClassModel {
@@ -559,7 +566,7 @@ public class Model {
 	private ObservableList<LinkModel> linkList;
 	private List<ClassBlock> classes;
 	private List<Link> links;
-
+	
 	/*
 	 * This class uses the classList and connectionList classes to represent all the
 	 * elements being stored in the diagram. Using two separate classes to store
@@ -700,6 +707,9 @@ public class Model {
 	 */
 	public void removeClassModel(int i) {
 		classList.remove(i);
+		
+		for (Link link : links)
+		  link.updateLine();
 	}
 
 	/**
@@ -753,6 +763,7 @@ public class Model {
 	 */
 	public void removeClass(int i) {
 		classes.remove(i);
+		//menuUpdate(i);
 	}
 
 	/**
@@ -775,6 +786,44 @@ public class Model {
 	public void removeLink(int i) {
 		links.remove(i);
 	}
+	
+	/**
+	 * menu container system - disabled
+	 * 
+	 * (would allow correct right-click delete fucntionality)
+	 * 
+	 * requires updating the save/load and all undo/redo functions to maintain ClassMenus
+	 */
+	
+	/*
+	 * 
+	 * 
+	 * @param index 
+	 * @param classContextMenu
+	 
+	public void addMenu(int i, ClassMenu classContextMenu) {
+		menuData menu = new menuData();
+		menu.index = i;
+		menu.menu = classContextMenu;
+		menus.add(menu);
+	}
+	*/
+	
+	/**
+	 * 
+	 * 
+	 * @param i
+	 
+	public void menuUpdate(int i) {
+		System.out.println("removing menu index " + i);
+		menus.remove(i);
+		
+		for (int l = i; l != menus.size(); ++l) {
+			menus.get(l).index = l;
+			menus.get(l).menu.updateIndex(l);
+		}
+	}
+	*/
 
 	/**
 	 * Clears all Links from the links list
@@ -1128,6 +1177,7 @@ public class Model {
 		classList.clear();
 		classes.clear();
 		linkList.clear();
+		menus.clear();
 
 		for (Link linky : links)
 			linky.warnLinkNodes();
