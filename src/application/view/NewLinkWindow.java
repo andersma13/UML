@@ -60,12 +60,16 @@ public class NewLinkWindow extends Stage {
 		EventHandler<ActionEvent> submitLinkEvent = new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent e) {
+				data.saveUndoState();
+				data.clearRedoState();
 				try {
 					int srcIn = Integer.parseInt(newLinkSrc.getText());
 					int destIn = Integer.parseInt(newLinkDest.getText());
 
-					data.addLinkModel(new int[] { data.getLinkTail(), 0, srcIn, destIn, 0, 1, 0, 1 },
-							newLinkTitle.getText());
+					if (srcIn <= data.maxLink() && srcIn >= 0 && destIn <= data.maxLink() && destIn >= 0) {
+						data.addLinkModel(new int[] { data.getLinkTail(), 0, srcIn, destIn, 0, 1, 0, 1 },
+								newLinkTitle.getText());
+					}
 				} catch (NumberFormatException ex) {
 				}
 				closeWindow();

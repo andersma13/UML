@@ -51,9 +51,12 @@ public class ProgramWindow extends Stage {
 	public Button newClass = new Button("New class...");
 	public Button removeClass = new Button("Delete...");
 	public Button newLink = new Button("New link...");
+	public Button undo = new Button("Undo...");
+	public Button redo = new Button("Redo...");
 
 	public ProgramWindow(Model dataIn) {
 		Stage ref = this;
+		ref.setTitle("teamTeam UML Designer Pro [registered version]");
 		data = dataIn;
 		this.setMinHeight(DEFAULT_HEIGHT);
 		this.setMinWidth(DEFAULT_WIDTH);
@@ -73,9 +76,13 @@ public class ProgramWindow extends Stage {
 		newClass.getStyleClass().add("toolbarButtons");
 		removeClass.getStyleClass().add("toolbarButtons");
 		newLink.getStyleClass().add("toolbarButtons");
+		undo.getStyleClass().add("toolbarButtons");
+		redo.getStyleClass().add("toolbarButtons");
 		tools.add(newClass, 0, 0);
 		tools.add(removeClass, 0, 1);
 		tools.add(newLink, 0, 2);
+		tools.add(undo, 0, 3);
+		tools.add(redo, 0, 4);
 
 		// Creates a new class dialog upon click
 		EventHandler<ActionEvent> newClassEvent = new EventHandler<ActionEvent>() {
@@ -105,6 +112,32 @@ public class ProgramWindow extends Stage {
 			public void handle(ActionEvent e) {
 				data.clear();
 				mainPanel.getChildren().clear();
+			}
+		};
+
+		EventHandler<ActionEvent> undoEvent = new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent e) {
+				data.setUndoState();
+				data.saveRedoState();
+				data.clear();
+				mainPanel.getChildren().clear();
+				data.undo();
+				if (data.emptyUndo())
+					undo.setDisable(true);
+			}
+		};
+
+		EventHandler<ActionEvent> redoEvent = new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent e) {
+				data.setRedoState();
+				data.saveUndoState();
+				data.clear();
+				mainPanel.getChildren().clear();
+				data.redo();
+				if (data.emptyRedo())
+					redo.setDisable(true);
 			}
 		};
 
@@ -170,9 +203,14 @@ public class ProgramWindow extends Stage {
 		newClass.setOnAction(newClassEvent);
 		newLink.setOnAction(newLinkEvent);
 		clear.setOnAction(clearEvent);
+		undo.setOnAction(undoEvent);
+		redo.setOnAction(redoEvent);
 		save.setOnAction(saveEvent);
 		load.setOnAction(loadEvent);
 		export.setOnAction(exportEvent);
+
+		redo.setDisable(true);
+		undo.setDisable(true);
 
 		// Place items on stage
 		root.setTop(menu);

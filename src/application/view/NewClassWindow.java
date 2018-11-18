@@ -1,6 +1,5 @@
 package application.view;
 
-import java.util.function.UnaryOperator;
 import application.include.Model;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -9,8 +8,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.control.TextFormatter;
-import javafx.scene.control.TextFormatter.Change;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
@@ -25,44 +22,28 @@ public class NewClassWindow extends Stage {
 	private TextArea newClassAttr = new TextArea();
 	private TextArea newClassOper = new TextArea();
 	private TextArea newClassDesc = new TextArea();
-	private TextField newClassX = new TextField("0");
-	private TextField newClassY = new TextField("0");
 	public Button newClassSubmit = new Button("Submit");
 	public Button deleteClass = new Button("Delete");
 
-	// Filter input for integral values
-	private UnaryOperator<Change> integers = change -> {
-		String text = change.getText();
-		return (text.matches("[0-9]*") ? change : null);
-	};
-
-	private TextFormatter<String> forceIntX = new TextFormatter<>(integers);
-	private TextFormatter<String> forceIntY = new TextFormatter<>(integers);
-
 	// Override tab presses for field traversal
-	
+
 	private EventHandler<KeyEvent> tabTraverse = new EventHandler<KeyEvent>() {
 		@Override
 		public void handle(KeyEvent event) {
-		    KeyCode code = event.getCode();
+			KeyCode code = event.getCode();
 
-		    if (code == KeyCode.TAB && !event.isShiftDown() && !event.isControlDown()) {
-		        event.consume();
-		        Node node = (Node) event.getSource();            
-		        KeyEvent newEvent 
-		          = new KeyEvent(event.getSource(),
-		                     event.getTarget(), event.getEventType(),
-		                     event.getCharacter(), event.getText(),
-		                     event.getCode(), event.isShiftDown(),
-		                     true, event.isAltDown(),
-		                     event.isMetaDown());
+			if (code == KeyCode.TAB && !event.isShiftDown() && !event.isControlDown()) {
+				event.consume();
+				Node node = (Node) event.getSource();
+				KeyEvent newEvent = new KeyEvent(event.getSource(), event.getTarget(), event.getEventType(),
+						event.getCharacter(), event.getText(), event.getCode(), event.isShiftDown(), true,
+						event.isAltDown(), event.isMetaDown());
 
-		        node.fireEvent(newEvent);            
-		        }
-		    }
+				node.fireEvent(newEvent);
+			}
+		}
 	};
 
-	
 	/**
 	 * Constructs a NewClassWindow instance
 	 * 
@@ -82,15 +63,11 @@ public class NewClassWindow extends Stage {
 			newClassAttr.setPromptText("Class Attributes...");
 			newClassOper.setPromptText("Class Operations...");
 			newClassDesc.setPromptText("Class Description...");
-			newClassX.setPromptText("Class X");
-			newClassY.setPromptText("Class Y");
 		} else {
 			newClassName.setText(data.getClassModel(editIndex).getName());
 			newClassAttr.setText(data.getClassModel(editIndex).getAttr());
 			newClassOper.setText(data.getClassModel(editIndex).getOper());
 			newClassDesc.setText(data.getClassModel(editIndex).getDesc());
-			newClassX.setText(String.valueOf(data.getClassModel(editIndex).getXPos()));
-			newClassY.setText(String.valueOf(data.getClassModel(editIndex).getYPos()));
 		}
 
 		// Place elements on stage
@@ -99,8 +76,6 @@ public class NewClassWindow extends Stage {
 		newClassInterface.add(newClassAttr, 0, 2, 2, 1);
 		newClassInterface.add(newClassOper, 0, 3, 2, 1);
 		newClassInterface.add(newClassDesc, 0, 4, 2, 1);
-		newClassInterface.add(newClassX, 0, 5);
-		newClassInterface.add(newClassY, 1, 5);
 		newClassInterface.add(newClassSubmit, 1, 6);
 
 		// Check for new class
@@ -113,18 +88,15 @@ public class NewClassWindow extends Stage {
 		newClassOper.addEventFilter(KeyEvent.KEY_PRESSED, tabTraverse);
 		newClassDesc.addEventFilter(KeyEvent.KEY_PRESSED, tabTraverse);
 
-		// Limit X and Y to ints
-		newClassX.setTextFormatter(forceIntX);
-		newClassY.setTextFormatter(forceIntY);
-
 		// Handler to submit the selected class
 		EventHandler<ActionEvent> submitClassEvent = new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent e) {
+				data.saveUndoState();
+				data.clearRedoState();
+
 				if (editIndex == -1) {
-					data.addClassModel(
-							new int[] { data.getClassTail(), Integer.parseInt(newClassX.getText()),
-									Integer.parseInt(newClassY.getText()), 100, 100 },
+					data.addClassModel(new int[] { data.getClassTail(), 0, 0, 100, 100 },
 							new String[] { newClassName.getText(), newClassAttr.getText(), newClassOper.getText(),
 									newClassDesc.getText() });
 				} else {

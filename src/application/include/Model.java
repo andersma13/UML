@@ -7,7 +7,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.Stack;
 
+import application.include.Model.classStackData;
 import application.objects.ClassBlock;
 import application.objects.Link;
 import javafx.beans.Observable;
@@ -20,6 +22,34 @@ import javafx.collections.ObservableList;
 import javafx.util.Callback;
 
 public class Model {
+	private Stack<classStackData> classUndoStack = new Stack<classStackData>();
+	private Stack<classStackData> classRedoStack = new Stack<classStackData>();
+	private Stack<Integer> classUndoStackSize = new Stack<Integer>();
+	private Stack<Integer> classRedoStackSize = new Stack<Integer>();
+	private Stack<linkStackData> linkUndoStack = new Stack<linkStackData>();
+	private Stack<linkStackData> linkRedoStack = new Stack<linkStackData>();
+	private Stack<Integer> linkUndoStackSize = new Stack<Integer>();
+	private Stack<Integer> linkRedoStackSize = new Stack<Integer>();
+
+	private Boolean duringUndo = false;
+	private Boolean duringRedo = false;
+	private Boolean justRestoredState = false;
+	private Boolean justUndid = false;
+	private Boolean justRedid = false;
+
+	public class classStackData {
+		private int[] intData = new int[5];
+		private String name;
+		private String attr;
+		private String oper;
+		private String desc;
+	}
+
+	public class linkStackData {
+		private int[] intData = new int[8];
+		private String label;
+	}
+
 	public class ClassModel {
 
 		/*
@@ -758,6 +788,256 @@ public class Model {
 	}
 
 	/**
+	 * 
+	 * @return returns the index of the highest numbered class
+	 */
+	public int maxLink() {
+		return classList.size() - 1;
+	}
+
+	/**
+	 * Tells if it is safe to saveUndoState
+	 * 
+	 * @return is false if model is in the middle of a undo or redo
+	 */
+	public Boolean safeToSave() {
+		return !(duringUndo || duringRedo);
+	}
+
+	/**
+	 * Sets flag that undo is in process
+	 */
+	public void setUndoState() {
+		duringUndo = true;
+
+	}
+
+	/**
+	 * Sets flag that redo is in process
+	 */
+	public void setRedoState() {
+		duringRedo = true;
+	}
+
+	/**
+	 * 
+	 * @return returns true if Redo was just executed
+	 */
+	public Boolean getJustRedid() {
+		return justRedid;
+	}
+
+	/**
+	 * clears the entire Redo stack (because of a branch in user choices)
+	 * 
+	 */
+	public void clearRedoState() {
+		while (!classRedoStackSize.isEmpty()) {
+			int size = classRedoStackSize.pop();
+			for (int i = 0; i != size; ++i)
+				classRedoStack.pop();
+		}
+
+		while (!linkRedoStackSize.isEmpty()) {
+			int size = linkRedoStackSize.pop();
+
+			for (int i = 0; i != size; ++i)
+				linkRedoStack.pop();
+		}
+	}
+
+	/**
+	 * 
+	 * @return returns true if the Undo Stack is empty
+	 */
+	public Boolean emptyUndo() {
+		return classUndoStackSize.size() == 0 ? true : false;
+	}
+
+	/**
+	 * 
+	 * @return returns true if the Redo stack is empty
+	 */
+	public Boolean emptyRedo() {
+		return classRedoStackSize.size() == 0 ? true : false;
+	}
+
+	/**
+	 * 
+	 * Saves an undoState onto the classUndoStack
+	 * 
+	 */
+	public void saveUndoState() {
+		if (classList.size() != 0) {
+			classUndoStackSize.push(classList.size());
+
+			for (int i = classList.size() - 1; i != -1; --i) {
+				classStackData state = new classStackData();
+
+				state.intData[0] = classList.get(i).getIndex();
+				state.intData[1] = classList.get(i).getXPos();
+				state.intData[2] = classList.get(i).getYPos();
+				state.intData[3] = classList.get(i).getWidth();
+				state.intData[4] = classList.get(i).getHeight();
+				state.name = classList.get(i).getName();
+				state.attr = classList.get(i).getAttr();
+				state.oper = classList.get(i).getOper();
+				state.desc = classList.get(i).getDesc();
+
+				classUndoStack.push(state);
+			}
+
+			linkUndoStackSize.push(linkList.size());
+
+			for (int i = linkList.size() - 1; i != -1; --i) {
+				linkStackData lstate = new linkStackData();
+
+				lstate.intData[0] = linkList.get(i).getIndex();
+				lstate.intData[1] = linkList.get(i).getType();
+				lstate.intData[2] = linkList.get(i).getSource();
+				lstate.intData[3] = linkList.get(i).getDest();
+				lstate.intData[4] = linkList.get(i).getSourceMin();
+				lstate.intData[5] = linkList.get(i).getSourceMax();
+				lstate.intData[6] = linkList.get(i).getDestMin();
+				lstate.intData[7] = linkList.get(i).getDestMax();
+				lstate.label = linkList.get(i).getLabel();
+
+				linkUndoStack.push(lstate);
+			}
+			justRestoredState = false;
+			justUndid = false;
+			justRedid = false;
+		}
+	}
+
+	/**
+	 * Saves the current model state to the Redo Stack
+	 */
+	public void saveRedoState() {
+		if (classList.size() != 0) {
+			classRedoStackSize.push(classList.size());
+
+			for (int i = classList.size() - 1; i != -1; --i) {
+				classStackData state = new classStackData();
+
+				state.intData[0] = classList.get(i).getIndex();
+				state.intData[1] = classList.get(i).getXPos();
+				state.intData[2] = classList.get(i).getYPos();
+				state.intData[3] = classList.get(i).getWidth();
+				state.intData[4] = classList.get(i).getHeight();
+				state.name = classList.get(i).getName();
+				state.attr = classList.get(i).getAttr();
+				state.oper = classList.get(i).getOper();
+				state.desc = classList.get(i).getDesc();
+
+				classRedoStack.push(state);
+			}
+
+			linkRedoStackSize.push(linkList.size());
+
+			for (int i = linkList.size() - 1; i != -1; --i) {
+				linkStackData lstate = new linkStackData();
+
+				lstate.intData[0] = linkList.get(i).getIndex();
+				lstate.intData[1] = linkList.get(i).getType();
+				lstate.intData[2] = linkList.get(i).getSource();
+				lstate.intData[3] = linkList.get(i).getDest();
+				lstate.intData[4] = linkList.get(i).getSourceMin();
+				lstate.intData[5] = linkList.get(i).getSourceMax();
+				lstate.intData[6] = linkList.get(i).getDestMin();
+				lstate.intData[7] = linkList.get(i).getDestMax();
+				lstate.label = linkList.get(i).getLabel();
+
+				linkRedoStack.push(lstate);
+			}
+		}
+	}
+
+	/**
+	 * Undoes the latest action done by the user
+	 */
+	public void undo() {
+		this.saveRedoState();
+
+		if (!classUndoStackSize.isEmpty()) {
+			// now actually restore the previous state
+			int size = classUndoStackSize.pop();
+			// classRedoStackSize.push(size);
+
+			for (int i = 0; i != size; ++i) {
+				classStackData state = classUndoStack.pop();
+				// classRedoStack.push(state);
+
+				int[] ints = { state.intData[0], state.intData[1], state.intData[2], state.intData[3],
+						state.intData[4] };
+
+				String[] strings = { state.name, state.attr, state.oper, state.desc };
+				classList.add(new ClassModel(ints, strings));
+			}
+		}
+
+		if (!linkUndoStackSize.isEmpty()) {
+			int size = linkUndoStackSize.pop();
+			// linkRedoStackSize.push(size);
+
+			for (int i = 0; i != size; ++i) {
+				linkStackData lstate = linkUndoStack.pop();
+				// linkRedoStack.push(lstate);
+
+				int[] ints = { lstate.intData[0], lstate.intData[1], lstate.intData[2], lstate.intData[3],
+						lstate.intData[4], lstate.intData[5], lstate.intData[6], lstate.intData[7] };
+
+				String label = lstate.label;
+				linkList.add(new LinkModel(ints, label));
+			}
+		}
+
+		duringUndo = false;
+		justRestoredState = true;
+		justUndid = true;
+		justRedid = false;
+	}
+
+	/**
+	 * Re-does what the user choose to undo
+	 * 
+	 */
+	public void redo() {
+		if (!classRedoStackSize.isEmpty()) {
+			int size = classRedoStackSize.pop();
+
+			for (int i = 0; i != size; ++i) {
+				classStackData state = classRedoStack.pop();
+
+				int[] ints = { state.intData[0], state.intData[1], state.intData[2], state.intData[3],
+						state.intData[4] };
+
+				String[] strings = { state.name, state.attr, state.oper, state.desc };
+				classList.add(new ClassModel(ints, strings));
+			}
+		}
+
+		if (!linkRedoStackSize.isEmpty()) {
+			int size = linkRedoStackSize.pop();
+
+			for (int i = 0; i != size; ++i) {
+				linkStackData lstate = linkRedoStack.pop();
+
+				int[] ints = { lstate.intData[0], lstate.intData[1], lstate.intData[2], lstate.intData[3],
+						lstate.intData[4], lstate.intData[5], lstate.intData[6], lstate.intData[7] };
+
+				String label = lstate.label;
+				linkList.add(new LinkModel(ints, label));
+			}
+		}
+		duringRedo = false;
+		justRestoredState = true;
+		justUndid = false;
+		justRedid = true;
+
+	}
+
+	/**
 	 * Saves the model data in a format that can be reread later.
 	 * 
 	 * @param file
@@ -809,6 +1089,8 @@ public class Model {
 	 *             Throws if the file can't be read from.
 	 */
 	public void load(File file) throws IOException {
+		this.clearRedoState();
+		
 		Scanner reader = new Scanner(file);
 		reader.next();
 
@@ -863,4 +1145,5 @@ public class Model {
 
 		links.clear();
 	}
+
 }

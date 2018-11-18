@@ -84,6 +84,14 @@ public class Main extends Application {
 		ListChangeListener<ClassModel> classListener = new ListChangeListener<ClassModel>() {
 			@Override
 			public void onChanged(Change<? extends ClassModel> c) {
+				if (!data.emptyUndo())
+					window.undo.setDisable(false);
+				else
+					window.undo.setDisable(true);
+				if (!data.emptyRedo())
+					window.redo.setDisable(false);
+				else
+					window.redo.setDisable(true);
 				while (c.next()) {
 
 					/*****************************
@@ -100,7 +108,6 @@ public class Main extends Application {
 
 						}
 					} else {
-
 						/*****************************
 						 * ELEMENT ADDED
 						 *****************************/
@@ -182,6 +189,10 @@ public class Main extends Application {
 								newClass.setOnMousePressed(new EventHandler<MouseEvent>() {
 									@Override
 									public void handle(MouseEvent e) {
+										if (data.safeToSave()) {
+											data.saveUndoState();
+											data.clearRedoState();
+										}
 										if (e.isPrimaryButtonDown()) {
 											newClass.getScene().setCursor(Cursor.DEFAULT);
 										}
@@ -198,6 +209,15 @@ public class Main extends Application {
 										if (!e.isPrimaryButtonDown()) {
 											newClass.getScene().setCursor(Cursor.DEFAULT);
 										}
+
+										if (!data.emptyUndo())
+											window.undo.setDisable(false);
+										else
+											window.undo.setDisable(true);
+										if (!data.emptyRedo())
+											window.redo.setDisable(false);
+										else
+											window.redo.setDisable(true);
 									}
 								});
 
@@ -255,11 +275,10 @@ public class Main extends Application {
 								newClass.toFront();
 								window.applyCss();
 								newClass.initWidthHeight();
-								
+
 								// Set the bounds of the ClassBlock within the LinkNode
 								newClass.getNode().setBounds((int) (added.getXPos()),
-										(int) (added.getXPos() + newClass.getWidth()),
-										(int) (added.getYPos()),
+										(int) (added.getXPos() + newClass.getWidth()), (int) (added.getYPos()),
 										(int) (added.getYPos() + newClass.getHeight()));
 							}
 						}
@@ -378,7 +397,6 @@ public class Main extends Application {
 								newLink.toBack();
 							}
 						} else if (c.wasRemoved()) {
-
 						}
 					}
 				}
