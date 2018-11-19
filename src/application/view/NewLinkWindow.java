@@ -3,10 +3,13 @@ package application.view;
 import java.util.function.UnaryOperator;
 
 import application.include.Model;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
 import javafx.scene.control.TextFormatter.Change;
@@ -23,7 +26,17 @@ public class NewLinkWindow extends Stage {
 	private TextField newLinkSrc = new TextField();
 	private TextField newLinkDest = new TextField();
 	private Button newLinkSubmit = new Button("Submit");
-
+	
+	ObservableList<String> options = 
+		    FXCollections.observableArrayList(
+		    		"Dependency",
+		    		"Assocation",
+		    		"Generalization",
+		    		"Aggregate",
+		    		"Composition"
+		    );
+	private ComboBox<String> newLinkArrow = new ComboBox<String>(options);
+	
 	// Filter input for integral values
 	private UnaryOperator<Change> integers = change -> {
 
@@ -48,11 +61,13 @@ public class NewLinkWindow extends Stage {
 
 		// Place elements on Dialog
 		newLinkInterface.add(newLinkTitle, 0, 0, 2, 1);
-		newLinkInterface.add(newLinkLabel, 0, 1, 2, 1);
+		newLinkInterface.add(newLinkArrow, 0, 1, 2, 1);
+		newLinkInterface.add(newLinkLabel, 0, 2, 2, 1);
 		newLinkInterface.add(newLinkSrc, 0, 5);
 		newLinkInterface.add(newLinkDest, 1, 5);
 		newLinkInterface.add(newLinkSubmit, 1, 6);
 		newLinkLabel.setPromptText("Link label...");
+		newLinkArrow.setPromptText("Select link type...");
 		newLinkSrc.setPromptText("Link Source");
 		newLinkDest.setPromptText("Link Dest");
 
@@ -62,13 +77,13 @@ public class NewLinkWindow extends Stage {
 			public void handle(ActionEvent e) {
 				data.saveUndoState();
 				data.clearRedoState();
-				try {
+				try {					
 					int srcIn = Integer.parseInt(newLinkSrc.getText());
 					int destIn = Integer.parseInt(newLinkDest.getText());
 
 					if (srcIn <= data.maxLink() && srcIn >= 0 && destIn <= data.maxLink() && destIn >= 0) {
-						data.addLinkModel(new int[] { data.getLinkTail(), 0, srcIn, destIn, 0, 1, 0, 1 },
-								newLinkTitle.getText());
+						data.addLinkModel(new int[] { data.getLinkTail(), newLinkArrow.getSelectionModel().getSelectedIndex(), srcIn, destIn, 0, 1, 0, 1 },
+								newLinkLabel.getText());
 					}
 				} catch (NumberFormatException ex) {
 				}

@@ -12,6 +12,7 @@ import java.util.Stack;
 import application.include.Model.classStackData;
 import application.objects.ClassBlock;
 import application.objects.Link;
+import application.view.context.ClassMenu;
 import javafx.beans.Observable;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -22,6 +23,8 @@ import javafx.collections.ObservableList;
 import javafx.util.Callback;
 
 public class Model {
+	private List<menuData> menus = new ArrayList<menuData>();
+	
 	private Stack<classStackData> classUndoStack = new Stack<classStackData>();
 	private Stack<classStackData> classRedoStack = new Stack<classStackData>();
 	private Stack<Integer> classUndoStackSize = new Stack<Integer>();
@@ -33,9 +36,6 @@ public class Model {
 
 	private Boolean duringUndo = false;
 	private Boolean duringRedo = false;
-	private Boolean justRestoredState = false;
-	private Boolean justUndid = false;
-	private Boolean justRedid = false;
 
 	public class classStackData {
 		private int[] intData = new int[5];
@@ -48,6 +48,11 @@ public class Model {
 	public class linkStackData {
 		private int[] intData = new int[8];
 		private String label;
+	}
+	
+	public class menuData {
+		private int index;
+		private ClassMenu menu;
 	}
 
 	public class ClassModel {
@@ -69,7 +74,7 @@ public class Model {
 		private StringProperty attr = new SimpleStringProperty();
 		private StringProperty oper = new SimpleStringProperty();
 		private StringProperty desc = new SimpleStringProperty();
-		private final int STEP = 10;
+		private final int STEP = 1;
 
 		/**
 		 * Constructs an instance of ClassModel
@@ -561,7 +566,7 @@ public class Model {
 	private ObservableList<LinkModel> linkList;
 	private List<ClassBlock> classes;
 	private List<Link> links;
-
+	
 	/*
 	 * This class uses the classList and connectionList classes to represent all the
 	 * elements being stored in the diagram. Using two separate classes to store
@@ -702,6 +707,9 @@ public class Model {
 	 */
 	public void removeClassModel(int i) {
 		classList.remove(i);
+		
+		for (Link link : links)
+		  link.updateLine();
 	}
 
 	/**
@@ -715,6 +723,7 @@ public class Model {
 		linkList.remove(i);
 		for (int l = i; l != linkList.size(); ++l) {
 			linkList.get(l).setIndex(l);
+			links.get(i).warnLinkNodes();
 		}
 	}
 
@@ -754,6 +763,7 @@ public class Model {
 	 */
 	public void removeClass(int i) {
 		classes.remove(i);
+		//menuUpdate(i);
 	}
 
 	/**
@@ -776,6 +786,44 @@ public class Model {
 	public void removeLink(int i) {
 		links.remove(i);
 	}
+	
+	/**
+	 * menu container system - disabled
+	 * 
+	 * (would allow correct right-click delete fucntionality)
+	 * 
+	 * requires updating the save/load and all undo/redo functions to maintain ClassMenus
+	 */
+	
+	/*
+	 * 
+	 * 
+	 * @param index 
+	 * @param classContextMenu
+	 
+	public void addMenu(int i, ClassMenu classContextMenu) {
+		menuData menu = new menuData();
+		menu.index = i;
+		menu.menu = classContextMenu;
+		menus.add(menu);
+	}
+	*/
+	
+	/**
+	 * 
+	 * 
+	 * @param i
+	 
+	public void menuUpdate(int i) {
+		System.out.println("removing menu index " + i);
+		menus.remove(i);
+		
+		for (int l = i; l != menus.size(); ++l) {
+			menus.get(l).index = l;
+			menus.get(l).menu.updateIndex(l);
+		}
+	}
+	*/
 
 	/**
 	 * Clears all Links from the links list
@@ -823,9 +871,9 @@ public class Model {
 	 * 
 	 * @return returns true if Redo was just executed
 	 */
-	public Boolean getJustRedid() {
-		return justRedid;
-	}
+	//public Boolean getJustRedid() {
+	//	return justRedid;
+	//}
 
 	/**
 	 * clears the entire Redo stack (because of a branch in user choices)
@@ -904,9 +952,7 @@ public class Model {
 
 				linkUndoStack.push(lstate);
 			}
-			justRestoredState = false;
-			justUndid = false;
-			justRedid = false;
+			//justRedid = false;
 		}
 	}
 
@@ -962,11 +1008,9 @@ public class Model {
 		if (!classUndoStackSize.isEmpty()) {
 			// now actually restore the previous state
 			int size = classUndoStackSize.pop();
-			// classRedoStackSize.push(size);
 
 			for (int i = 0; i != size; ++i) {
 				classStackData state = classUndoStack.pop();
-				// classRedoStack.push(state);
 
 				int[] ints = { state.intData[0], state.intData[1], state.intData[2], state.intData[3],
 						state.intData[4] };
@@ -978,11 +1022,9 @@ public class Model {
 
 		if (!linkUndoStackSize.isEmpty()) {
 			int size = linkUndoStackSize.pop();
-			// linkRedoStackSize.push(size);
 
 			for (int i = 0; i != size; ++i) {
 				linkStackData lstate = linkUndoStack.pop();
-				// linkRedoStack.push(lstate);
 
 				int[] ints = { lstate.intData[0], lstate.intData[1], lstate.intData[2], lstate.intData[3],
 						lstate.intData[4], lstate.intData[5], lstate.intData[6], lstate.intData[7] };
@@ -993,9 +1035,7 @@ public class Model {
 		}
 
 		duringUndo = false;
-		justRestoredState = true;
-		justUndid = true;
-		justRedid = false;
+		//justRedid = false;
 	}
 
 	/**
@@ -1031,9 +1071,7 @@ public class Model {
 			}
 		}
 		duringRedo = false;
-		justRestoredState = true;
-		justUndid = false;
-		justRedid = true;
+		//justRedid = true;
 
 	}
 
@@ -1090,7 +1128,7 @@ public class Model {
 	 */
 	public void load(File file) throws IOException {
 		this.clearRedoState();
-		
+
 		Scanner reader = new Scanner(file);
 		reader.next();
 
@@ -1139,6 +1177,7 @@ public class Model {
 		classList.clear();
 		classes.clear();
 		linkList.clear();
+		menus.clear();
 
 		for (Link linky : links)
 			linky.warnLinkNodes();

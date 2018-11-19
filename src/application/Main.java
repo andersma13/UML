@@ -119,6 +119,7 @@ public class Main extends Application {
 								newClass.setLayoutX((double) added.getXPos());
 								newClass.setLayoutY((double) added.getYPos());
 								ClassMenu classContextMenu = new ClassMenu(added.getIndex(), data);
+								//data.addMenu(added.getIndex(), classContextMenu);
 
 								// Declare delta to be used with click events
 								final Delta delta = new Delta();
@@ -356,7 +357,7 @@ public class Main extends Application {
 								int destIndex = added.getDest();
 
 								Link newLink = new Link(data.getClass(srcIndex).getNode(),
-										data.getClass(destIndex).getNode());
+										data.getClass(destIndex).getNode(), added.getType());
 
 								data.getClass(srcIndex).getNode().getXProperty()
 										.addListener(new ChangeListener<Number>() {
@@ -393,8 +394,11 @@ public class Main extends Application {
 												newLink.setEndY((int) newValue);
 											}
 										});
+
 								addLink(newLink);
 								newLink.toBack();
+								
+								newLink.updateLine();
 							}
 						} else if (c.wasRemoved()) {
 						}
@@ -449,6 +453,7 @@ public class Main extends Application {
 	private void addLink(Link in) {
 		data.addLink(in);
 		window.addLink(in);
+		window.addArrow(in.getArrow());
 	}
 
 	public static void main(String[] args) {

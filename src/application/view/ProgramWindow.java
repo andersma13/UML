@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 
 import application.include.Model;
+import application.objects.Arrow;
 import application.objects.ClassBlock;
 import application.objects.Link;
 import javafx.event.ActionEvent;
@@ -110,6 +111,8 @@ public class ProgramWindow extends Stage {
 		EventHandler<ActionEvent> clearEvent = new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent e) {
+				data.saveUndoState();
+				data.clearRedoState();
 				data.clear();
 				mainPanel.getChildren().clear();
 			}
@@ -258,6 +261,16 @@ public class ProgramWindow extends Stage {
 	public void addLink(Link in) {
 		mainPanel.getChildren().add(in);
 	}
+	
+	/**
+	 * Add a arrow to the main panel
+	 * 
+	 * @param in
+	 * 			The arrow to be added
+	 */
+	public void addArrow(Arrow in) {
+		mainPanel.getChildren().add(in);
+	}
 
 	/**
 	 * Removes the given link from the main panel
@@ -266,6 +279,16 @@ public class ProgramWindow extends Stage {
 	 *            The link to be removed
 	 */
 	public void removeLink(Link in) {
+		mainPanel.getChildren().remove(in);
+	}
+	
+	/**
+	 * Removes the given arrow from the main panel
+	 * 
+	 * @param in
+	 * 			The arrow to be removed
+	 */
+	public void removeArrow(Arrow in) {
 		mainPanel.getChildren().remove(in);
 	}
 
