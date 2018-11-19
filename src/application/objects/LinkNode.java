@@ -63,7 +63,8 @@ public class LinkNode {
 	/**
 	 * Returns the x position of the LinkNode
 	 * 
-	 * @return the x position of the LinkNode
+	 * @return 
+	 * 			the x position of the LinkNode
 	 */
 	public int getX() {
 		return xPos.get();
@@ -72,7 +73,8 @@ public class LinkNode {
 	/**
 	 * Returns the y position of the LinkNode
 	 * 
-	 * @return the y position of the LinkNode
+	 * @return 
+	 * 			the y position of the LinkNode
 	 */
 	public int getY() {
 		return yPos.get();
@@ -81,7 +83,8 @@ public class LinkNode {
 	/**
 	 * Returns the xPos property of the LinkNode
 	 * 
-	 * @return the LinkNode's xPos property
+	 * @return 
+	 * 			the LinkNode's xPos property
 	 */
 	public IntegerProperty getXProperty() {
 		return xPos;
@@ -90,14 +93,15 @@ public class LinkNode {
 	/**
 	 * Returns the yPos property of the LinkNode
 	 * 
-	 * @return the LinkNode's yPos property
+	 * @return 
+	 * 			the LinkNode's yPos property
 	 */
 	public IntegerProperty getYProperty() {
 		return yPos;
 	}
 
 	/**
-	 * add the parent Link to the list of Links that originate from this LinkNode
+	 * Add the parent Link to the list of Links that originate from this LinkNode
 	 * 
 	 * @param one
 	 *            of the Links that uses this LinkNode

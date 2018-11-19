@@ -66,8 +66,7 @@ public class Link extends Line {
 	}
 
 	/**
-	 *
-	 * tell each connected LinkNode that this Link will soon be deleted.
+	 * Tell each connected LinkNode that this Link will soon be deleted.
 	 *   also tell the arrowheads to clear themselves while you're at it.
 	 *
 	 */
@@ -79,8 +78,7 @@ public class Link extends Line {
 	}
 
 	/**
-	 *
-	 * update the source and destinations of the Link (Line) to appropriate sides
+	 * Update the source and destinations of the Link (Line) to appropriate sides
 	 * and offsets
 	 *
 	 */
