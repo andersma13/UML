@@ -13,7 +13,7 @@ public class Arrow extends Path {
 	private int linkType;
 
 	/**
-	 * 
+	 * Constructor for the Arrow
 	 * 
 	 * @param type
 	 *            Link types by int
@@ -48,8 +48,6 @@ public class Arrow extends Path {
 	 *            Length of the arrow
 	 */
 	public void updateLocation(int x, int y, Link.arrowFacing orientation, int arrowheadShaft) {
-		// spacingOffset is can be x or y depending on orientation
-		// arrowheadShaft starts negative
 		getElements().clear();
 
 		int XArrowheadShaft = 0;
@@ -69,7 +67,6 @@ public class Arrow extends Path {
 		    else
 		    	XArrowheadAngleMul = 1.5 * arrowheadShaft;
 
-			// atan (distance y, distance x) - pi/2
 			angle = Math.atan2(0, arrowheadShaft) - Math.PI / 2.0;
 
 			break;

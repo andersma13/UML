@@ -189,11 +189,14 @@ public class LinkNode {
 	}
 
 	/**
-	 *  returns an appropriate offset for the Link based on its index in the list of links connected to this LinkNode
-	 *    ( offsets go 0, 1, -1, 2, -2, ... )
+	 *  Returns an appropriate offset for the Link based on its index in the list of links connected to this LinkNode
+	 *    ( offsets number pattern is such:  0, 1, -1, 2, -2, ... )
 	 * 
 	 * @param link
+	 * 				The link object that wants to know what its index is
+	 * 
 	 * @return
+	 * 			The correct number in the series as derived from the index of the Link
 	 */
 	public int askNum(Link link) {
 		int x = connectedLinks.indexOf(link);

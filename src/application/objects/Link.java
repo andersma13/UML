@@ -10,7 +10,6 @@ public class Link extends Line {
 	private int srcOffsetMul;
 	private int destOffsetMul;
 
-	// which direction is arrow pointing?
 	enum arrowFacing { UP, RIGHT, DOWN, LEFT }; 
 
 	/**
@@ -22,6 +21,7 @@ public class Link extends Line {
 	 * @param dest
 	 *            the LinkNode that connects to the destination of the Link
 	 * @param arrowType
+	 *            the type of link the user chose (changes type of arrow displayed)
 	 */
 	public Link(LinkNode src, LinkNode dest, int arrowType) {
 		this.getStyleClass().add("link");
@@ -67,7 +67,7 @@ public class Link extends Line {
 
 	/**
 	 * Tell each connected LinkNode that this Link will soon be deleted.
-	 *   also tell the arrowheads to clear themselves while you're at it.
+	 *   Also tell the arrowheads to clear themselves while you're at it.
 	 *
 	 */
 	public void warnLinkNodes() {
@@ -79,14 +79,17 @@ public class Link extends Line {
 
 	/**
 	 * Update the source and destinations of the Link (Line) to appropriate sides
-	 * and offsets
+	 * and offsets.
+	 * 
+	 * Also calls the Arrow redraw method
 	 *
 	 */
 	public void updateLine() {
+		// how many pixels a line connecting to source or destination should be offset from their neighbors
 		final int srcOffset = 0;
 		final int destOffset = 14;
 
-		// to make it look like the lines are always connecting to a box or an arrowhead
+		// to make it look like the lines are connected to a box or an arrowhead
 		final int arrowheadOffset = -10;
 		final int correctnessOffset = 5;
 		
@@ -185,11 +188,23 @@ public class Link extends Line {
 		}
 	}
 
+	/**
+	 * Creates an arrow object, assigning its appropriate type
+	 * 
+	 * @param type
+	 * 				The type of the arrow to draw
+	 */
 	public void setArrowType(int type) {
 		arrow = new Arrow(type);
 
 	}
 
+	/**
+	 * returns the arrow object
+	 * 
+	 * @return
+	 * 			The Link's arrow object
+	 */
 	public Arrow getArrow() {
 		return arrow;
 	}

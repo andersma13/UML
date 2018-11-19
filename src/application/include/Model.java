@@ -24,7 +24,7 @@ import javafx.util.Callback;
 
 public class Model {
 	private List<menuData> menus = new ArrayList<menuData>();
-	
+
 	private Stack<classStackData> classUndoStack = new Stack<classStackData>();
 	private Stack<classStackData> classRedoStack = new Stack<classStackData>();
 	private Stack<Integer> classUndoStackSize = new Stack<Integer>();
@@ -49,7 +49,7 @@ public class Model {
 		private int[] intData = new int[8];
 		private String label;
 	}
-	
+
 	public class menuData {
 		private int index;
 		private ClassMenu menu;
@@ -566,7 +566,7 @@ public class Model {
 	private ObservableList<LinkModel> linkList;
 	private List<ClassBlock> classes;
 	private List<Link> links;
-	
+
 	/*
 	 * This class uses the classList and connectionList classes to represent all the
 	 * elements being stored in the diagram. Using two separate classes to store
@@ -707,9 +707,9 @@ public class Model {
 	 */
 	public void removeClassModel(int i) {
 		classList.remove(i);
-		
+
 		for (Link link : links)
-		  link.updateLine();
+			link.updateLine();
 	}
 
 	/**
@@ -763,7 +763,7 @@ public class Model {
 	 */
 	public void removeClass(int i) {
 		classes.remove(i);
-		//menuUpdate(i);
+		// menuUpdate(i);
 	}
 
 	/**
@@ -786,47 +786,42 @@ public class Model {
 	public void removeLink(int i) {
 		links.remove(i);
 	}
-	
+
 	/**
 	 * menu container system - disabled
 	 * 
 	 * (would allow correct right-click delete fucntionality)
 	 * 
-	 * requires updating the save/load and all undo/redo functions to maintain ClassMenus
+	 * requires updating the save/load and all undo/redo functions to maintain
+	 * ClassMenus
 	 */
-	
+
 	/*
 	 * 
 	 * 
-	 * @param index 
+	 * @param index
+	 * 
 	 * @param classContextMenu
-	 
-	public void addMenu(int i, ClassMenu classContextMenu) {
-		menuData menu = new menuData();
-		menu.index = i;
-		menu.menu = classContextMenu;
-		menus.add(menu);
-	}
-	*/
-	
+	 * 
+	 * public void addMenu(int i, ClassMenu classContextMenu) { menuData menu = new
+	 * menuData(); menu.index = i; menu.menu = classContextMenu; menus.add(menu); }
+	 */
+
 	/**
 	 * 
 	 * 
 	 * @param i
-	 
-	public void menuUpdate(int i) {
-		System.out.println("removing menu index " + i);
-		menus.remove(i);
-		
-		for (int l = i; l != menus.size(); ++l) {
-			menus.get(l).index = l;
-			menus.get(l).menu.updateIndex(l);
-		}
-	}
-	*/
+	 * 
+	 *            public void menuUpdate(int i) { System.out.println("removing menu
+	 *            index " + i); menus.remove(i);
+	 * 
+	 *            for (int l = i; l != menus.size(); ++l) { menus.get(l).index = l;
+	 *            menus.get(l).menu.updateIndex(l); } }
+	 */
 
 	/**
 	 * Clears all Links from the links list
+	 * 
 	 */
 	public void clearLinks() {
 		for (Link linky : links)
@@ -854,6 +849,7 @@ public class Model {
 
 	/**
 	 * Sets flag that undo is in process
+	 * 
 	 */
 	public void setUndoState() {
 		duringUndo = true;
@@ -862,6 +858,7 @@ public class Model {
 
 	/**
 	 * Sets flag that redo is in process
+	 * 
 	 */
 	public void setRedoState() {
 		duringRedo = true;
@@ -871,9 +868,9 @@ public class Model {
 	 * 
 	 * @return returns true if Redo was just executed
 	 */
-	//public Boolean getJustRedid() {
-	//	return justRedid;
-	//}
+	// public Boolean getJustRedid() {
+	// return justRedid;
+	// }
 
 	/**
 	 * clears the entire Redo stack (because of a branch in user choices)
@@ -911,7 +908,6 @@ public class Model {
 	}
 
 	/**
-	 * 
 	 * Saves an undoState onto the classUndoStack
 	 * 
 	 */
@@ -952,12 +948,12 @@ public class Model {
 
 				linkUndoStack.push(lstate);
 			}
-			//justRedid = false;
 		}
 	}
 
 	/**
 	 * Saves the current model state to the Redo Stack
+	 * 
 	 */
 	public void saveRedoState() {
 		if (classList.size() != 0) {
@@ -1001,12 +997,12 @@ public class Model {
 
 	/**
 	 * Undoes the latest action done by the user
+	 * 
 	 */
 	public void undo() {
 		this.saveRedoState();
 
 		if (!classUndoStackSize.isEmpty()) {
-			// now actually restore the previous state
 			int size = classUndoStackSize.pop();
 
 			for (int i = 0; i != size; ++i) {
@@ -1035,7 +1031,6 @@ public class Model {
 		}
 
 		duringUndo = false;
-		//justRedid = false;
 	}
 
 	/**
@@ -1071,8 +1066,6 @@ public class Model {
 			}
 		}
 		duringRedo = false;
-		//justRedid = true;
-
 	}
 
 	/**
