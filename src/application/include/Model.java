@@ -12,6 +12,7 @@ import java.util.Stack;
 import application.include.Model.classStackData;
 import application.objects.ClassBlock;
 import application.objects.Link;
+import application.view.ProgramWindow;
 import application.view.context.ClassMenu;
 import javafx.beans.Observable;
 import javafx.beans.property.IntegerProperty;
@@ -828,6 +829,7 @@ public class Model {
 			linky.warnLinkNodes();
 
 		links.clear();
+		linkList.clear();
 	}
 
 	/**
@@ -1176,6 +1178,23 @@ public class Model {
 			linky.warnLinkNodes();
 
 		links.clear();
+	}
+
+	/**
+	 * Hands window to the model for a moment so the window can be cleared of all
+	 * Links
+	 * 
+	 * @param window
+	 *            The window to be cleared of all Links
+	 */
+	public void assistRemoveLinks(ProgramWindow window) {
+		for (ClassBlock classy : classes) {
+			classy.getNode().clearLinks();
+		}
+
+		for (Link linky : links)
+			window.removeLink(linky);
+
 	}
 
 }

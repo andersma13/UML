@@ -4,6 +4,14 @@ import javafx.scene.shape.Line;
 
 public class Link extends Line {
 
+	// how many pixels a line connecting to source or destination should be offset from their neighbors
+	private static final int SOURCE_OFFSET = 0;
+	private static final int DESTINATION_OFFSET = 14;
+
+	// to make it look like the lines are connected to a box or an arrowhead
+	private static final int ARROWHEAD_OFFSET = -10;
+	private static final int CORRECTNESS_OFFSET = 5;
+	
 	private LinkNode source;
 	private LinkNode destination;
 	private Arrow arrow;
@@ -84,15 +92,7 @@ public class Link extends Line {
 	 * Also calls the Arrow redraw method
 	 *
 	 */
-	public void updateLine() {
-		// how many pixels a line connecting to source or destination should be offset from their neighbors
-		final int srcOffset = 0;
-		final int destOffset = 14;
-
-		// to make it look like the lines are connected to a box or an arrowhead
-		final int arrowheadOffset = -10;
-		final int correctnessOffset = 5;
-		
+	public void updateLine() {		
 		// needs to be updated in case links have been removed
 		destOffsetMul=destination.askNum(this);
 		srcOffsetMul=source.askNum(this);
@@ -106,38 +106,38 @@ public class Link extends Line {
 			if (deltaY > 0) {
 				// draw on top of source, on bottom of destination
 				if (deltaY > deltaX) {
-					this.setStartX(source.getX() + (srcOffsetMul * srcOffset));
-					this.setStartY(source.getU() + correctnessOffset);
-					this.setEndX(destination.getX() + (destOffsetMul * destOffset));
-					this.setEndY(destination.getD() - arrowheadOffset);
-					arrow.updateLocation(destination.getX() + (destOffsetMul * destOffset), destination.getD(), arrowFacing.UP, arrowheadOffset);
+					this.setStartX(source.getX() + (srcOffsetMul * SOURCE_OFFSET));
+					this.setStartY(source.getU() + CORRECTNESS_OFFSET);
+					this.setEndX(destination.getX() + (destOffsetMul * DESTINATION_OFFSET));
+					this.setEndY(destination.getD() - ARROWHEAD_OFFSET);
+					arrow.updateLocation(destination.getX() + (destOffsetMul * DESTINATION_OFFSET), destination.getD(), arrowFacing.UP, ARROWHEAD_OFFSET);
 				}
 				// draw on left of source, on right of destination
 				else {
-					this.setStartX(source.getL() + correctnessOffset);
-					this.setStartY(source.getY() + (srcOffsetMul * srcOffset));
-					this.setEndX(destination.getR() - arrowheadOffset);
-					this.setEndY(destination.getY() + (destOffsetMul * destOffset));
-					arrow.updateLocation(destination.getR(), destination.getY() + (destOffsetMul * destOffset), arrowFacing.LEFT, arrowheadOffset);
+					this.setStartX(source.getL() + CORRECTNESS_OFFSET);
+					this.setStartY(source.getY() + (srcOffsetMul * SOURCE_OFFSET));
+					this.setEndX(destination.getR() - ARROWHEAD_OFFSET);
+					this.setEndY(destination.getY() + (destOffsetMul * DESTINATION_OFFSET));
+					arrow.updateLocation(destination.getR(), destination.getY() + (destOffsetMul * DESTINATION_OFFSET), arrowFacing.LEFT, ARROWHEAD_OFFSET);
 				}
 			}
 			// source is above destination
 			else {
 				// draw on bottom of source, on top of destination
 				if (-deltaY > deltaX) {
-					this.setStartX(source.getX() + (srcOffsetMul * srcOffset));
-					this.setStartY(source.getD() - correctnessOffset);
-					this.setEndX(destination.getX() + (destOffsetMul * destOffset));
-					this.setEndY(destination.getU() + arrowheadOffset);
-					arrow.updateLocation(destination.getX() + (destOffsetMul * destOffset), destination.getU(), arrowFacing.DOWN, arrowheadOffset);
+					this.setStartX(source.getX() + (srcOffsetMul * SOURCE_OFFSET));
+					this.setStartY(source.getD() - CORRECTNESS_OFFSET);
+					this.setEndX(destination.getX() + (destOffsetMul * DESTINATION_OFFSET));
+					this.setEndY(destination.getU() + ARROWHEAD_OFFSET);
+					arrow.updateLocation(destination.getX() + (destOffsetMul * DESTINATION_OFFSET), destination.getU(), arrowFacing.DOWN, ARROWHEAD_OFFSET);
 				}
 				// draw on left of source, on right of destination
 				else {
-					this.setStartX(source.getL() + correctnessOffset);
-					this.setStartY(source.getY() + (srcOffsetMul * srcOffset));
-					this.setEndX(destination.getR() - arrowheadOffset);
-					this.setEndY(destination.getY() + (destOffsetMul * destOffset));
-					arrow.updateLocation(destination.getR(), destination.getY() + (destOffsetMul * destOffset), arrowFacing.LEFT, arrowheadOffset);
+					this.setStartX(source.getL() + CORRECTNESS_OFFSET);
+					this.setStartY(source.getY() + (srcOffsetMul * SOURCE_OFFSET));
+					this.setEndX(destination.getR() - ARROWHEAD_OFFSET);
+					this.setEndY(destination.getY() + (destOffsetMul * DESTINATION_OFFSET));
+					arrow.updateLocation(destination.getR(), destination.getY() + (destOffsetMul * DESTINATION_OFFSET), arrowFacing.LEFT, ARROWHEAD_OFFSET);
 				}
 
 			}
@@ -149,38 +149,38 @@ public class Link extends Line {
 			if (deltaY > 0) {
 				// draw on top of source, on bottom of destination
 				if (deltaY > -deltaX) {
-					this.setStartX(source.getX() + (srcOffsetMul * srcOffset));
-					this.setStartY(source.getU() + correctnessOffset);
-					this.setEndX(destination.getX() + (destOffsetMul * destOffset));
-					this.setEndY(destination.getD() - arrowheadOffset);
-					arrow.updateLocation(destination.getX() + (destOffsetMul * destOffset), destination.getD(), arrowFacing.UP, arrowheadOffset);
+					this.setStartX(source.getX() + (srcOffsetMul * SOURCE_OFFSET));
+					this.setStartY(source.getU() + CORRECTNESS_OFFSET);
+					this.setEndX(destination.getX() + (destOffsetMul * DESTINATION_OFFSET));
+					this.setEndY(destination.getD() - ARROWHEAD_OFFSET);
+					arrow.updateLocation(destination.getX() + (destOffsetMul * DESTINATION_OFFSET), destination.getD(), arrowFacing.UP, ARROWHEAD_OFFSET);
 				}
 				// draw on right of source, on left of destination
 				else {
-					this.setStartX(source.getR() - correctnessOffset);
-					this.setStartY(source.getY() + (srcOffsetMul * srcOffset));
-					this.setEndX(destination.getL() + arrowheadOffset);
-					this.setEndY(destination.getY() + (destOffsetMul * destOffset));
-					arrow.updateLocation(destination.getL(), destination.getY() + (destOffsetMul * destOffset), arrowFacing.RIGHT, arrowheadOffset);
+					this.setStartX(source.getR() - CORRECTNESS_OFFSET);
+					this.setStartY(source.getY() + (srcOffsetMul * SOURCE_OFFSET));
+					this.setEndX(destination.getL() + ARROWHEAD_OFFSET);
+					this.setEndY(destination.getY() + (destOffsetMul * DESTINATION_OFFSET));
+					arrow.updateLocation(destination.getL(), destination.getY() + (destOffsetMul * DESTINATION_OFFSET), arrowFacing.RIGHT, ARROWHEAD_OFFSET);
 				}
 			}
 			// source is above destination
 			else {
 				// draw on bottom of source, on top of destination
 				if (-deltaY > -deltaX) {
-					this.setStartX(source.getX() + (srcOffsetMul * srcOffset));
-					this.setStartY(source.getD() - correctnessOffset);
-					this.setEndX(destination.getX() + (destOffsetMul * destOffset));
-					this.setEndY(destination.getU() + arrowheadOffset);
-					arrow.updateLocation(destination.getX() + (destOffsetMul * destOffset), destination.getU(), arrowFacing.DOWN, arrowheadOffset);
+					this.setStartX(source.getX() + (srcOffsetMul * SOURCE_OFFSET));
+					this.setStartY(source.getD() - CORRECTNESS_OFFSET);
+					this.setEndX(destination.getX() + (destOffsetMul * DESTINATION_OFFSET));
+					this.setEndY(destination.getU() + ARROWHEAD_OFFSET);
+					arrow.updateLocation(destination.getX() + (destOffsetMul * DESTINATION_OFFSET), destination.getU(), arrowFacing.DOWN, ARROWHEAD_OFFSET);
 				}
 				// draw on right of source, on left of destination
 				else {
-					this.setStartX(source.getR() - correctnessOffset);
-					this.setStartY(source.getY() + (srcOffsetMul * srcOffset));
-					this.setEndX(destination.getL() + arrowheadOffset);
-					this.setEndY(destination.getY() + (destOffsetMul * destOffset));
-					arrow.updateLocation(destination.getL(), destination.getY() + (destOffsetMul * destOffset), arrowFacing.RIGHT, arrowheadOffset);
+					this.setStartX(source.getR() - CORRECTNESS_OFFSET);
+					this.setStartY(source.getY() + (srcOffsetMul * SOURCE_OFFSET));
+					this.setEndX(destination.getL() + ARROWHEAD_OFFSET);
+					this.setEndY(destination.getY() + (destOffsetMul * DESTINATION_OFFSET));
+					arrow.updateLocation(destination.getL(), destination.getY() + (destOffsetMul * DESTINATION_OFFSET), arrowFacing.RIGHT, ARROWHEAD_OFFSET);
 				}
 
 			}
