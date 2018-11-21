@@ -119,7 +119,7 @@ public class Main extends Application {
 								newClass.setLayoutX((double) added.getXPos());
 								newClass.setLayoutY((double) added.getYPos());
 								ClassMenu classContextMenu = new ClassMenu(added.getIndex(), data);
-								//data.addMenu(added.getIndex(), classContextMenu);
+								// data.addMenu(added.getIndex(), classContextMenu);
 
 								// Declare delta to be used with click events
 								final Delta delta = new Delta();
@@ -356,8 +356,30 @@ public class Main extends Application {
 								int srcIndex = added.getSource();
 								int destIndex = added.getDest();
 
+								// if Source or Dest Min are < 0, entire string should be *, otherwise express a
+								// range Min to Max (including * for int<0 Max)
+								String srcMulti;
+								String destMulti;
+
+								if (added.getSourceMin() == -1)
+									srcMulti = "*";
+								else if (added.getSourceMin() == -2 || added.getSourceMax() == -2)
+									srcMulti = "";
+								else
+									srcMulti = Integer.toString(added.getSourceMin()) + "..."
+											+ (added.getSourceMax() == -1 ? "*"
+													: Integer.toString(added.getSourceMax()));
+
+								if (added.getDestMin() == -1)
+									destMulti = "*";
+								else if (added.getDestMin() == -2 || added.getDestMax() == -2)
+									destMulti = "";
+								else
+									destMulti = Integer.toString(added.getDestMin()) + "..."
+											+ (added.getDestMax() == -1 ? "*" : Integer.toString(added.getDestMax()));
+
 								Link newLink = new Link(data.getClass(srcIndex).getNode(),
-										data.getClass(destIndex).getNode(), added.getType());
+										data.getClass(destIndex).getNode(), added.getType(), srcMulti, destMulti);
 
 								data.getClass(srcIndex).getNode().getXProperty()
 										.addListener(new ChangeListener<Number>() {
@@ -397,7 +419,7 @@ public class Main extends Application {
 
 								addLink(newLink);
 								newLink.toBack();
-								
+
 								newLink.updateLine();
 							}
 						} else if (c.wasRemoved()) {
@@ -454,6 +476,8 @@ public class Main extends Application {
 		data.addLink(in);
 		window.addLink(in);
 		window.addArrow(in.getArrow());
+		window.addText(in.getSrcMultiplicity());
+		window.addText(in.getDestMultiplicity());
 	}
 
 	public static void main(String[] args) {

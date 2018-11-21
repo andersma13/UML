@@ -327,9 +327,9 @@ public class Model {
 		/*
 		 * intData: [Connection index] [Connection type] [Source] [Dest] [Source
 		 * minimum][Source maximum] [Destination minimum] [Destination Maximum] Index is
-		 * used for reference Connection type denotes the type of connection: 0 -
-		 * general 1 - association 2 - aggregation 3 - composition 4 - generalization 5
-		 * - dependency Source and Destination store the indices of the Source and
+		 * used for reference Connection type denotes the type of connection: 0 =
+		 * "Dependency", 1 = "Assocation", 2 = "Generalization", 3 = "Aggregate", 4 =
+		 * "Composition" Source and Destination store the indices of the Source and
 		 * Destination blocks respectively. Source minimum and source maximum denote the
 		 * cardinality of the connection with the source class block (ie. 0 - 1, 0 - *).
 		 * Use -1 (or any negative) to denote ANY (*). Destination minimum and

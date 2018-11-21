@@ -7,6 +7,7 @@ import application.include.Model;
 import application.objects.Arrow;
 import application.objects.ClassBlock;
 import application.objects.Link;
+import application.objects.Multiplicity;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.print.PageOrientation;
@@ -239,14 +240,14 @@ public class ProgramWindow extends Stage {
 	}
 
 	/**
-	 * Clears the main panel of all visible elements
+	 * Clears the main panel of all visible elements.
 	 */
 	public void clear() {
 		mainPanel.getChildren().clear();
 	}
 
 	/**
-	 * Add a class to the main panel
+	 * Add a class to the main panel.
 	 * 
 	 * @param in
 	 *            The Class Block to be added
@@ -256,7 +257,7 @@ public class ProgramWindow extends Stage {
 	}
 
 	/**
-	 * Remove the given class from the main panel
+	 * Remove the given class from the main panel.
 	 * 
 	 * @param in
 	 *            The class block to be removed
@@ -266,7 +267,7 @@ public class ProgramWindow extends Stage {
 	}
 
 	/**
-	 * Add a link to the main panel
+	 * Add a link to the main panel.
 	 * 
 	 * @param in
 	 *            The link to be added
@@ -276,7 +277,7 @@ public class ProgramWindow extends Stage {
 	}
 
 	/**
-	 * Add a arrow to the main panel
+	 * Add a arrow to the main panel.
 	 * 
 	 * @param in
 	 *            The arrow to be added
@@ -286,7 +287,18 @@ public class ProgramWindow extends Stage {
 	}
 
 	/**
-	 * Removes the given link from the main panel
+	 * Add a Multiplicity to the main panel.
+	 * 
+	 * @param mult
+	 *            The multiplicity to be added
+	 */
+	public void addText(Multiplicity mult) {
+		mainPanel.getChildren().add(mult);
+
+	}
+
+	/**
+	 * Removes the given link from the main panel.
 	 * 
 	 * @param in
 	 *            The link to be removed
@@ -295,12 +307,18 @@ public class ProgramWindow extends Stage {
 		mainPanel.getChildren().remove(in);
 	}
 
+	/**
+	 * Hands the model this window temporarily so it can properly remove all Links.
+	 * 
+	 * (run before removing Links from model)
+	 * 
+	 */
 	public void removeLinks() {
 		data.assistRemoveLinks(this);
 	}
 
 	/**
-	 * Removes the given arrow from the main panel
+	 * Removes the given arrow from the main panel.
 	 * 
 	 * @param in
 	 *            The arrow to be removed
@@ -310,7 +328,7 @@ public class ProgramWindow extends Stage {
 	}
 
 	/**
-	 * Refreshes the main panel's layout information
+	 * Refreshes the main panel's layout information.
 	 */
 	public void applyCss() {
 		mainPanel.applyCss();

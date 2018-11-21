@@ -124,10 +124,10 @@ public class Arrow extends Path {
 	}
 
 	/**
-	 * erase the arrowheads if the associated Link is going to be removed
+	 * erase the arrowhead (likely associated Link is going to be removed)
 	 * 
 	 */
-	public void eraseArrowheads() {
+	public void eraseArrowhead() {
 		getElements().clear();
 	}
 
