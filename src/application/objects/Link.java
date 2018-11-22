@@ -6,18 +6,22 @@ public class Link extends Line {
 
 	// how many pixels a line connecting to source or destination should be offset
 	// from their neighbors
-	private static final int SOURCE_OFFSET = 0;
+	private static final int SOURCE_OFFSET = 14;
 	private static final int DESTINATION_OFFSET = 14;
 
 	// to make it look like the lines are connected to a box or an arrowhead
 	private static final int ARROWHEAD_OFFSET = -10;
-	private static final int CORRECTNESS_OFFSET = 5;
+	private static final int CORRECTNESS_OFFSET = 1;
 
 	// how much to offset the multiplicity text by
-	private static final int MULTI_XOFFSET = 5;
-	private static final int MULTI_YOFFSET = 5;
-	private static final int BORDER_OFFSET_MUL = 3;
-	private static final int LINE_OFFSET_MUL = 2;
+	private static final int BOTTOM_XOFFSET = 26;
+	private static final int BOTTOM_YOFFSET = 0;
+	private static final int TOP_XOFFSET = 26;
+	private static final int TOP_YOFFSET = 15;
+	private static final int RIGHT_XOFFSET = 3;
+	private static final int RIGHT_YOFFSET = 22;
+	private static final int LEFT_XOFFSET = 23;
+	private static final int LEFT_YOFFSET = 20;
 
 	private LinkNode source;
 	private LinkNode destination;
@@ -183,11 +187,11 @@ public class Link extends Line {
 		arrow.updateLocation(destination.getX() + (destOffsetMul * DESTINATION_OFFSET), destination.getD(),
 				arrowFacing.UP, ARROWHEAD_OFFSET);
 		srcMultiplicity.updateLocation(
-				source.getX() + (srcOffsetMul * DESTINATION_OFFSET) - (MULTI_XOFFSET * LINE_OFFSET_MUL),
-				source.getU() - MULTI_YOFFSET);
+				source.getX() + (srcOffsetMul * SOURCE_OFFSET) - TOP_XOFFSET,
+				source.getU() - TOP_YOFFSET);
 		destMultiplicity.updateLocation(
-				destination.getX() + (destOffsetMul * DESTINATION_OFFSET) - (MULTI_XOFFSET * LINE_OFFSET_MUL),
-				destination.getD() + MULTI_YOFFSET);
+				destination.getX() + (destOffsetMul * DESTINATION_OFFSET) - BOTTOM_XOFFSET,
+				destination.getD() + BOTTOM_YOFFSET);
 	}
 
 	/**
@@ -203,10 +207,10 @@ public class Link extends Line {
 		this.setEndY(destination.getU() + ARROWHEAD_OFFSET);
 		arrow.updateLocation(destination.getX() + (destOffsetMul * DESTINATION_OFFSET), destination.getU(),
 				arrowFacing.DOWN, ARROWHEAD_OFFSET);
-		srcMultiplicity.updateLocation(source.getX() + (srcOffsetMul * DESTINATION_OFFSET) - MULTI_XOFFSET,
-				source.getD() + MULTI_YOFFSET);
-		destMultiplicity.updateLocation(destination.getX() + (destOffsetMul * DESTINATION_OFFSET) - MULTI_XOFFSET,
-				destination.getU() - MULTI_YOFFSET);
+		srcMultiplicity.updateLocation(source.getX() + (srcOffsetMul * SOURCE_OFFSET) - BOTTOM_XOFFSET,
+				source.getD() + BOTTOM_YOFFSET);
+		destMultiplicity.updateLocation(destination.getX() + (destOffsetMul * DESTINATION_OFFSET) - TOP_XOFFSET,
+				destination.getU() - TOP_YOFFSET);
 	}
 
 	/**
@@ -222,10 +226,10 @@ public class Link extends Line {
 		this.setEndY(destination.getY() + (destOffsetMul * DESTINATION_OFFSET));
 		arrow.updateLocation(destination.getR(), destination.getY() + (destOffsetMul * DESTINATION_OFFSET),
 				arrowFacing.LEFT, ARROWHEAD_OFFSET);
-		srcMultiplicity.updateLocation(source.getL() + (srcOffsetMul * DESTINATION_OFFSET) - MULTI_XOFFSET,
-				source.getY() - MULTI_YOFFSET);
-		destMultiplicity.updateLocation(destination.getR() + (destOffsetMul * DESTINATION_OFFSET) + MULTI_XOFFSET,
-				destination.getY() - MULTI_YOFFSET);
+		srcMultiplicity.updateLocation(source.getL() - LEFT_XOFFSET,
+				source.getY() + (srcOffsetMul * SOURCE_OFFSET) - LEFT_YOFFSET);
+		destMultiplicity.updateLocation(destination.getR() + RIGHT_XOFFSET,
+				destination.getY() + (destOffsetMul * DESTINATION_OFFSET) - RIGHT_YOFFSET);
 
 	}
 
@@ -242,10 +246,10 @@ public class Link extends Line {
 		this.setEndY(destination.getY() + (destOffsetMul * DESTINATION_OFFSET));
 		arrow.updateLocation(destination.getL(), destination.getY() + (destOffsetMul * DESTINATION_OFFSET),
 				arrowFacing.RIGHT, ARROWHEAD_OFFSET);
-		srcMultiplicity.updateLocation(source.getR() + (srcOffsetMul * DESTINATION_OFFSET) + MULTI_XOFFSET,
-				source.getY() - MULTI_YOFFSET);
-		destMultiplicity.updateLocation(destination.getL() + (destOffsetMul * DESTINATION_OFFSET) - MULTI_XOFFSET,
-				destination.getY() - MULTI_YOFFSET);
+		srcMultiplicity.updateLocation(source.getR() + RIGHT_XOFFSET,
+				source.getY() + (srcOffsetMul * SOURCE_OFFSET) - RIGHT_YOFFSET);
+		destMultiplicity.updateLocation(destination.getL() - LEFT_XOFFSET,
+				destination.getY() + (destOffsetMul * DESTINATION_OFFSET) - LEFT_YOFFSET);
 	}
 
 	/**

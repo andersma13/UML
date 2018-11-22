@@ -361,23 +361,9 @@ public class Main extends Application {
 								String srcMulti;
 								String destMulti;
 
-								if (added.getSourceMin() == -1)
-									srcMulti = "*";
-								else if (added.getSourceMin() == -2 || added.getSourceMax() == -2)
-									srcMulti = "";
-								else
-									srcMulti = Integer.toString(added.getSourceMin()) + "..."
-											+ (added.getSourceMax() == -1 ? "*"
-													: Integer.toString(added.getSourceMax()));
-
-								if (added.getDestMin() == -1)
-									destMulti = "*";
-								else if (added.getDestMin() == -2 || added.getDestMax() == -2)
-									destMulti = "";
-								else
-									destMulti = Integer.toString(added.getDestMin()) + "..."
-											+ (added.getDestMax() == -1 ? "*" : Integer.toString(added.getDestMax()));
-
+								srcMulti = stringifyMulti(added.getSourceMin(), added.getSourceMax());
+								destMulti = stringifyMulti(added.getDestMin(), added.getDestMax());
+								
 								Link newLink = new Link(data.getClass(srcIndex).getNode(),
 										data.getClass(destIndex).getNode(), added.getType(), srcMulti, destMulti);
 
@@ -427,7 +413,44 @@ public class Main extends Application {
 					}
 				}
 			}
+
+			/**
+			 * Take special flag values and mutate the output string based on their values
+			 * ( -2 means no entry, -1 means asterisk )
+			 * 
+			 * Ranges should appear in the form "min ... max" except when starting with "*" or if only one value has been entered 
+			 * 
+			 * @param min
+			 * 				The user's chosen min value of multiplicity (start of range)
+			 * @param max
+			 * 				The user's chosen max value of multiplicity (end of range)
+			 * @return
+			 * 				A correct complete string for the range
+			 */
+			private String stringifyMulti(int min, int max) {
+				String multi;
+				
+				if (min == -1)
+					multi = "*";
+				else if (min == -2) {
+					if (max == -2)
+						multi = "";
+					else
+						multi = (max == -1 ? "*"
+								: Integer.toString(max));
+				}
+				else if (max == -2)
+					multi = (min == -1 ? "*"
+							: Integer.toString(min));
+				else
+					multi = Integer.toString(min) + "..."
+							+ (max == -1 ? "*"
+									: Integer.toString(max));
+
+				return multi;
+			}
 		};
+		
 		return linkListener;
 	}
 
