@@ -177,7 +177,7 @@ public class LinkNode {
 	}
 
 	/**
-	 * Link will be removed from model, remove all instances of link
+	 * Link will be removed from this LinkNode, remove all instances of link
 	 * 
 	 * @param link
 	 *            to be removed
@@ -186,6 +186,15 @@ public class LinkNode {
 		while (connectedLinks.contains(link))
 			connectedLinks.remove(link);
 
+	}
+	
+	/**
+	 * All links will be removed from this LinkNode
+	 * 
+	 */
+	public void clearLinks() {
+		connectedLinks.clear();
+		
 	}
 
 	/**

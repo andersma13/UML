@@ -12,6 +12,7 @@ import java.util.Stack;
 import application.include.Model.classStackData;
 import application.objects.ClassBlock;
 import application.objects.Link;
+import application.view.ProgramWindow;
 import application.view.context.ClassMenu;
 import javafx.beans.Observable;
 import javafx.beans.property.IntegerProperty;
@@ -326,9 +327,9 @@ public class Model {
 		/*
 		 * intData: [Connection index] [Connection type] [Source] [Dest] [Source
 		 * minimum][Source maximum] [Destination minimum] [Destination Maximum] Index is
-		 * used for reference Connection type denotes the type of connection: 0 -
-		 * general 1 - association 2 - aggregation 3 - composition 4 - generalization 5
-		 * - dependency Source and Destination store the indices of the Source and
+		 * used for reference Connection type denotes the type of connection: 0 =
+		 * "Dependency", 1 = "Assocation", 2 = "Generalization", 3 = "Aggregate", 4 =
+		 * "Composition" Source and Destination store the indices of the Source and
 		 * Destination blocks respectively. Source minimum and source maximum denote the
 		 * cardinality of the connection with the source class block (ie. 0 - 1, 0 - *).
 		 * Use -1 (or any negative) to denote ANY (*). Destination minimum and
@@ -820,7 +821,7 @@ public class Model {
 	 */
 
 	/**
-	 * Clears all Links from the links list
+	 * Clears all Links from the links list.
 	 * 
 	 */
 	public void clearLinks() {
@@ -828,18 +829,20 @@ public class Model {
 			linky.warnLinkNodes();
 
 		links.clear();
+		linkList.clear();
 	}
 
 	/**
 	 * 
-	 * @return returns the index of the highest numbered class
+	 * @return 
+	 * 		the index of the highest numbered class
 	 */
 	public int maxLink() {
 		return classList.size() - 1;
 	}
 
 	/**
-	 * Tells if it is safe to saveUndoState
+	 * Tells if it is safe to saveUndoState.
 	 * 
 	 * @return is false if model is in the middle of a undo or redo
 	 */
@@ -848,7 +851,7 @@ public class Model {
 	}
 
 	/**
-	 * Sets flag that undo is in process
+	 * Sets flag that undo is in process.
 	 * 
 	 */
 	public void setUndoState() {
@@ -857,7 +860,7 @@ public class Model {
 	}
 
 	/**
-	 * Sets flag that redo is in process
+	 * Sets flag that redo is in process.
 	 * 
 	 */
 	public void setRedoState() {
@@ -865,15 +868,7 @@ public class Model {
 	}
 
 	/**
-	 * 
-	 * @return returns true if Redo was just executed
-	 */
-	// public Boolean getJustRedid() {
-	// return justRedid;
-	// }
-
-	/**
-	 * clears the entire Redo stack (because of a branch in user choices)
+	 * clears the entire Redo stack (because of a branch in user choices).
 	 * 
 	 */
 	public void clearRedoState() {
@@ -895,7 +890,7 @@ public class Model {
 	 * 
 	 * @return returns true if the Undo Stack is empty
 	 */
-	public Boolean emptyUndo() {
+	public Boolean isUndoEmpty() {
 		return classUndoStackSize.size() == 0 ? true : false;
 	}
 
@@ -903,12 +898,12 @@ public class Model {
 	 * 
 	 * @return returns true if the Redo stack is empty
 	 */
-	public Boolean emptyRedo() {
+	public Boolean isRedoEmpty() {
 		return classRedoStackSize.size() == 0 ? true : false;
 	}
 
 	/**
-	 * Saves an undoState onto the classUndoStack
+	 * Saves an undoState onto the classUndoStack.
 	 * 
 	 */
 	public void saveUndoState() {
@@ -952,7 +947,7 @@ public class Model {
 	}
 
 	/**
-	 * Saves the current model state to the Redo Stack
+	 * Saves the current model state to the Redo Stack.
 	 * 
 	 */
 	public void saveRedoState() {
@@ -996,7 +991,7 @@ public class Model {
 	}
 
 	/**
-	 * Undoes the latest action done by the user
+	 * Undoes the latest action done by the user.
 	 * 
 	 */
 	public void undo() {
@@ -1034,7 +1029,7 @@ public class Model {
 	}
 
 	/**
-	 * Re-does what the user choose to undo
+	 * Re-does what the user choose to undo.
 	 * 
 	 */
 	public void redo() {
@@ -1176,6 +1171,23 @@ public class Model {
 			linky.warnLinkNodes();
 
 		links.clear();
+	}
+
+	/**
+	 * Hands window to the model for a moment so the window can be cleared of all
+	 * Links
+	 * 
+	 * @param window
+	 *            The window to be cleared of all Links
+	 */
+	public void assistRemoveLinks(ProgramWindow window) {
+		for (ClassBlock classy : classes) {
+			classy.getNode().clearLinks();
+		}
+
+		for (Link linky : links)
+			window.removeLink(linky);
+
 	}
 
 }

@@ -9,7 +9,7 @@ import javafx.scene.shape.Polygon;
 
 public class Arrow extends Path {
 
-	private static final double arrowHeadSize = 10.0;
+	private static final double ARROWHEAD_SIZE = 10.0;
 	private int linkType;
 
 	/**
@@ -90,11 +90,11 @@ public class Arrow extends Path {
 		double sin = Math.sin(angle);
 		double cos = Math.cos(angle);
 		
-		double x1 = (-1.0 / 2.0 * cos + Math.sqrt(3) / 2 * sin) * arrowHeadSize + x + XArrowheadAngleMul;
-		double y1 = (-1.0 / 2.0 * sin - Math.sqrt(3) / 2 * cos) * arrowHeadSize + y + YArrowheadAngleMul;
+		double x1 = (-1.0 / 2.0 * cos + Math.sqrt(3) / 2 * sin) * ARROWHEAD_SIZE + x + XArrowheadAngleMul;
+		double y1 = (-1.0 / 2.0 * sin - Math.sqrt(3) / 2 * cos) * ARROWHEAD_SIZE + y + YArrowheadAngleMul;
 
-		double x2 = (1.0 / 2.0 * cos + Math.sqrt(3) / 2 * sin) * arrowHeadSize + x + XArrowheadAngleMul;
-		double y2 = (1.0 / 2.0 * sin - Math.sqrt(3) / 2 * cos) * arrowHeadSize + y + YArrowheadAngleMul;
+		double x2 = (1.0 / 2.0 * cos + Math.sqrt(3) / 2 * sin) * ARROWHEAD_SIZE + x + XArrowheadAngleMul;
+		double y2 = (1.0 / 2.0 * sin - Math.sqrt(3) / 2 * cos) * ARROWHEAD_SIZE + y + YArrowheadAngleMul;
 		
 		getElements().add(new MoveTo(x,y));
 		
@@ -124,10 +124,10 @@ public class Arrow extends Path {
 	}
 
 	/**
-	 * erase the arrowheads if the associated Link is going to be removed
+	 * erase the arrowhead (likely associated Link is going to be removed)
 	 * 
 	 */
-	public void eraseArrowheads() {
+	public void eraseArrowhead() {
 		getElements().clear();
 	}
 

@@ -6,7 +6,9 @@ import java.io.IOException;
 import application.include.Model;
 import application.objects.Arrow;
 import application.objects.ClassBlock;
+import application.objects.Label;
 import application.objects.Link;
+import application.objects.Multiplicity;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.print.PageOrientation;
@@ -47,10 +49,11 @@ public class ProgramWindow extends Stage {
 	public MenuItem load = new MenuItem("Load...");
 	public MenuItem export = new MenuItem("Export...");
 	public MenuItem clear = new MenuItem("Clear elements");
+	public MenuItem clearLinks = new MenuItem("Clear links");
 
 	// Define tool panel elements
 	public Button newClass = new Button("New class...");
-	public Button removeClass = new Button("Delete...");
+	// public Button removeClass = new Button("Delete...");
 	public Button newLink = new Button("New link...");
 	public Button undo = new Button("Undo...");
 	public Button redo = new Button("Redo...");
@@ -70,17 +73,18 @@ public class ProgramWindow extends Stage {
 		file.getItems().add(load);
 		file.getItems().add(export);
 		edit.getItems().add(clear);
+		edit.getItems().add(clearLinks);
 		menu.getMenus().add(file);
 		menu.getMenus().add(edit);
 
 		// Construct tool panel
 		newClass.getStyleClass().add("toolbarButtons");
-		removeClass.getStyleClass().add("toolbarButtons");
+		// removeClass.getStyleClass().add("toolbarButtons");
 		newLink.getStyleClass().add("toolbarButtons");
 		undo.getStyleClass().add("toolbarButtons");
 		redo.getStyleClass().add("toolbarButtons");
 		tools.add(newClass, 0, 0);
-		tools.add(removeClass, 0, 1);
+		// tools.add(removeClass, 0, 1);
 		tools.add(newLink, 0, 2);
 		tools.add(undo, 0, 3);
 		tools.add(redo, 0, 4);
@@ -118,6 +122,16 @@ public class ProgramWindow extends Stage {
 			}
 		};
 
+		EventHandler<ActionEvent> clearLinksEvent = new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent e) {
+				data.saveUndoState();
+				data.clearRedoState();
+				removeLinks();
+				data.clearLinks();
+			}
+		};
+
 		EventHandler<ActionEvent> undoEvent = new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent e) {
@@ -126,7 +140,7 @@ public class ProgramWindow extends Stage {
 				data.clear();
 				mainPanel.getChildren().clear();
 				data.undo();
-				if (data.emptyUndo())
+				if (data.isUndoEmpty())
 					undo.setDisable(true);
 			}
 		};
@@ -139,7 +153,7 @@ public class ProgramWindow extends Stage {
 				data.clear();
 				mainPanel.getChildren().clear();
 				data.redo();
-				if (data.emptyRedo())
+				if (data.isRedoEmpty())
 					redo.setDisable(true);
 			}
 		};
@@ -206,6 +220,7 @@ public class ProgramWindow extends Stage {
 		newClass.setOnAction(newClassEvent);
 		newLink.setOnAction(newLinkEvent);
 		clear.setOnAction(clearEvent);
+		clearLinks.setOnAction(clearLinksEvent);
 		undo.setOnAction(undoEvent);
 		redo.setOnAction(redoEvent);
 		save.setOnAction(saveEvent);
@@ -226,14 +241,14 @@ public class ProgramWindow extends Stage {
 	}
 
 	/**
-	 * Clears the main panel of all visible elements
+	 * Clears the main panel of all visible elements.
 	 */
 	public void clear() {
 		mainPanel.getChildren().clear();
 	}
 
 	/**
-	 * Add a class to the main panel
+	 * Add a class to the main panel.
 	 * 
 	 * @param in
 	 *            The Class Block to be added
@@ -243,7 +258,7 @@ public class ProgramWindow extends Stage {
 	}
 
 	/**
-	 * Remove the given class from the main panel
+	 * Remove the given class from the main panel.
 	 * 
 	 * @param in
 	 *            The class block to be removed
@@ -253,7 +268,7 @@ public class ProgramWindow extends Stage {
 	}
 
 	/**
-	 * Add a link to the main panel
+	 * Add a link to the main panel.
 	 * 
 	 * @param in
 	 *            The link to be added
@@ -261,19 +276,41 @@ public class ProgramWindow extends Stage {
 	public void addLink(Link in) {
 		mainPanel.getChildren().add(in);
 	}
-	
+
 	/**
-	 * Add a arrow to the main panel
+	 * Add a arrow to the main panel.
 	 * 
 	 * @param in
-	 * 			The arrow to be added
+	 *            The arrow to be added
 	 */
 	public void addArrow(Arrow in) {
 		mainPanel.getChildren().add(in);
 	}
 
 	/**
-	 * Removes the given link from the main panel
+	 * Add a Multiplicity to the main panel.
+	 * 
+	 * @param mult
+	 *            The multiplicity to be added
+	 */
+	public void addMultiplicity(Multiplicity mult) {
+		mainPanel.getChildren().add(mult);
+
+	}
+	
+	/**
+	 * Add a Label to the main panel.
+	 * 
+	 * @param mult
+	 *            The multiplicity to be added
+	 */
+	public void addLabel(Label label) {
+		mainPanel.getChildren().add(label);
+
+	}
+
+	/**
+	 * Removes the given link from the main panel.
 	 * 
 	 * @param in
 	 *            The link to be removed
@@ -281,19 +318,29 @@ public class ProgramWindow extends Stage {
 	public void removeLink(Link in) {
 		mainPanel.getChildren().remove(in);
 	}
-	
+
 	/**
-	 * Removes the given arrow from the main panel
+	 * Hands the model this window temporarily so it can properly remove all Links.
+	 * 
+	 * (run before removing Links from model)
+	 * 
+	 */
+	public void removeLinks() {
+		data.assistRemoveLinks(this);
+	}
+
+	/**
+	 * Removes the given arrow from the main panel.
 	 * 
 	 * @param in
-	 * 			The arrow to be removed
+	 *            The arrow to be removed
 	 */
 	public void removeArrow(Arrow in) {
 		mainPanel.getChildren().remove(in);
 	}
 
 	/**
-	 * Refreshes the main panel's layout information
+	 * Refreshes the main panel's layout information.
 	 */
 	public void applyCss() {
 		mainPanel.applyCss();
