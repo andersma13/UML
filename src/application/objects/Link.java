@@ -25,11 +25,14 @@ public class Link extends Line {
 
 	private LinkNode source;
 	private LinkNode destination;
+	private Label label;
 	private Arrow arrow;
 	private Multiplicity srcMultiplicity;
 	private Multiplicity destMultiplicity;
 	private int srcOffsetMul;
 	private int destOffsetMul;
+	private int deltaX;
+	private int deltaY;
 
 	enum arrowFacing {
 		UP, RIGHT, DOWN, LEFT
@@ -52,7 +55,7 @@ public class Link extends Line {
 	 *            the string to be displayed as a representation of multiplicity for
 	 *            the destination end of the Link
 	 */
-	public Link(LinkNode src, LinkNode dest, int arrowType, String sourceMultiplicity, String destinationMultiplicity) {
+	public Link(LinkNode src, LinkNode dest, String labelText, int arrowType, String sourceMultiplicity, String destinationMultiplicity) {
 		this.getStyleClass().add("link");
 
 		if (arrowType == 0)
@@ -60,6 +63,7 @@ public class Link extends Line {
 
 		source = src;
 		destination = dest;
+		setLabel(labelText);
 		setArrowType(arrowType);
 		setSrcMultiplicity(sourceMultiplicity);
 		setDestMultiplicity(destinationMultiplicity);
@@ -105,6 +109,7 @@ public class Link extends Line {
 		source.removeMe(this);
 		destination.removeMe(this);
 
+		label.eraseText();
 		arrow.eraseArrowhead();
 		srcMultiplicity.eraseText();
 		destMultiplicity.eraseText();
@@ -122,9 +127,11 @@ public class Link extends Line {
 		destOffsetMul = destination.askNum(this);
 		srcOffsetMul = source.askNum(this);
 
-		int deltaX = source.getX() - destination.getX();
-		int deltaY = source.getY() - destination.getY();
+		deltaX = source.getX() - destination.getX();
+		deltaY = source.getY() - destination.getY();
 
+		label.updateLocation(source.getX() - deltaX / 2, source.getY() - deltaY / 2);
+		
 		// source is right of destination
 		if (deltaX > 0) {
 			// source is below destination
@@ -251,6 +258,17 @@ public class Link extends Line {
 		destMultiplicity.updateLocation(destination.getL() - LEFT_XOFFSET,
 				destination.getY() + (destOffsetMul * DESTINATION_OFFSET) - LEFT_YOFFSET);
 	}
+	
+	/**
+	 * Creates an label object, assigning its appropriate text
+	 * 
+	 * @param text
+	 *            The text of the label
+	 */
+	private void setLabel(String text) {
+		label = new Label(text);
+		
+	}
 
 	/**
 	 * Creates an arrow object, assigning its appropriate type
@@ -284,6 +302,16 @@ public class Link extends Line {
 	}
 
 	/**
+	 * returns the label object
+	 * 
+	 * @return
+	 * 			The Link's label object
+	 */
+	public Label getLabel() {
+		return label;
+	}
+	
+	/**
 	 * returns the arrow object
 	 * 
 	 * @return The Link's arrow object
@@ -292,10 +320,22 @@ public class Link extends Line {
 		return arrow;
 	}
 
+	/**
+	 * returns the source multiplicity object
+	 * 
+	 * @return
+	 * 			The Link's source multiplicity object
+	 */
 	public Multiplicity getSrcMultiplicity() {
 		return srcMultiplicity;
 	}
 
+	/**
+	 * returns the destination multiplicity object
+	 * 
+	 * @return
+	 * 			The Link's destination multiplicity object
+	 */
 	public Multiplicity getDestMultiplicity() {
 		return destMultiplicity;
 	}

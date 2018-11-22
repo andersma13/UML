@@ -6,6 +6,7 @@ import java.io.IOException;
 import application.include.Model;
 import application.objects.Arrow;
 import application.objects.ClassBlock;
+import application.objects.Label;
 import application.objects.Link;
 import application.objects.Multiplicity;
 import javafx.event.ActionEvent;
@@ -292,8 +293,19 @@ public class ProgramWindow extends Stage {
 	 * @param mult
 	 *            The multiplicity to be added
 	 */
-	public void addText(Multiplicity mult) {
+	public void addMultiplicity(Multiplicity mult) {
 		mainPanel.getChildren().add(mult);
+
+	}
+	
+	/**
+	 * Add a Label to the main panel.
+	 * 
+	 * @param mult
+	 *            The multiplicity to be added
+	 */
+	public void addLabel(Label label) {
+		mainPanel.getChildren().add(label);
 
 	}
 

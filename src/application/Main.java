@@ -363,9 +363,10 @@ public class Main extends Application {
 
 								srcMulti = stringifyMulti(added.getSourceMin(), added.getSourceMax());
 								destMulti = stringifyMulti(added.getDestMin(), added.getDestMax());
-								
+
 								Link newLink = new Link(data.getClass(srcIndex).getNode(),
-										data.getClass(destIndex).getNode(), added.getType(), srcMulti, destMulti);
+										data.getClass(destIndex).getNode(), added.getLabel(), added.getType(), srcMulti,
+										destMulti);
 
 								data.getClass(srcIndex).getNode().getXProperty()
 										.addListener(new ChangeListener<Number>() {
@@ -415,42 +416,37 @@ public class Main extends Application {
 			}
 
 			/**
-			 * Take special flag values and mutate the output string based on their values
-			 * ( -2 means no entry, -1 means asterisk )
+			 * Take special flag values and mutate the output string based on their values (
+			 * -2 means no entry, -1 means asterisk )
 			 * 
-			 * Ranges should appear in the form "min ... max" except when starting with "*" or if only one value has been entered 
+			 * Ranges should appear in the form "min ... max" except when starting with "*"
+			 * or if only one value has been entered
 			 * 
 			 * @param min
-			 * 				The user's chosen min value of multiplicity (start of range)
+			 *            The user's chosen min value of multiplicity (start of range)
 			 * @param max
-			 * 				The user's chosen max value of multiplicity (end of range)
-			 * @return
-			 * 				A correct complete string for the range
+			 *            The user's chosen max value of multiplicity (end of range)
+			 * @return A correct complete string for the range
 			 */
 			private String stringifyMulti(int min, int max) {
 				String multi;
-				
+
 				if (min == -1)
 					multi = "*";
 				else if (min == -2) {
 					if (max == -2)
 						multi = "";
 					else
-						multi = (max == -1 ? "*"
-								: Integer.toString(max));
-				}
-				else if (max == -2)
-					multi = (min == -1 ? "*"
-							: Integer.toString(min));
+						multi = (max == -1 ? "*" : Integer.toString(max));
+				} else if (max == -2)
+					multi = (min == -1 ? "*" : Integer.toString(min));
 				else
-					multi = Integer.toString(min) + "..."
-							+ (max == -1 ? "*"
-									: Integer.toString(max));
+					multi = Integer.toString(min) + "..." + (max == -1 ? "*" : Integer.toString(max));
 
 				return multi;
 			}
 		};
-		
+
 		return linkListener;
 	}
 
@@ -498,9 +494,10 @@ public class Main extends Application {
 	private void addLink(Link in) {
 		data.addLink(in);
 		window.addLink(in);
+		window.addLabel(in.getLabel());
 		window.addArrow(in.getArrow());
-		window.addText(in.getSrcMultiplicity());
-		window.addText(in.getDestMultiplicity());
+		window.addMultiplicity(in.getSrcMultiplicity());
+		window.addMultiplicity(in.getDestMultiplicity());
 	}
 
 	public static void main(String[] args) {
