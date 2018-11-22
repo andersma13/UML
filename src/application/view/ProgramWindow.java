@@ -140,7 +140,7 @@ public class ProgramWindow extends Stage {
 				data.clear();
 				mainPanel.getChildren().clear();
 				data.undo();
-				if (data.emptyUndo())
+				if (data.isUndoEmpty())
 					undo.setDisable(true);
 			}
 		};
@@ -153,7 +153,7 @@ public class ProgramWindow extends Stage {
 				data.clear();
 				mainPanel.getChildren().clear();
 				data.redo();
-				if (data.emptyRedo())
+				if (data.isRedoEmpty())
 					redo.setDisable(true);
 			}
 		};

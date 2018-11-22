@@ -46,6 +46,8 @@ public class Link extends Line {
 	 *            the LinkNode that connects to the source of the Link
 	 * @param dest
 	 *            the LinkNode that connects to the destination of the Link
+	 * @param labelText
+	 * 			  the string of the link as assigned by the user
 	 * @param arrowType
 	 *            the type of link the user chose (changes type of arrow displayed)
 	 * @param sourceMultiplicity
@@ -77,7 +79,7 @@ public class Link extends Line {
 	}
 
 	/**
-	 * Sets the Link's source node and updates the start positions accordingly
+	 * Sets the Link's source node and updates the start positions accordingly.
 	 * 
 	 * @param src
 	 *            The LinkNode to attach the start of the link to
@@ -89,7 +91,7 @@ public class Link extends Line {
 	}
 
 	/**
-	 * Sets the Link's dest node and updates the end positions accordingly
+	 * Sets the Link's dest node and updates the end positions accordingly.
 	 * 
 	 * @param dest
 	 *            The LinkNode to attach the end of the link to
@@ -101,8 +103,8 @@ public class Link extends Line {
 	}
 
 	/**
-	 * Tell each connected LinkNode that this Link will soon be deleted. Also tell
-	 * the arrowheads to clear themselves while you're at it.
+	 * Tell each connected LinkNode that this Link will soon be deleted. 
+	 * Also tell the arrowheads to clear themselves while you're at it.
 	 *
 	 */
 	public void warnLinkNodes() {
@@ -119,7 +121,7 @@ public class Link extends Line {
 	 * Update the source and destinations of the Link (Line) to appropriate sides
 	 * and offsets.
 	 * 
-	 * Also calls the Arrow redraw method
+	 * Also calls the Arrow redraw method.
 	 *
 	 */
 	public void updateLine() {
@@ -260,7 +262,7 @@ public class Link extends Line {
 	}
 	
 	/**
-	 * Creates an label object, assigning its appropriate text
+	 * Creates an label object, assigning its appropriate text.
 	 * 
 	 * @param text
 	 *            The text of the label
@@ -271,38 +273,38 @@ public class Link extends Line {
 	}
 
 	/**
-	 * Creates an arrow object, assigning its appropriate type
+	 * Creates an arrow object, assigning its appropriate type.
 	 * 
 	 * @param type
 	 *            The type of the arrow to draw
 	 */
-	public void setArrowType(int type) {
+	private void setArrowType(int type) {
 		arrow = new Arrow(type);
 
 	}
 
 	/**
-	 * Creates source Multiplicity object, assigning its appropriate type
+	 * Creates source Multiplicity object, assigning its appropriate type.
 	 * 
 	 * @param type
 	 *            The type of multiplicity to display
 	 */
-	public void setSrcMultiplicity(String type) {
+	private void setSrcMultiplicity(String type) {
 		srcMultiplicity = new Multiplicity(type);
 	}
 
 	/**
-	 * Creates destination Multiplicity object, assigning its appropriate type
+	 * Creates destination Multiplicity object, assigning its appropriate type.
 	 * 
 	 * @param type
 	 *            The type of multiplicity to display
 	 */
-	public void setDestMultiplicity(String type) {
+	private void setDestMultiplicity(String type) {
 		destMultiplicity = new Multiplicity(type);
 	}
 
 	/**
-	 * returns the label object
+	 * returns the label object.
 	 * 
 	 * @return
 	 * 			The Link's label object
@@ -312,7 +314,7 @@ public class Link extends Line {
 	}
 	
 	/**
-	 * returns the arrow object
+	 * returns the arrow object.
 	 * 
 	 * @return The Link's arrow object
 	 */
@@ -321,7 +323,7 @@ public class Link extends Line {
 	}
 
 	/**
-	 * returns the source multiplicity object
+	 * returns the source multiplicity object.
 	 * 
 	 * @return
 	 * 			The Link's source multiplicity object
@@ -331,7 +333,7 @@ public class Link extends Line {
 	}
 
 	/**
-	 * returns the destination multiplicity object
+	 * returns the destination multiplicity object.
 	 * 
 	 * @return
 	 * 			The Link's destination multiplicity object

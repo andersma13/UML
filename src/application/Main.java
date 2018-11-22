@@ -84,11 +84,11 @@ public class Main extends Application {
 		ListChangeListener<ClassModel> classListener = new ListChangeListener<ClassModel>() {
 			@Override
 			public void onChanged(Change<? extends ClassModel> c) {
-				if (!data.emptyUndo())
+				if (!data.isUndoEmpty())
 					window.undo.setDisable(false);
 				else
 					window.undo.setDisable(true);
-				if (!data.emptyRedo())
+				if (!data.isRedoEmpty())
 					window.redo.setDisable(false);
 				else
 					window.redo.setDisable(true);
@@ -211,11 +211,11 @@ public class Main extends Application {
 											newClass.getScene().setCursor(Cursor.DEFAULT);
 										}
 
-										if (!data.emptyUndo())
+										if (!data.isUndoEmpty())
 											window.undo.setDisable(false);
 										else
 											window.undo.setDisable(true);
-										if (!data.emptyRedo())
+										if (!data.isRedoEmpty())
 											window.redo.setDisable(false);
 										else
 											window.redo.setDisable(true);
@@ -486,7 +486,7 @@ public class Main extends Application {
 	}
 
 	/**
-	 * Adds the given Link to the visible window and to the Model
+	 * Adds the given Link to the visible window and to the Model.
 	 * 
 	 * @param in
 	 *            The link to be added

@@ -16,7 +16,7 @@ public class Label extends Text {
 	}
 	
 	/**
-	 * relocates the Text to a new location
+	 * relocates the Text to a new location.
 	 * 
 	 * @param x
 	 *            The x coordinate where the text should go
