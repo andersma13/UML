@@ -121,7 +121,8 @@ public class Model {
 		 */
 		public void setXPos(int x) {
 			if (x >= 0) {
-				intData[1] = (x % STEP < (STEP / 2) ? x - (x % STEP) : x + STEP - (x % STEP));
+				intData[1] = x; 
+						//(x % STEP < (STEP / 2) ? x - (x % STEP) : x + STEP - (x % STEP));
 			} else {
 				intData[1] = 0;
 			}
@@ -135,7 +136,8 @@ public class Model {
 		 */
 		public void setYPos(int y) {
 			if (y >= 0) {
-				intData[2] = (y % STEP < (STEP / 2) ? y - (y % STEP) : y + STEP - (y % STEP));
+				intData[2] = y; 
+						//(y % STEP < (STEP / 2) ? y - (y % STEP) : y + STEP - (y % STEP));
 			} else {
 				intData[2] = 0;
 			}
@@ -148,7 +150,8 @@ public class Model {
 		 *            the width value to be stored
 		 */
 		public void setWidth(int w) {
-			intData[3] = (w % STEP < (STEP / 2) ? w - (w % STEP) : w + STEP - (w % STEP));
+			intData[3] = w;
+					//(w % STEP < (STEP / 2) ? w - (w % STEP) : w + STEP - (w % STEP));
 		}
 
 		/**
@@ -158,7 +161,8 @@ public class Model {
 		 *            the height value to be stored
 		 */
 		public void setHeight(int h) {
-			intData[4] = (h % STEP < (STEP / 2) ? h - (h % STEP) : h + STEP - (h % STEP));
+			intData[4] = h; 
+					//(h % STEP < (STEP / 2) ? h - (h % STEP) : h + STEP - (h % STEP));
 		}
 
 		/**
