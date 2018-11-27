@@ -274,6 +274,16 @@ public class Link extends Line {
 	}
 	
 	/**
+	 * Sets the link's label
+	 * 
+	 * @param l
+	 * 	the label to set
+	 */
+	public void setLabel(String l) {
+		label.setText(l);
+	}
+	
+	/**
 	 * returns the arrow object.
 	 * 
 	 * @return The Link's arrow object

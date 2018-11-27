@@ -299,9 +299,7 @@ public class Main extends Application {
 									for (int i = 0; i != bound; ++i) {
 										if (data.getLinkModel(i).getSource() == pivot
 												|| data.getLinkModel(i).getDest() == pivot) {
-											window.removeLink(data.getLink(i));
 											data.removeLinkModel(i);
-											data.removeLink(i);
 											--bound;
 											--i;
 										}
@@ -368,6 +366,23 @@ public class Main extends Application {
 								Link newLink = new Link(data.getClass(srcIndex).getNode(),
 										data.getClass(destIndex).getNode(), added.getLabel(), added.getType(), srcMulti,
 										destMulti);
+								
+								// Label listener
+								added.getLabelProp().addListener(new ChangeListener<String>() {
+									@Override
+									public void changed(ObservableValue<? extends String> observable, String oldValue,
+											String newValue) {
+										newLink.setLabel(newValue);
+									}
+								});
+								
+								added.getTypeProp().addListener(new ChangeListener<Number>() {
+									@Override
+									public void changed(ObservableValue<? extends Number> observable, Number oldValue, 
+											Number newValue) {
+										newLink.setType((int)newValue);
+									}
+								});
 
 								data.getClass(srcIndex).getNode().getXProperty()
 										.addListener(new ChangeListener<Number>() {
@@ -431,8 +446,11 @@ public class Main extends Application {
 						} else if (c.wasRemoved()) {
 							for(LinkModel removed : c.getRemoved())
 							{
-								window.removeLink(data.getLink(removed.getIndex()));
-								data.removeLink(removed.getIndex());
+								int pivot = removed.getIndex();
+								
+								data.getLink(pivot).warnLinkNodes();
+								window.remove(data.getLink(pivot));
+								data.removeLink(pivot);
 							}
 						}
 					}

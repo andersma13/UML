@@ -113,30 +113,40 @@ public class NewLinkWindow extends Stage {
 			public void handle(ActionEvent e) {
 				data.saveUndoState();
 				data.clearRedoState();
-				try {
-					int srcIn = Integer.parseInt(newLinkSrc.getText());
-					int destIn = Integer.parseInt(newLinkDest.getText());
-					int srcMulMin = (newSrcMultiMin.getText().length() == 0 ? -2
-							: (newSrcMultiMin.getText().matches("(\\*)*") ? -1
-									: Integer.parseInt(newSrcMultiMin.getText())));
-					int destMulMin = (newDestMultiMin.getText().length() == 0 ? -2
-							: (newDestMultiMin.getText().matches("(\\*)*") ? -1
-									: Integer.parseInt(newDestMultiMin.getText())));
-					int srcMulMax = (newSrcMultiMax.getText().length() == 0 ? -2
-							: (newSrcMultiMax.getText().matches("(\\*)*") ? -1
-									: Integer.parseInt(newSrcMultiMax.getText())));
-					int destMulMax = (newDestMultiMax.getText().length() == 0 ? -2
-							: (newDestMultiMax.getText().matches("(\\*)*") ? -1
-									: Integer.parseInt(newDestMultiMax.getText())));
+				if(editIndex == -1)
+				{
+					try {
+						int srcIn = Integer.parseInt(newLinkSrc.getText());
+						int destIn = Integer.parseInt(newLinkDest.getText());
+						int srcMulMin = (newSrcMultiMin.getText().length() == 0 ? -2
+								: (newSrcMultiMin.getText().matches("(\\*)*") ? -1
+										: Integer.parseInt(newSrcMultiMin.getText())));
+						int destMulMin = (newDestMultiMin.getText().length() == 0 ? -2
+								: (newDestMultiMin.getText().matches("(\\*)*") ? -1
+										: Integer.parseInt(newDestMultiMin.getText())));
+						int srcMulMax = (newSrcMultiMax.getText().length() == 0 ? -2
+								: (newSrcMultiMax.getText().matches("(\\*)*") ? -1
+										: Integer.parseInt(newSrcMultiMax.getText())));
+						int destMulMax = (newDestMultiMax.getText().length() == 0 ? -2
+								: (newDestMultiMax.getText().matches("(\\*)*") ? -1
+										: Integer.parseInt(newDestMultiMax.getText())));
 
-					if (srcIn <= data.maxLink() && srcIn >= 0 && destIn <= data.maxLink() && destIn >= 0) {
-						data.addLinkModel(
-								new int[] { data.getLinkTail(), newLinkArrow.getSelectionModel().getSelectedIndex(),
-										srcIn, destIn, srcMulMin, srcMulMax, destMulMin, destMulMax },
-								newLinkLabel.getText());
+						if (srcIn <= data.maxLink() && srcIn >= 0 && destIn <= data.maxLink() && destIn >= 0) {
+							data.addLinkModel(
+									new int[] { data.getLinkTail(), newLinkArrow.getSelectionModel().getSelectedIndex(),
+											srcIn, destIn, srcMulMin, srcMulMax, destMulMin, destMulMax },
+									newLinkLabel.getText());
+						}
+					} catch (NumberFormatException ex) {
 					}
-				} catch (NumberFormatException ex) {
-				}
+				} else {
+					data.getLinkModel(editIndex).setLabel(newLinkLabel.getText());
+					data.getLinkModel(editIndex).setType(newLinkArrow.getSelectionModel().getSelectedIndex());
+					data.getLinkModel(editIndex).setSourceMin(Integer.parseInt(newSrcMultiMin.getText()));
+					data.getLinkModel(editIndex).setSourceMax(Integer.parseInt(newSrcMultiMax.getText()));
+					data.getLinkModel(editIndex).setDestMin(Integer.parseInt(newDestMultiMin.getText()));
+					data.getLinkModel(editIndex).setDestMax(Integer.parseInt(newDestMultiMax.getText()));
+				}				
 				closeWindow();
 				e.consume();
 			}

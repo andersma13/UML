@@ -310,12 +310,12 @@ public class ProgramWindow extends Stage {
 	}
 
 	/**
-	 * Removes the given link from the main panel.
+	 * Removes the given element from the main panel.
 	 * 
 	 * @param in
-	 *            The link to be removed
+	 *            The element to be removed
 	 */
-	public void removeLink(Link in) {
+	public void remove(Link in) {
 		mainPanel.getChildren().remove(in);
 	}
 
@@ -330,12 +330,32 @@ public class ProgramWindow extends Stage {
 	}
 
 	/**
-	 * Removes the given arrow from the main panel.
+	 * Removes the given element from the main panel.
 	 * 
 	 * @param in
-	 *            The arrow to be removed
+	 *            The element to be removed
 	 */
-	public void removeArrow(Arrow in) {
+	public void remove(Arrow in) {
+		mainPanel.getChildren().remove(in);
+	}
+
+	/**
+	 * Removes the given element from the main panel.
+	 * 
+	 * @param in
+	 *            The element to be removed
+	 */
+	public void remove(Multiplicity in) {
+		mainPanel.getChildren().remove(in);
+	}
+	
+	/**
+	 * Removes the given element from the main panel.
+	 * 
+	 * @param in
+	 *            The element to be removed
+	 */
+	public void remove(Label in) {
 		mainPanel.getChildren().remove(in);
 	}
 

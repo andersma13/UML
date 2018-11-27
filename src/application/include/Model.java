@@ -330,10 +330,16 @@ public class Model {
 		 * destination maximum denote the cardinality of the connection with the
 		 * destination block. Same rules apply. Label is pretty straightforward.
 		 */
-		private int[] intData = new int[6];
+		private int index;
+		private IntegerProperty type = new SimpleIntegerProperty();
 		private IntegerProperty src = new SimpleIntegerProperty();
 		private IntegerProperty dest = new SimpleIntegerProperty();
-		private String label;
+		private IntegerProperty srcMin = new SimpleIntegerProperty();
+		private IntegerProperty srcMax = new SimpleIntegerProperty();
+		private IntegerProperty destMin = new SimpleIntegerProperty();
+		private IntegerProperty destMax = new SimpleIntegerProperty();
+		
+		private StringProperty label = new SimpleStringProperty();
 
 		/**
 		 * Constructs an instance of LinkModel
@@ -346,17 +352,17 @@ public class Model {
 		 */
 		public LinkModel(int[] data, String l) {
 			if (data.length == 8) {
-				intData[0] = data[0];
-				intData[1] = data[1];
+				index = data[0];
+				type.set(data[1]);
 				src.set(data[2]);
 				dest.set(data[3]);
-				intData[2] = data[4];
-				intData[3] = data[5];
-				intData[4] = data[6];
-				intData[5] = data[7];
+				srcMin.set(data[4]);
+				srcMax.set(data[5]);
+				destMin.set(data[6]);
+				destMax.set(data[7]);
 
 			}
-			label = l;
+			label.set(l);
 		}
 
 		/*****************************
@@ -370,7 +376,7 @@ public class Model {
 		 *            the index value to be stored
 		 */
 		public void setIndex(int i) {
-			intData[0] = i;
+			index = i;
 		}
 
 		/**
@@ -380,7 +386,7 @@ public class Model {
 		 *            the type value to be stored
 		 */
 		public void setType(int t) {
-			intData[1] = t;
+			type.set(t);
 		}
 
 		/**
@@ -410,7 +416,7 @@ public class Model {
 		 *            the source minimum value to be stored
 		 */
 		public void setSourceMin(int s) {
-			intData[2] = s;
+			srcMin.set(s);
 		}
 
 		/**
@@ -420,7 +426,7 @@ public class Model {
 		 *            the source maximum value to be stored
 		 */
 		public void setSourceMax(int s) {
-			intData[3] = s;
+			srcMax.set(s);
 		}
 
 		/**
@@ -430,7 +436,7 @@ public class Model {
 		 *            the destination minimum value to be stored
 		 */
 		public void setDestMin(int d) {
-			intData[4] = d;
+			destMin.set(d);
 		}
 
 		/**
@@ -440,7 +446,7 @@ public class Model {
 		 *            the destination maximum value to be stored
 		 */
 		public void setDestMax(int d) {
-			intData[5] = d;
+			destMax.set(d);
 		}
 
 		/**
@@ -450,7 +456,7 @@ public class Model {
 		 *            the label to be stored
 		 */
 		public void setLabel(String l) {
-			label = l;
+			label.set(l);
 		}
 
 		/*****************************
@@ -463,7 +469,7 @@ public class Model {
 		 * @return the index value of the LinkModel
 		 */
 		public int getIndex() {
-			return intData[0];
+			return index;
 		}
 
 		/**
@@ -472,7 +478,7 @@ public class Model {
 		 * @return the type value of the LinkModel
 		 */
 		public int getType() {
-			return intData[1];
+			return type.get();
 		}
 
 		/**
@@ -499,7 +505,7 @@ public class Model {
 		 * @return the source minimum value of the LinkModel
 		 */
 		public int getSourceMin() {
-			return intData[2];
+			return srcMin.get();
 		}
 
 		/**
@@ -508,7 +514,7 @@ public class Model {
 		 * @return the source maximum value of the LinkModel
 		 */
 		public int getSourceMax() {
-			return intData[3];
+			return srcMax.get();
 		}
 
 		/**
@@ -517,7 +523,7 @@ public class Model {
 		 * @return the destination minimum value of the LinkModel
 		 */
 		public int getDestMin() {
-			return intData[4];
+			return destMin.get();
 		}
 
 		/**
@@ -526,7 +532,7 @@ public class Model {
 		 * @return the destination maximum value of the LinkModel
 		 */
 		public int getDestMax() {
-			return intData[5];
+			return destMax.get();
 		}
 
 		/**
@@ -535,9 +541,18 @@ public class Model {
 		 * @return the label of the LinkModel
 		 */
 		public String getLabel() {
-			return label;
+			return label.get();
 		}
 
+		/**
+		 * Returns the IntegerProperty associated with the LinkModel's type
+		 * 
+		 * @return the IntegerProperty associated with the LinkModel's type
+		 */
+		public IntegerProperty getTypeProp() {
+			return type;
+		}
+		
 		/**
 		 * Returns the IntegerProperty associated with the LinkModel's source
 		 * 
@@ -555,6 +570,52 @@ public class Model {
 		public IntegerProperty getDestProp() {
 			return dest;
 		}
+	
+		/**
+		 * Returns the IntegerProperty associated with the LinkModel's source min
+		 * 
+		 * @return the IntegerProperty associated with the LinkModel's source min
+		 */
+		public IntegerProperty getSourceMinProp() {
+			return srcMin;
+		}
+		
+		/**
+		 * Returns the IntegerProperty associated with the LinkModel's source max
+		 * 
+		 * @return the IntegerProperty associated with the LinkModel's source max
+		 */
+		public IntegerProperty getSourceMaxProp() {
+			return srcMax;
+		}
+		
+		/**
+		 * Returns the IntegerProperty associated with the LinkModel's dest min
+		 * 
+		 * @return the IntegerProperty associated with the LinkModel's dest min
+		 */
+		public IntegerProperty getDestMinProp() {
+			return destMin;
+		}
+		
+		/**
+		 * Returns the IntegerProperty associated with the LinkModel's dest max
+		 * 
+		 * @return the IntegerProperty associated with the LinkModel's dest max
+		 */
+		public IntegerProperty getDestMaxProp() {
+			return destMax;
+		}
+
+		/**
+		 * Returns the StringProperty associated with the LinkModel's label
+		 * 
+		 * @return the StringProperty associated with the LinkModel's label
+		 */
+		public StringProperty getLabelProp() {
+			return label;
+		}
+		
 	}
 
 	private ObservableList<ClassModel> classList;
@@ -714,11 +775,11 @@ public class Model {
 	 *            the index of the LinkModel to be removed
 	 */
 	public void removeLinkModel(int i) {
-		links.get(i).warnLinkNodes();
+//		links.get(i).warnLinkNodes();
 		linkList.remove(i);
 		for (int l = i; l != linkList.size(); ++l) {
 			linkList.get(l).setIndex(l);
-			links.get(i).warnLinkNodes();
+//			links.get(i).warnLinkNodes();
 		}
 	}
 
@@ -823,7 +884,7 @@ public class Model {
 			linky.warnLinkNodes();
 
 		links.clear();
-		linkList.clear();
+		// linkList.clear();
 	}
 
 	/**
@@ -1158,7 +1219,6 @@ public class Model {
 	public void clear() {
 		classList.clear();
 		classes.clear();
-		linkList.clear();
 
 		for (Link linky : links)
 			linky.warnLinkNodes();
@@ -1179,6 +1239,6 @@ public class Model {
 		}
 
 		for (Link linky : links)
-			window.removeLink(linky);
+			window.remove(linky);
 	}
 }
