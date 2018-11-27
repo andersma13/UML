@@ -30,6 +30,7 @@ public class NewLinkWindow extends Stage {
 	private TextField newSrcMultiMax = new TextField();
 	private TextField newDestMultiMax = new TextField();
 	private Button newLinkSubmit = new Button("Submit");
+	private Button deleteLink = new Button("Delete");
 
 	ObservableList<String> options = FXCollections.observableArrayList("Dependency", "Assocation", "Generalization",
 			"Aggregate", "Composition");
@@ -62,7 +63,7 @@ public class NewLinkWindow extends Stage {
 	 * @param data
 	 *            The model to write data to
 	 */
-	public NewLinkWindow(Model data) {
+	public NewLinkWindow(int editIndex, Model data) {
 		// Link formatters
 		newLinkSrc.setTextFormatter(forceIntSrc);
 		newLinkDest.setTextFormatter(forceIntDest);
@@ -75,21 +76,36 @@ public class NewLinkWindow extends Stage {
 		newLinkInterface.add(newLinkTitle, 0, 0, 2, 1);
 		newLinkInterface.add(newLinkArrow, 0, 1, 2, 1);
 		newLinkInterface.add(newLinkLabel, 0, 2, 2, 1);
-		newLinkInterface.add(newLinkSrc, 0, 5);
-		newLinkInterface.add(newLinkDest, 1, 5);
+		if(editIndex == -1) {
+			newLinkInterface.add(newLinkSrc, 0, 5);
+			newLinkInterface.add(newLinkDest, 1, 5);
+		}
 		newLinkInterface.add(newSrcMultiMin, 0, 6);
 		newLinkInterface.add(newDestMultiMin, 1, 6);
 		newLinkInterface.add(newSrcMultiMax, 0, 7);
 		newLinkInterface.add(newDestMultiMax, 1, 7);
+		if(editIndex != -1) {
+			newLinkInterface.add(deleteLink, 0, 8);
+		}
 		newLinkInterface.add(newLinkSubmit, 1, 8);
-		newLinkLabel.setPromptText("Link label...");
-		newLinkArrow.setPromptText("Select link type...");
-		newLinkSrc.setPromptText("Link Source");
-		newLinkDest.setPromptText("Link Dest");
-		newSrcMultiMin.setPromptText("Src multiplicity min");
-		newDestMultiMin.setPromptText("Dest multiplicity min");
-		newSrcMultiMax.setPromptText("Src multiplicity max");
-		newDestMultiMax.setPromptText("Dest multiplicity max");
+		
+		if(editIndex == -1) {
+			newLinkLabel.setPromptText("Link label...");
+			newLinkArrow.setPromptText("Select link type...");
+			newLinkSrc.setPromptText("Link Source");
+			newLinkDest.setPromptText("Link Dest");
+			newSrcMultiMin.setPromptText("Src multiplicity min");
+			newDestMultiMin.setPromptText("Dest multiplicity min");
+			newSrcMultiMax.setPromptText("Src multiplicity max");
+			newDestMultiMax.setPromptText("Dest multiplicity max");
+		} else {
+			newLinkLabel.setText(data.getLinkModel(editIndex).getLabel());
+			newLinkArrow.getSelectionModel().select(data.getLinkModel(editIndex).getType());
+			newSrcMultiMin.setText(String.valueOf(data.getLinkModel(editIndex).getSourceMin()));
+			newSrcMultiMax.setText(String.valueOf(data.getLinkModel(editIndex).getSourceMax()));
+			newDestMultiMin.setText(String.valueOf(data.getLinkModel(editIndex).getDestMin()));
+			newDestMultiMax.setText(String.valueOf(data.getLinkModel(editIndex).getDestMax()));
+		}
 
 		// Handler to submit a new Link
 		EventHandler<ActionEvent> submitLinkEvent = new EventHandler<ActionEvent>() {
@@ -125,8 +141,19 @@ public class NewLinkWindow extends Stage {
 				e.consume();
 			}
 		};
+		
+		EventHandler<ActionEvent> deleteLinkEvent = new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent e) {
+				data.removeLinkModel(editIndex);
+				closeWindow();
+				e.consume();
+			}
+		};
+		
 		newLinkSubmit.setOnAction(submitLinkEvent);
-
+		deleteLink.setOnAction(deleteLinkEvent);
+		
 		// Display dialog
 		Scene scene = new Scene(newLinkInterface);
 		this.setScene(scene);

@@ -31,10 +31,9 @@ public class Multiplicity extends Text {
 	}
 
 	/**
-	 * sets the text to blank ( not a great solution )
-	 * 
+	 * sets the text to null
 	 */
 	public void eraseText() {
-		setText("");
+		setText(null);
 	}
 }

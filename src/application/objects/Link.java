@@ -60,15 +60,17 @@ public class Link extends Line {
 	public Link(LinkNode src, LinkNode dest, String labelText, int arrowType, String sourceMultiplicity, String destinationMultiplicity) {
 		this.getStyleClass().add("link");
 
-		if (arrowType == 0)
-			this.getStrokeDashArray().addAll(10d);
-
 		source = src;
 		destination = dest;
-		setLabel(labelText);
-		setArrowType(arrowType);
-		setSrcMultiplicity(sourceMultiplicity);
-		setDestMultiplicity(destinationMultiplicity);
+		label = new Label(labelText);
+		arrow = new Arrow(arrowType);
+		srcMultiplicity = new Multiplicity(sourceMultiplicity);
+		destMultiplicity = new Multiplicity(destinationMultiplicity);
+		
+		if (arrowType == 0) {
+			this.getStrokeDashArray().addAll(10d);
+		}
+		
 		updateLine();
 
 		src.giveParent(this);
@@ -259,48 +261,6 @@ public class Link extends Line {
 				source.getY() + (srcOffsetMul * SOURCE_OFFSET) - RIGHT_YOFFSET);
 		destMultiplicity.updateLocation(destination.getL() - LEFT_XOFFSET,
 				destination.getY() + (destOffsetMul * DESTINATION_OFFSET) - LEFT_YOFFSET);
-	}
-	
-	/**
-	 * Creates an label object, assigning its appropriate text.
-	 * 
-	 * @param text
-	 *            The text of the label
-	 */
-	private void setLabel(String text) {
-		label = new Label(text);
-		
-	}
-
-	/**
-	 * Creates an arrow object, assigning its appropriate type.
-	 * 
-	 * @param type
-	 *            The type of the arrow to draw
-	 */
-	private void setArrowType(int type) {
-		arrow = new Arrow(type);
-
-	}
-
-	/**
-	 * Creates source Multiplicity object, assigning its appropriate type.
-	 * 
-	 * @param type
-	 *            The type of multiplicity to display
-	 */
-	private void setSrcMultiplicity(String type) {
-		srcMultiplicity = new Multiplicity(type);
-	}
-
-	/**
-	 * Creates destination Multiplicity object, assigning its appropriate type.
-	 * 
-	 * @param type
-	 *            The type of multiplicity to display
-	 */
-	private void setDestMultiplicity(String type) {
-		destMultiplicity = new Multiplicity(type);
 	}
 
 	/**

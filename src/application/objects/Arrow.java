@@ -5,7 +5,7 @@ import application.objects.Link;
 import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
-import javafx.scene.shape.Polygon;
+//import javafx.scene.shape.Polygon;
 
 public class Arrow extends Path {
 

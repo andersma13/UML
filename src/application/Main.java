@@ -17,6 +17,7 @@ import application.include.Model.LinkModel;
 import application.objects.ClassBlock;
 import application.objects.Link;
 import application.view.NewClassWindow;
+import application.view.NewLinkWindow;
 import application.view.ProgramWindow;
 import application.view.context.ClassMenu;
 import javafx.application.Application;
@@ -404,12 +405,35 @@ public class Main extends Application {
 											}
 										});
 
+								// Makes the link selectable
+								newLink.setOnMouseClicked(new EventHandler<MouseEvent>() {
+									@Override
+									public void handle(MouseEvent e) {
+										// Check for double click coming from primary mouse button
+										if (e.getButton().equals(MouseButton.PRIMARY)) {
+											if (e.getClickCount() == 2) {
+												// Launch link edit window
+												NewLinkWindow dialog = new NewLinkWindow(added.getIndex(), data);
+												dialog.initModality(Modality.APPLICATION_MODAL);
+												dialog.show();
+											}
+											e.consume();
+										} 
+									}
+								});
+								
+								// Display Link
 								addLink(newLink);
 								newLink.toBack();
 
 								newLink.updateLine();
 							}
 						} else if (c.wasRemoved()) {
+							for(LinkModel removed : c.getRemoved())
+							{
+								window.removeLink(data.getLink(removed.getIndex()));
+								data.removeLink(removed.getIndex());
+							}
 						}
 					}
 				}

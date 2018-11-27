@@ -9,11 +9,11 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.Stack;
 
-import application.include.Model.classStackData;
+//import application.include.Model.classStackData;
 import application.objects.ClassBlock;
 import application.objects.Link;
 import application.view.ProgramWindow;
-import application.view.context.ClassMenu;
+//import application.view.context.ClassMenu;
 import javafx.beans.Observable;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -24,7 +24,6 @@ import javafx.collections.ObservableList;
 import javafx.util.Callback;
 
 public class Model {
-	private List<menuData> menus = new ArrayList<menuData>();
 
 	private Stack<classStackData> classUndoStack = new Stack<classStackData>();
 	private Stack<classStackData> classRedoStack = new Stack<classStackData>();
@@ -49,11 +48,6 @@ public class Model {
 	public class linkStackData {
 		private int[] intData = new int[8];
 		private String label;
-	}
-
-	public class menuData {
-		private int index;
-		private ClassMenu menu;
 	}
 
 	public class ClassModel {
@@ -328,7 +322,7 @@ public class Model {
 		 * intData: [Connection index] [Connection type] [Source] [Dest] [Source
 		 * minimum][Source maximum] [Destination minimum] [Destination Maximum] Index is
 		 * used for reference Connection type denotes the type of connection: 0 =
-		 * "Dependency", 1 = "Assocation", 2 = "Generalization", 3 = "Aggregate", 4 =
+		 * "Dependency", 1 = "Association", 2 = "Generalization", 3 = "Aggregate", 4 =
 		 * "Composition" Source and Destination store the indices of the Source and
 		 * Destination blocks respectively. Source minimum and source maximum denote the
 		 * cardinality of the connection with the source class block (ie. 0 - 1, 0 - *).
@@ -1165,7 +1159,6 @@ public class Model {
 		classList.clear();
 		classes.clear();
 		linkList.clear();
-		menus.clear();
 
 		for (Link linky : links)
 			linky.warnLinkNodes();
@@ -1187,7 +1180,5 @@ public class Model {
 
 		for (Link linky : links)
 			window.removeLink(linky);
-
 	}
-
 }

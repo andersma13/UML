@@ -104,7 +104,7 @@ public class ProgramWindow extends Stage {
 		EventHandler<ActionEvent> newLinkEvent = new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent e) {
-				NewLinkWindow dialog = new NewLinkWindow(data);
+				NewLinkWindow dialog = new NewLinkWindow(-1, data);
 				dialog.initModality(Modality.APPLICATION_MODAL);
 				dialog.show();
 				e.consume();
