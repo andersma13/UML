@@ -11,6 +11,7 @@ import application.objects.Link;
 import application.objects.Multiplicity;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.print.PageLayout;
 import javafx.print.PageOrientation;
 import javafx.print.Paper;
 import javafx.print.PrintQuality;
@@ -203,12 +204,12 @@ public class ProgramWindow extends Stage {
 			@Override
 			public void handle(ActionEvent e) {
 				PrinterJob job = PrinterJob.createPrinterJob();
-				Printer printer = Printer.getDefaultPrinter();
+				PageLayout layout = Printer.getDefaultPrinter().createPageLayout(Paper.TABLOID, 
+						PageOrientation.LANDSCAPE, Printer.MarginType.HARDWARE_MINIMUM);
 				if (job != null) {
 					job.showPrintDialog(ref);
-					job.getJobSettings().setPageLayout(
-							printer.createPageLayout(Paper.NA_LETTER, PageOrientation.LANDSCAPE, 0, 0, 0, 0));
-					job.getJobSettings().setPrintQuality(PrintQuality.HIGH);
+					job.getJobSettings().setPageLayout(layout);
+					
 					job.printPage(mainPanel);
 					job.endJob();
 				}

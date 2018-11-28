@@ -192,6 +192,7 @@ public class Main extends Application {
 									@Override
 									public void handle(MouseEvent e) {
 										if (data.safeToSave()) {
+											System.out.println("Click.");
 											data.saveUndoState();
 											data.clearRedoState();
 										}
@@ -367,6 +368,10 @@ public class Main extends Application {
 										data.getClass(destIndex).getNode(), added.getLabel(), added.getType(), srcMulti,
 										destMulti);
 								
+								/*****************************
+								 * SET UP LISTENERS
+								 *****************************/
+
 								// Label listener
 								added.getLabelProp().addListener(new ChangeListener<String>() {
 									@Override
@@ -376,14 +381,52 @@ public class Main extends Application {
 									}
 								});
 								
+								// Src Min listener
+								added.getSourceMinProp().addListener(new ChangeListener<Number>() {
+									@Override
+									public void changed(ObservableValue<? extends Number> observable, Number oldValue,
+											Number newValue) {
+										newLink.setSrcMultiplicity(stringifyMulti((int)newValue, added.getSourceMax()));
+									}
+								});
+								
+								// Src Max listener
+								added.getSourceMaxProp().addListener(new ChangeListener<Number>() {
+									@Override
+									public void changed(ObservableValue<? extends Number> observable, Number oldValue,
+											Number newValue) {
+										newLink.setSrcMultiplicity(stringifyMulti(added.getSourceMin(), (int)newValue));
+									}
+								});
+								
+								// Dest Min listener
+								added.getDestMinProp().addListener(new ChangeListener<Number>() {
+									@Override
+									public void changed(ObservableValue<? extends Number> observable, Number oldValue,
+											Number newValue) {
+										newLink.setDestMultiplicity(stringifyMulti((int)newValue, added.getDestMax()));
+									}
+								});
+								
+								// Dest Max listener
+								added.getDestMaxProp().addListener(new ChangeListener<Number>() {
+									@Override
+									public void changed(ObservableValue<? extends Number> observable, Number oldValue,
+											Number newValue) {
+										newLink.setDestMultiplicity(stringifyMulti(added.getDestMin(), (int)newValue));
+									}
+								});
+								
+								// Type listener
 								added.getTypeProp().addListener(new ChangeListener<Number>() {
 									@Override
-									public void changed(ObservableValue<? extends Number> observable, Number oldValue, 
+									public void changed(ObservableValue<? extends Number> observable, Number oldValue,
 											Number newValue) {
 										newLink.setType((int)newValue);
 									}
 								});
 
+								// Source X position listener
 								data.getClass(srcIndex).getNode().getXProperty()
 										.addListener(new ChangeListener<Number>() {
 											@Override
@@ -392,7 +435,8 @@ public class Main extends Application {
 												newLink.setStartX((int) newValue);
 											}
 										});
-
+								
+								// Source Y position listener
 								data.getClass(srcIndex).getNode().getYProperty()
 										.addListener(new ChangeListener<Number>() {
 											@Override
@@ -402,6 +446,7 @@ public class Main extends Application {
 											}
 										});
 
+								// Dest X Position listener
 								data.getClass(destIndex).getNode().getXProperty()
 										.addListener(new ChangeListener<Number>() {
 											@Override
@@ -411,6 +456,7 @@ public class Main extends Application {
 											}
 										});
 
+								// Dest Y position listener
 								data.getClass(destIndex).getNode().getYProperty()
 										.addListener(new ChangeListener<Number>() {
 											@Override
@@ -419,7 +465,29 @@ public class Main extends Application {
 												newLink.setEndY((int) newValue);
 											}
 										});
+								
+								/*****************************
+								 * CURSOR MODIFICATIONS
+								 *****************************/
 
+								// Turns the cursor into a hand over draggable elements
+								newLink.setOnMouseEntered(new EventHandler<MouseEvent>() {
+									@Override
+									public void handle(MouseEvent e) {
+										if (!e.isPrimaryButtonDown()) {
+											newLink.getScene().setCursor(Cursor.HAND);
+										}
+									}
+								});
+
+								// Turns the cursor normal after leaving a draggable element
+								newLink.setOnMouseExited(new EventHandler<MouseEvent>() {
+									@Override
+									public void handle(MouseEvent e) {
+										newLink.getScene().setCursor(Cursor.DEFAULT);
+									}
+								});
+								
 								// Makes the link selectable
 								newLink.setOnMouseClicked(new EventHandler<MouseEvent>() {
 									@Override

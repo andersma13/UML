@@ -5,10 +5,15 @@ import application.objects.Link;
 import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
-//import javafx.scene.shape.Polygon;
+// import javafx.scene.shape.Polygon;
 
 public class Arrow extends Path {
 
+	private int x;
+	private int y;
+	private Link.arrowFacing orientation;
+	private int arrowheadShaft;
+	
 	private static final double ARROWHEAD_SIZE = 10.0;
 	private int linkType;
 
@@ -34,6 +39,20 @@ public class Arrow extends Path {
 		}
 	}
 
+	public void setType(int type) {
+		linkType = type;
+		
+		if (linkType == 4) {
+			strokeProperty().bind(fillProperty());
+			setFill(Color.BLACK);
+		} else {
+			strokeProperty().unbind();
+			setFill(Color.WHITE);
+		}
+		
+		redraw();
+	}
+	
 	/**
 	 * Draws the appropriate arrowhead with the appropriate orientation at the
 	 * appropriate location 
@@ -47,9 +66,20 @@ public class Arrow extends Path {
 	 * @param arrowheadShaft
 	 *            Length of the arrow
 	 */
-	public void updateLocation(int x, int y, Link.arrowFacing orientation, int arrowheadShaft) {
-		getElements().clear();
+	public void updateLocation(int xIn, int yIn, Link.arrowFacing orientationIn, int arrowheadShaftIn) {
 
+		x = xIn;
+		y = yIn;
+		orientation = orientationIn;
+		arrowheadShaft = arrowheadShaftIn;
+		
+		redraw();
+	}
+	
+	public void redraw()
+	{
+		getElements().clear();
+		
 		int XArrowheadShaft = 0;
 		int YArrowheadShaft = 0;
 		double XArrowheadAngleMul = 0;
@@ -120,7 +150,6 @@ public class Arrow extends Path {
 			getElements().add(new LineTo(x2,y2));
 			getElements().add(new LineTo(x,y));
 		}
-
 	}
 
 	/**
@@ -130,5 +159,4 @@ public class Arrow extends Path {
 	public void eraseArrowhead() {
 		getElements().clear();
 	}
-
 }

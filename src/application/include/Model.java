@@ -1219,11 +1219,11 @@ public class Model {
 	public void clear() {
 		classList.clear();
 		classes.clear();
+		linkList.clear();
+		//for (Link linky : links)
+		//	linky.warnLinkNodes();
 
-		for (Link linky : links)
-			linky.warnLinkNodes();
-
-		links.clear();
+		//links.clear();
 	}
 
 	/**

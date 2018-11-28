@@ -33,7 +33,6 @@
 
 .classBlockPanel
 {
-	-fx-padding: 2; 
 	-fx-background-color: black, white ;
     -fx-background-insets: 0, 0 1 1 0 ;
     -fx-padding: 2;	

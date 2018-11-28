@@ -60,17 +60,16 @@ public class Link extends Line {
 	public Link(LinkNode src, LinkNode dest, String labelText, int arrowType, String sourceMultiplicity, String destinationMultiplicity) {
 		this.getStyleClass().add("link");
 
+		if (arrowType == 0)
+			this.getStrokeDashArray().addAll(10d);
+
 		source = src;
 		destination = dest;
 		label = new Label(labelText);
+		//HERE
 		arrow = new Arrow(arrowType);
 		srcMultiplicity = new Multiplicity(sourceMultiplicity);
 		destMultiplicity = new Multiplicity(destinationMultiplicity);
-		
-		if (arrowType == 0) {
-			this.getStrokeDashArray().addAll(10d);
-		}
-		
 		updateLine();
 
 		src.giveParent(this);
@@ -78,6 +77,16 @@ public class Link extends Line {
 
 		destOffsetMul = dest.askNum(this);
 		srcOffsetMul = src.askNum(this);
+	}
+	
+	/**
+	 * Creates an label object, assigning its appropriate text.
+	 * 
+	 * @param text
+	 *            The text of the label
+	 */
+	public void setLabel(String text) {
+		label.setText(text);	
 	}
 
 	/**
@@ -264,6 +273,42 @@ public class Link extends Line {
 	}
 
 	/**
+	 * Creates an arrow object, assigning its appropriate type.
+	 * 
+	 * @param type
+	 *            The type of the arrow to draw
+	 */
+	public void setType(int type) {
+		if (type == 0) {
+			this.getStrokeDashArray().addAll(10d);
+		} else {
+			this.getStrokeDashArray().clear();
+		}
+		// arrow.eraseArrowhead();
+		arrow.setType(type);
+	}
+
+	/**
+	 * Creates source Multiplicity object, assigning its appropriate type.
+	 * 
+	 * @param type
+	 *            The type of multiplicity to display
+	 */
+	public void setSrcMultiplicity(String type) {
+		srcMultiplicity.updateMultiplicity(type);
+	}
+
+	/**
+	 * Creates destination Multiplicity object, assigning its appropriate type.
+	 * 
+	 * @param type
+	 *            The type of multiplicity to display
+	 */
+	public void setDestMultiplicity(String type) {
+		destMultiplicity.updateMultiplicity(type);
+	}
+
+	/**
 	 * returns the label object.
 	 * 
 	 * @return
@@ -271,16 +316,6 @@ public class Link extends Line {
 	 */
 	public Label getLabel() {
 		return label;
-	}
-	
-	/**
-	 * Sets the link's label
-	 * 
-	 * @param l
-	 * 	the label to set
-	 */
-	public void setLabel(String l) {
-		label.setText(l);
 	}
 	
 	/**
