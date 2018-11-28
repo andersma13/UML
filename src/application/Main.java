@@ -192,7 +192,6 @@ public class Main extends Application {
 									@Override
 									public void handle(MouseEvent e) {
 										if (data.safeToSave()) {
-											System.out.println("Click.");
 											data.saveUndoState();
 											data.clearRedoState();
 										}
@@ -514,11 +513,13 @@ public class Main extends Application {
 						} else if (c.wasRemoved()) {
 							for(LinkModel removed : c.getRemoved())
 							{
+								if (!data.isClearing()) {
 								int pivot = removed.getIndex();
 								
 								data.getLink(pivot).warnLinkNodes();
 								window.remove(data.getLink(pivot));
-								data.removeLink(pivot);
+									data.removeLink(pivot);
+								}
 							}
 						}
 					}

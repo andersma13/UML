@@ -36,6 +36,7 @@ public class Model {
 
 	private Boolean duringUndo = false;
 	private Boolean duringRedo = false;
+	private Boolean clearing = false;
 
 	public class classStackData {
 		private int[] intData = new int[5];
@@ -880,11 +881,14 @@ public class Model {
 	 * 
 	 */
 	public void clearLinks() {
+		clearing = true;
 		for (Link linky : links)
 			linky.warnLinkNodes();
 
 		links.clear();
-		// linkList.clear();
+		linkList.clear();
+		
+		clearing = false;
 	}
 
 	/**
@@ -903,6 +907,15 @@ public class Model {
 	 */
 	public Boolean safeToSave() {
 		return !(duringUndo || duringRedo);
+	}
+	
+	/**
+	 * Tells if model is currently being cleared.
+	 * 
+	 * @return is true if model is in the middle of a clear
+	 */
+	public Boolean isClearing() {
+		return clearing;
 	}
 
 	/**
@@ -1217,13 +1230,16 @@ public class Model {
 	 * Clears the model of all data.
 	 */
 	public void clear() {
+		clearing = true;
 		classList.clear();
 		classes.clear();
 		linkList.clear();
-		//for (Link linky : links)
-		//	linky.warnLinkNodes();
+		for (Link linky : links)
+			linky.warnLinkNodes();
 
-		//links.clear();
+		links.clear();
+		
+		clearing = false;
 	}
 
 	/**
