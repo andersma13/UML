@@ -85,14 +85,7 @@ public class Main extends Application {
 		ListChangeListener<ClassModel> classListener = new ListChangeListener<ClassModel>() {
 			@Override
 			public void onChanged(Change<? extends ClassModel> c) {
-				if (!data.isUndoEmpty())
-					window.undo.setDisable(false);
-				else
-					window.undo.setDisable(true);
-				if (!data.isRedoEmpty())
-					window.redo.setDisable(false);
-				else
-					window.redo.setDisable(true);
+				updateButtons();
 				while (c.next()) {
 
 					/*****************************
@@ -366,7 +359,7 @@ public class Main extends Application {
 								Link newLink = new Link(data.getClass(srcIndex).getNode(),
 										data.getClass(destIndex).getNode(), added.getLabel(), added.getType(), srcMulti,
 										destMulti);
-								
+
 								/*****************************
 								 * SET UP LISTENERS
 								 *****************************/
@@ -377,51 +370,65 @@ public class Main extends Application {
 									public void changed(ObservableValue<? extends String> observable, String oldValue,
 											String newValue) {
 										newLink.setLabel(newValue);
+										
+										updateButtons();
 									}
 								});
-								
+
 								// Src Min listener
 								added.getSourceMinProp().addListener(new ChangeListener<Number>() {
 									@Override
 									public void changed(ObservableValue<? extends Number> observable, Number oldValue,
 											Number newValue) {
-										newLink.setSrcMultiplicity(stringifyMulti((int)newValue, added.getSourceMax()));
+										newLink.setSrcMultiplicity(
+												stringifyMulti((int) newValue, added.getSourceMax()));
+										
+										updateButtons();
 									}
 								});
-								
+
 								// Src Max listener
 								added.getSourceMaxProp().addListener(new ChangeListener<Number>() {
 									@Override
 									public void changed(ObservableValue<? extends Number> observable, Number oldValue,
 											Number newValue) {
-										newLink.setSrcMultiplicity(stringifyMulti(added.getSourceMin(), (int)newValue));
+										newLink.setSrcMultiplicity(
+												stringifyMulti(added.getSourceMin(), (int) newValue));
+										
+										updateButtons();
 									}
 								});
-								
+
 								// Dest Min listener
 								added.getDestMinProp().addListener(new ChangeListener<Number>() {
 									@Override
 									public void changed(ObservableValue<? extends Number> observable, Number oldValue,
 											Number newValue) {
-										newLink.setDestMultiplicity(stringifyMulti((int)newValue, added.getDestMax()));
+										newLink.setDestMultiplicity(stringifyMulti((int) newValue, added.getDestMax()));
+										
+										updateButtons();
 									}
 								});
-								
+
 								// Dest Max listener
 								added.getDestMaxProp().addListener(new ChangeListener<Number>() {
 									@Override
 									public void changed(ObservableValue<? extends Number> observable, Number oldValue,
 											Number newValue) {
-										newLink.setDestMultiplicity(stringifyMulti(added.getDestMin(), (int)newValue));
+										newLink.setDestMultiplicity(stringifyMulti(added.getDestMin(), (int) newValue));
+										
+										updateButtons();
 									}
 								});
-								
+
 								// Type listener
 								added.getTypeProp().addListener(new ChangeListener<Number>() {
 									@Override
 									public void changed(ObservableValue<? extends Number> observable, Number oldValue,
 											Number newValue) {
-										newLink.setType((int)newValue);
+										newLink.setType((int) newValue);
+										
+										updateButtons();
 									}
 								});
 
@@ -432,9 +439,11 @@ public class Main extends Application {
 											public void changed(ObservableValue<? extends Number> observable,
 													Number oldValue, Number newValue) {
 												newLink.setStartX((int) newValue);
+												
+												updateButtons();
 											}
 										});
-								
+
 								// Source Y position listener
 								data.getClass(srcIndex).getNode().getYProperty()
 										.addListener(new ChangeListener<Number>() {
@@ -442,6 +451,8 @@ public class Main extends Application {
 											public void changed(ObservableValue<? extends Number> observable,
 													Number oldValue, Number newValue) {
 												newLink.setStartY((int) newValue);
+												
+												updateButtons();
 											}
 										});
 
@@ -452,6 +463,8 @@ public class Main extends Application {
 											public void changed(ObservableValue<? extends Number> observable,
 													Number oldValue, Number newValue) {
 												newLink.setEndX((int) newValue);
+												
+												updateButtons();
 											}
 										});
 
@@ -462,9 +475,11 @@ public class Main extends Application {
 											public void changed(ObservableValue<? extends Number> observable,
 													Number oldValue, Number newValue) {
 												newLink.setEndY((int) newValue);
+												
+												updateButtons();
 											}
 										});
-								
+
 								/*****************************
 								 * CURSOR MODIFICATIONS
 								 *****************************/
@@ -486,7 +501,7 @@ public class Main extends Application {
 										newLink.getScene().setCursor(Cursor.DEFAULT);
 									}
 								});
-								
+
 								// Makes the link selectable
 								newLink.setOnMouseClicked(new EventHandler<MouseEvent>() {
 									@Override
@@ -500,10 +515,10 @@ public class Main extends Application {
 												dialog.show();
 											}
 											e.consume();
-										} 
+										}
 									}
 								});
-								
+
 								// Display Link
 								addLink(newLink);
 								newLink.toBack();
@@ -511,20 +526,21 @@ public class Main extends Application {
 								newLink.updateLine();
 							}
 						} else if (c.wasRemoved()) {
-							for(LinkModel removed : c.getRemoved())
-							{
+							for (LinkModel removed : c.getRemoved()) {
 								if (!data.isClearing()) {
-								int pivot = removed.getIndex();
-								
-								data.getLink(pivot).warnLinkNodes();
-								window.remove(data.getLink(pivot));
+									int pivot = removed.getIndex();
+
+									data.getLink(pivot).warnLinkNodes();
+									window.remove(data.getLink(pivot));
 									data.removeLink(pivot);
 								}
 							}
 						}
+
 					}
 				}
 			}
+
 
 			/**
 			 * Take special flag values and mutate the output string based on their values (
@@ -572,8 +588,21 @@ public class Main extends Application {
 
 		public Delta() {
 		}
+
 	}
 
+	private void updateButtons() {
+		if (!data.isUndoEmpty())
+			window.undo.setDisable(false);
+		else
+			window.undo.setDisable(true);
+		if (!data.isRedoEmpty())
+			window.redo.setDisable(false);
+		else
+			window.redo.setDisable(true);
+
+	}
+	
 	/**
 	 * Snaps the given values to a grid
 	 * 
