@@ -623,6 +623,7 @@ public class Model {
 	private ObservableList<LinkModel> linkList;
 	private List<ClassBlock> classes;
 	private List<Link> links;
+	private boolean createLinkMode = false;
 
 	/*
 	 * This class uses the classList and connectionList classes to represent all the
@@ -1256,5 +1257,27 @@ public class Model {
 
 		for (Link linky : links)
 			window.remove(linky);
+	}
+	
+	/**
+	 * 
+	 * @return returns createLinkMode value. 
+	 * 
+	 * If it's false, the blocks are draggable. If it's true, dragging creates links.
+	 * 
+	 */
+	
+	public boolean isLinkable()
+	{
+		return createLinkMode;
+	}
+	
+	/**
+	 * Toggles createLinkMode.
+	 */
+	
+	public void toggleLinkMode()
+	{
+		createLinkMode = !createLinkMode;
 	}
 }

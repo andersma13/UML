@@ -23,6 +23,9 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
@@ -55,9 +58,13 @@ public class ProgramWindow extends Stage {
 	// Define tool panel elements
 	public Button newClass = new Button("New class...");
 	// public Button removeClass = new Button("Delete...");
-	public Button newLink = new Button("New link...");
+	//public Button newLink = new Button("New link...");
+	public ToggleButton dragMode = new ToggleButton("");
+
+	public ToggleButton linkMode = new ToggleButton("");
 	public Button undo = new Button("Undo...");
 	public Button redo = new Button("Redo...");
+	
 
 	public ProgramWindow(Model dataIn) {
 		Stage ref = this;
@@ -78,17 +85,18 @@ public class ProgramWindow extends Stage {
 		menu.getMenus().add(file);
 		menu.getMenus().add(edit);
 
-		// Construct tool panel
+		// Construct tool panel		
 		newClass.getStyleClass().add("toolbarButtons");
-		// removeClass.getStyleClass().add("toolbarButtons");
-		newLink.getStyleClass().add("toolbarButtons");
 		undo.getStyleClass().add("toolbarButtons");
 		redo.getStyleClass().add("toolbarButtons");
+		
 		tools.add(newClass, 0, 0);
-		// tools.add(removeClass, 0, 1);
-		tools.add(newLink, 0, 2);
+		tools.add(dragMode, 0, 2);
+		dragMode.setSelected(true);
+		tools.add(linkMode, 1, 2);
 		tools.add(undo, 0, 3);
 		tools.add(redo, 0, 4);
+		
 
 		// Creates a new class dialog upon click
 		EventHandler<ActionEvent> newClassEvent = new EventHandler<ActionEvent>() {
@@ -100,17 +108,28 @@ public class ProgramWindow extends Stage {
 				e.consume();
 			}
 		};
+		
+		
 
 		// Creates a new link dialog upon click
-		EventHandler<ActionEvent> newLinkEvent = new EventHandler<ActionEvent>() {
+		EventHandler<ActionEvent> toggleLinkEvent = new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent e) {
-				NewLinkWindow dialog = new NewLinkWindow(-1, data);
-				dialog.initModality(Modality.APPLICATION_MODAL);
-				dialog.show();
-				e.consume();
+				data.toggleLinkMode();
+				dragMode.setSelected(!dragMode.isSelected());
 			}
 		};
+		
+
+		// Creates a new link dialog upon click
+		EventHandler<ActionEvent> toggleDragEvent = new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent e) {				
+				data.toggleLinkMode();
+				linkMode.setSelected(!linkMode.isSelected());
+			}
+		};
+
 
 		// Clears the main panel upon click
 		EventHandler<ActionEvent> clearEvent = new EventHandler<ActionEvent>() {
@@ -219,7 +238,22 @@ public class ProgramWindow extends Stage {
 
 		// Apply handlers
 		newClass.setOnAction(newClassEvent);
-		newLink.setOnAction(newLinkEvent);
+		linkMode.setOnAction(toggleLinkEvent);
+		dragMode.setOnAction(toggleDragEvent);
+		
+		Image dragIcon = new Image(getClass().getResourceAsStream("/application/include/drag.png"));
+		ImageView i1 = new ImageView(dragIcon);
+		i1.setFitWidth(25);
+		i1.setFitHeight(25);
+		
+		Image linkIcon = new Image(getClass().getResourceAsStream("/application/include/link.png"));
+		ImageView i2 = new ImageView(linkIcon);
+		i2.setFitWidth(25);
+		i2.setFitHeight(25);
+		
+		dragMode.setGraphic(i1);
+		linkMode.setGraphic(i2);
+		
 		clear.setOnAction(clearEvent);
 		clearLinks.setOnAction(clearLinksEvent);
 		undo.setOnAction(undoEvent);

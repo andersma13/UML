@@ -28,11 +28,16 @@ import javafx.event.EventHandler;
 import javafx.scene.Cursor;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Line;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class Main extends Application {
 
+	int linkSrc = -1;
+	Line line;
+	
 	/**
 	 * Model: this class will handle all objects in the program. Data can be pulled
 	 * from it at will and pushed to the view.
@@ -174,8 +179,8 @@ public class Main extends Application {
 
 								// Turns the cursor normal after leaving a draggable element
 								newClass.setOnMouseExited(new EventHandler<MouseEvent>() {
-									@Override
-									public void handle(MouseEvent e) {
+										@Override
+								public void handle(MouseEvent e) {
 										newClass.getScene().setCursor(Cursor.DEFAULT);
 									}
 								});
@@ -184,6 +189,7 @@ public class Main extends Application {
 								newClass.setOnMousePressed(new EventHandler<MouseEvent>() {
 									@Override
 									public void handle(MouseEvent e) {
+										
 										if (data.safeToSave()) {
 											data.saveUndoState();
 											data.clearRedoState();
@@ -194,6 +200,8 @@ public class Main extends Application {
 										delta.x = e.getX();
 										delta.y = e.getY();
 										newClass.getScene().setCursor(Cursor.MOVE);
+										
+
 									}
 								});
 
@@ -213,17 +221,21 @@ public class Main extends Application {
 											window.redo.setDisable(false);
 										else
 											window.redo.setDisable(true);
+										
 									}
 								});
 
 								/*****************************
 								 * MAKE DRAGGABLE/SELECTABLE
 								 *****************************/
-
+								
 								// Makes the class block draggable
 								newClass.setOnMouseDragged(new EventHandler<MouseEvent>() {
 									@Override
 									public void handle(MouseEvent e) {
+										
+										if (!data.isLinkable())
+										{
 										// set stored X and Y positions
 										added.setXPos((int) (newClass.getLayoutX() + e.getX() - delta.x));
 										added.setYPos((int) (newClass.getLayoutY() + e.getY() - delta.y));
@@ -242,6 +254,15 @@ public class Main extends Application {
 												(int) (added.getYPos() + e.getY() - delta.y),
 												(int) (added.getYPos() + (newClass.getHeight()) + e.getY() - delta.y));
 										newClass.getNode().updateLink();
+										}
+										else
+										{
+											if (window.mainPanel.getChildren().contains(line))
+											{
+												line.setEndX(e.getX() - delta.x);
+												line.setEndY(e.getY() - delta.y);
+											}
+										}
 									}
 								});
 
@@ -262,8 +283,75 @@ public class Main extends Application {
 										} else if (e.getButton() == MouseButton.SECONDARY) {
 											classContextMenu.show(newClass, e.getScreenX(), e.getScreenY());
 										}
+
 									}
 								});
+						
+						     
+								/****************
+								 * DRAG TO LINK *
+								 ****************/
+								
+								//	Sets linkSrc to wherever the drag started, creates line
+						        newClass.setOnDragDetected(new EventHandler<MouseEvent>() {
+									@Override
+									public void handle(MouseEvent e) {
+										newClass.startFullDrag();
+										
+										if (data.isLinkable())
+										{
+											linkSrc = added.getIndex();
+											
+											//line = new Line(added.getXPos() + added.getWidth()/2, added.getYPos() + added.getHeight()/2, e.getX() - delta.x, e.getY() - delta.y);
+											line = new Line(e.getX(), e.getY(), e.getX(), e.getY());
+											line.setStroke(Color.GRAY);
+											line.getStrokeDashArray().addAll(3.0);
+											window.mainPanel.getChildren().add(line);
+											line.toBack();
+										}
+									}
+						        });
+						        
+						        //	Sets destination and brings up new link editor
+						        newClass.setOnMouseDragReleased(new EventHandler<MouseEvent>() {
+									@Override
+									public void handle(MouseEvent e) {
+										if (data.isLinkable())
+										{
+											if (linkSrc != added.getIndex() && linkSrc != -1)
+											{	
+												// Create link window, with filled in src/dest
+												window.mainPanel.getChildren().remove(line);
+												NewLinkWindow dialog = new NewLinkWindow(-1, data);
+												dialog.setSrc(linkSrc);
+												dialog.setDest(added.getIndex());
+												dialog.initModality(Modality.APPLICATION_MODAL);
+												dialog.show();
+											}
+
+											//	Reset src variable
+											linkSrc = -1;
+										}										
+									}
+						        });
+						        
+						        
+						        //	Handles erasing temp line on mouse release
+						        window.addEventFilter(MouseEvent.MOUSE_RELEASED, new EventHandler<MouseEvent>(){
+									@Override
+									public void handle(MouseEvent e) {
+				
+										if (window.mainPanel.getChildren().contains(line))
+										{
+											window.mainPanel.getChildren().remove(line);
+											window.applyCss();
+											
+										}
+										
+										//	Reset src variable
+										linkSrc = -1;
+									}
+						        });
 
 								// Display class
 								addClass(newClass);

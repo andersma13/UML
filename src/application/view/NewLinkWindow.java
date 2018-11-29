@@ -23,8 +23,6 @@ public class NewLinkWindow extends Stage {
 	private GridPane newLinkInterface = new GridPane();
 	private Text newLinkTitle = new Text("Create Link");
 	private TextField newLinkLabel = new TextField();
-	private TextField newLinkSrc = new TextField();
-	private TextField newLinkDest = new TextField();
 	private TextField newSrcMultiMin = new TextField();
 	private TextField newDestMultiMin = new TextField();
 	private TextField newSrcMultiMax = new TextField();
@@ -32,6 +30,9 @@ public class NewLinkWindow extends Stage {
 	private Button newLinkSubmit = new Button("Submit");
 	private Button deleteLink = new Button("Delete");
 
+	private int srcIn;
+	private int destIn;
+	
 	ObservableList<String> options = FXCollections.observableArrayList("Dependency", "Assocation", "Generalization",
 			"Aggregate", "Composition");
 	private ComboBox<String> newLinkArrow = new ComboBox<String>(options);
@@ -50,8 +51,6 @@ public class NewLinkWindow extends Stage {
 		return (text.matches("\\*|[0-9]*") ? change : null);
 	};
 
-	private TextFormatter<String> forceIntSrc = new TextFormatter<>(integers);
-	private TextFormatter<String> forceIntDest = new TextFormatter<>(integers);
 	private TextFormatter<String> forceSrcMultiMin = new TextFormatter<>(multiplicities);
 	private TextFormatter<String> forceDestMultiMin = new TextFormatter<>(multiplicities);
 	private TextFormatter<String> forceSrcMultiMax = new TextFormatter<>(multiplicities);
@@ -65,8 +64,6 @@ public class NewLinkWindow extends Stage {
 	 */
 	public NewLinkWindow(int editIndex, Model data) {
 		// Link formatters
-		newLinkSrc.setTextFormatter(forceIntSrc);
-		newLinkDest.setTextFormatter(forceIntDest);
 		newSrcMultiMin.setTextFormatter(forceSrcMultiMin);
 		newDestMultiMin.setTextFormatter(forceDestMultiMin);
 		newSrcMultiMax.setTextFormatter(forceSrcMultiMax);
@@ -76,10 +73,7 @@ public class NewLinkWindow extends Stage {
 		newLinkInterface.add(newLinkTitle, 0, 0, 2, 1);
 		newLinkInterface.add(newLinkArrow, 0, 1, 2, 1);
 		newLinkInterface.add(newLinkLabel, 0, 2, 2, 1);
-		if(editIndex == -1) {
-			newLinkInterface.add(newLinkSrc, 0, 5);
-			newLinkInterface.add(newLinkDest, 1, 5);
-		}
+	
 		newLinkInterface.add(newSrcMultiMin, 0, 6);
 		newLinkInterface.add(newDestMultiMin, 1, 6);
 		newLinkInterface.add(newSrcMultiMax, 0, 7);
@@ -92,8 +86,6 @@ public class NewLinkWindow extends Stage {
 		if(editIndex == -1) {
 			newLinkLabel.setPromptText("Link label...");
 			newLinkArrow.setPromptText("Select link type...");
-			newLinkSrc.setPromptText("Link Source");
-			newLinkDest.setPromptText("Link Dest");
 			newSrcMultiMin.setPromptText("Src multiplicity min");
 			newDestMultiMin.setPromptText("Dest multiplicity min");
 			newSrcMultiMax.setPromptText("Src multiplicity max");
@@ -115,9 +107,9 @@ public class NewLinkWindow extends Stage {
 				data.clearRedoState();
 				if(editIndex == -1)
 				{
+
 					try {
-						int srcIn = Integer.parseInt(newLinkSrc.getText());
-						int destIn = Integer.parseInt(newLinkDest.getText());
+
 						int srcMulMin = (newSrcMultiMin.getText().length() == 0 ? -2
 								: (newSrcMultiMin.getText().matches("(\\*)*") ? -1
 										: Integer.parseInt(newSrcMultiMin.getText())));
@@ -184,5 +176,13 @@ public class NewLinkWindow extends Stage {
 	 */
 	private void closeWindow() {
 		this.close();
+	}
+	
+	public void setSrc(int s) {
+		srcIn = s;
+	}
+	
+	public void setDest(int d) {
+		destIn = d;
 	}
 }
