@@ -593,6 +593,10 @@ public class Main extends Application {
 
 	}
 
+	/**
+	 * Update the redo and undo buttons on the ProgramWindow (they may have to be dimmed or lit)
+	 * 
+	 */
 	private void updateButtons() {
 		if (!data.isUndoEmpty())
 			window.undo.setDisable(false);
