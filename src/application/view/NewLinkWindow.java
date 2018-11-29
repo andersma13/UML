@@ -163,6 +163,8 @@ public class NewLinkWindow extends Stage {
 		EventHandler<ActionEvent> deleteLinkEvent = new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent e) {
+				data.saveUndoState();
+				data.clearRedoState();
 				data.removeLinkModel(editIndex);
 				closeWindow();
 				e.consume();

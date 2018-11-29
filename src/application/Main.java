@@ -533,6 +533,8 @@ public class Main extends Application {
 									data.getLink(pivot).warnLinkNodes();
 									window.remove(data.getLink(pivot));
 									data.removeLink(pivot);
+									
+									updateButtons();
 								}
 							}
 						}
