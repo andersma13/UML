@@ -259,8 +259,8 @@ public class Main extends Application {
 										{
 											if (window.mainPanel.getChildren().contains(line))
 											{
-												line.setEndX(e.getX() - delta.x);
-												line.setEndY(e.getY() - delta.y);
+												line.setEndX(added.getXPos() + e.getX());
+												line.setEndY(added.getYPos() + e.getY());
 											}
 										}
 									}
@@ -303,7 +303,7 @@ public class Main extends Application {
 											linkSrc = added.getIndex();
 											
 											//line = new Line(added.getXPos() + added.getWidth()/2, added.getYPos() + added.getHeight()/2, e.getX() - delta.x, e.getY() - delta.y);
-											line = new Line(e.getX(), e.getY(), e.getX(), e.getY());
+											line = new Line(added.getXPos() + e.getX(), added.getYPos() + e.getY(), added.getXPos() + e.getX(), added.getYPos() + e.getY());
 											line.setStroke(Color.GRAY);
 											line.getStrokeDashArray().addAll(3.0);
 											window.mainPanel.getChildren().add(line);
@@ -331,6 +331,8 @@ public class Main extends Application {
 
 											//	Reset src variable
 											linkSrc = -1;
+											
+											updateButtons();
 										}										
 									}
 						        });

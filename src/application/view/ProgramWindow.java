@@ -27,6 +27,7 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
@@ -75,7 +76,7 @@ public class ProgramWindow extends Stage {
 		center.setContent(mainPanel);
 		root.getStyleClass().add("root");
 		mainPanel.getStyleClass().add("mainPanel");
-
+		
 		// Construct Menu bar
 		file.getItems().add(save);
 		file.getItems().add(load);
@@ -90,12 +91,12 @@ public class ProgramWindow extends Stage {
 		undo.getStyleClass().add("toolbarButtons");
 		redo.getStyleClass().add("toolbarButtons");
 		
-		tools.add(newClass, 0, 0);
+		tools.add(newClass, 0, 0, 2, 1);
 		tools.add(dragMode, 0, 2);
 		dragMode.setSelected(true);
 		tools.add(linkMode, 1, 2);
-		tools.add(undo, 0, 3);
-		tools.add(redo, 0, 4);
+		tools.add(undo, 0, 3, 2, 1);
+		tools.add(redo, 0, 4, 2, 1);
 		
 
 		// Creates a new class dialog upon click
