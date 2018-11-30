@@ -5,9 +5,15 @@ import application.objects.Link;
 import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
-import javafx.scene.shape.Polygon;
+// import javafx.scene.shape.Polygon;
 
 public class Arrow extends Path {
+
+	private int x;
+	private int y;
+	private Link.arrowFacing orientation;
+	private int arrowheadShaft;
+	private Boolean redrawing = false;
 
 	private static final double ARROWHEAD_SIZE = 10.0;
 	private int linkType;
@@ -34,9 +40,25 @@ public class Arrow extends Path {
 		}
 	}
 
+	public void setType(int type) {
+		linkType = type;
+
+		if (linkType == 4) {
+			strokeProperty().bind(fillProperty());
+			setFill(Color.BLACK);
+		} else {
+			strokeProperty().unbind();
+			setFill(Color.WHITE);
+		}
+
+		redrawing = true;
+		redraw();
+		redrawing = false;
+	}
+
 	/**
 	 * Draws the appropriate arrowhead with the appropriate orientation at the
-	 * appropriate location 
+	 * appropriate location
 	 * 
 	 * @param x
 	 *            Tip of arrow in X axis
@@ -47,7 +69,17 @@ public class Arrow extends Path {
 	 * @param arrowheadShaft
 	 *            Length of the arrow
 	 */
-	public void updateLocation(int x, int y, Link.arrowFacing orientation, int arrowheadShaft) {
+	public void updateLocation(int xIn, int yIn, Link.arrowFacing orientationIn, int arrowheadShaftIn) {
+
+		x = xIn;
+		y = yIn;
+		orientation = orientationIn;
+		arrowheadShaft = arrowheadShaftIn;
+
+		redraw();
+	}
+
+	public void redraw() {
 		getElements().clear();
 
 		int XArrowheadShaft = 0;
@@ -58,28 +90,30 @@ public class Arrow extends Path {
 
 		switch (orientation) {
 		case LEFT: {
-			arrowheadShaft = -arrowheadShaft;
+			if (!redrawing)
+				arrowheadShaft = -arrowheadShaft;
 		}
 		case RIGHT: {
 			XArrowheadShaft = arrowheadShaft;
-		    if (linkType == 3 || linkType == 4)
-		    	XArrowheadAngleMul = 1.35 * arrowheadShaft;
-		    else
-		    	XArrowheadAngleMul = 1.5 * arrowheadShaft;
+			if (linkType == 3 || linkType == 4)
+				XArrowheadAngleMul = 1.35 * arrowheadShaft;
+			else
+				XArrowheadAngleMul = 1.5 * arrowheadShaft;
 
 			angle = Math.atan2(0, arrowheadShaft) - Math.PI / 2.0;
 
 			break;
 		}
 		case UP: {
-			arrowheadShaft = -arrowheadShaft;
+			if (!redrawing)
+				arrowheadShaft = -arrowheadShaft;
 		}
 		case DOWN: {
 			YArrowheadShaft = arrowheadShaft;
-		    if (linkType == 3 || linkType == 4)
-		    	YArrowheadAngleMul = 1.35 * arrowheadShaft;	
-		    else
-		    	YArrowheadAngleMul = 1.5 * arrowheadShaft;
+			if (linkType == 3 || linkType == 4)
+				YArrowheadAngleMul = 1.35 * arrowheadShaft;
+			else
+				YArrowheadAngleMul = 1.5 * arrowheadShaft;
 
 			angle = Math.atan2(arrowheadShaft, 0) - Math.PI / 2.0;
 
@@ -89,15 +123,15 @@ public class Arrow extends Path {
 
 		double sin = Math.sin(angle);
 		double cos = Math.cos(angle);
-		
+
 		double x1 = (-1.0 / 2.0 * cos + Math.sqrt(3) / 2 * sin) * ARROWHEAD_SIZE + x + XArrowheadAngleMul;
 		double y1 = (-1.0 / 2.0 * sin - Math.sqrt(3) / 2 * cos) * ARROWHEAD_SIZE + y + YArrowheadAngleMul;
 
 		double x2 = (1.0 / 2.0 * cos + Math.sqrt(3) / 2 * sin) * ARROWHEAD_SIZE + x + XArrowheadAngleMul;
 		double y2 = (1.0 / 2.0 * sin - Math.sqrt(3) / 2 * cos) * ARROWHEAD_SIZE + y + YArrowheadAngleMul;
-		
-		getElements().add(new MoveTo(x,y));
-		
+
+		getElements().add(new MoveTo(x, y));
+
 		// note, -1 is the result of the user NOT selecting an arrow type
 		if (linkType == 0 || linkType == 1 || linkType == -1) {
 			getElements().add(new LineTo(x + XArrowheadShaft, y + YArrowheadShaft));
@@ -108,19 +142,17 @@ public class Arrow extends Path {
 			getElements().add(new LineTo(x, y));
 
 		} else if (linkType == 2) {
-			getElements().add(new LineTo(x1,y1));
-			getElements().add(new LineTo(x2,y2));
-			getElements().add(new LineTo(x,y));
-			getElements().add(new MoveTo(x2-(x2-x1)/2,y2-(y2-y1)/2));
-			getElements().add(new LineTo(x+XArrowheadShaft,y+YArrowheadShaft));
-		}
-		else if (linkType == 3 || linkType == 4) {		
-			getElements().add(new LineTo(x1,y1));
+			getElements().add(new LineTo(x1, y1));
+			getElements().add(new LineTo(x2, y2));
+			getElements().add(new LineTo(x, y));
+			getElements().add(new MoveTo(x2 - (x2 - x1) / 2, y2 - (y2 - y1) / 2));
 			getElements().add(new LineTo(x + XArrowheadShaft, y + YArrowheadShaft));
-			getElements().add(new LineTo(x2,y2));
-			getElements().add(new LineTo(x,y));
+		} else if (linkType == 3 || linkType == 4) {
+			getElements().add(new LineTo(x1, y1));
+			getElements().add(new LineTo(x + XArrowheadShaft, y + YArrowheadShaft));
+			getElements().add(new LineTo(x2, y2));
+			getElements().add(new LineTo(x, y));
 		}
-
 	}
 
 	/**
@@ -130,5 +162,4 @@ public class Arrow extends Path {
 	public void eraseArrowhead() {
 		getElements().clear();
 	}
-
 }

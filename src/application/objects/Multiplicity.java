@@ -27,14 +27,17 @@ public class Multiplicity extends Text {
 		currentX = (double) x;
 		currentY = (double) y;
 		relocate(currentX, currentY);
-
+	}
+	
+	public void updateMultiplicity(String type) {
+		multiType = type;
+		this.setText(multiType);
 	}
 
 	/**
-	 * sets the text to blank ( not a great solution )
-	 * 
+	 * sets the text to null
 	 */
 	public void eraseText() {
-		setText("");
+		setText(null);
 	}
 }

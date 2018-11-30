@@ -65,10 +65,11 @@ public class Link extends Line {
 
 		source = src;
 		destination = dest;
-		setLabel(labelText);
-		setArrowType(arrowType);
-		setSrcMultiplicity(sourceMultiplicity);
-		setDestMultiplicity(destinationMultiplicity);
+		label = new Label(labelText);
+		//HERE
+		arrow = new Arrow(arrowType);
+		srcMultiplicity = new Multiplicity(sourceMultiplicity);
+		destMultiplicity = new Multiplicity(destinationMultiplicity);
 		updateLine();
 
 		src.giveParent(this);
@@ -76,6 +77,16 @@ public class Link extends Line {
 
 		destOffsetMul = dest.askNum(this);
 		srcOffsetMul = src.askNum(this);
+	}
+	
+	/**
+	 * Creates an label object, assigning its appropriate text.
+	 * 
+	 * @param text
+	 *            The text of the label
+	 */
+	public void setLabel(String text) {
+		label.setText(text);	
 	}
 
 	/**
@@ -260,17 +271,6 @@ public class Link extends Line {
 		destMultiplicity.updateLocation(destination.getL() - LEFT_XOFFSET,
 				destination.getY() + (destOffsetMul * DESTINATION_OFFSET) - LEFT_YOFFSET);
 	}
-	
-	/**
-	 * Creates an label object, assigning its appropriate text.
-	 * 
-	 * @param text
-	 *            The text of the label
-	 */
-	private void setLabel(String text) {
-		label = new Label(text);
-		
-	}
 
 	/**
 	 * Creates an arrow object, assigning its appropriate type.
@@ -278,9 +278,14 @@ public class Link extends Line {
 	 * @param type
 	 *            The type of the arrow to draw
 	 */
-	private void setArrowType(int type) {
-		arrow = new Arrow(type);
-
+	public void setType(int type) {
+		if (type == 0) {
+			this.getStrokeDashArray().addAll(10d);
+		} else {
+			this.getStrokeDashArray().clear();
+		}
+		// arrow.eraseArrowhead();
+		arrow.setType(type);
 	}
 
 	/**
@@ -289,8 +294,8 @@ public class Link extends Line {
 	 * @param type
 	 *            The type of multiplicity to display
 	 */
-	private void setSrcMultiplicity(String type) {
-		srcMultiplicity = new Multiplicity(type);
+	public void setSrcMultiplicity(String type) {
+		srcMultiplicity.updateMultiplicity(type);
 	}
 
 	/**
@@ -299,8 +304,8 @@ public class Link extends Line {
 	 * @param type
 	 *            The type of multiplicity to display
 	 */
-	private void setDestMultiplicity(String type) {
-		destMultiplicity = new Multiplicity(type);
+	public void setDestMultiplicity(String type) {
+		destMultiplicity.updateMultiplicity(type);
 	}
 
 	/**

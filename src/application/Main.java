@@ -17,6 +17,7 @@ import application.include.Model.LinkModel;
 import application.objects.ClassBlock;
 import application.objects.Link;
 import application.view.NewClassWindow;
+import application.view.NewLinkWindow;
 import application.view.ProgramWindow;
 import application.view.context.ClassMenu;
 import javafx.application.Application;
@@ -27,11 +28,16 @@ import javafx.event.EventHandler;
 import javafx.scene.Cursor;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Line;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class Main extends Application {
 
+	int linkSrc = -1;
+	Line line;
+	
 	/**
 	 * Model: this class will handle all objects in the program. Data can be pulled
 	 * from it at will and pushed to the view.
@@ -84,14 +90,7 @@ public class Main extends Application {
 		ListChangeListener<ClassModel> classListener = new ListChangeListener<ClassModel>() {
 			@Override
 			public void onChanged(Change<? extends ClassModel> c) {
-				if (!data.isUndoEmpty())
-					window.undo.setDisable(false);
-				else
-					window.undo.setDisable(true);
-				if (!data.isRedoEmpty())
-					window.redo.setDisable(false);
-				else
-					window.redo.setDisable(true);
+				updateButtons();
 				while (c.next()) {
 
 					/*****************************
@@ -180,8 +179,8 @@ public class Main extends Application {
 
 								// Turns the cursor normal after leaving a draggable element
 								newClass.setOnMouseExited(new EventHandler<MouseEvent>() {
-									@Override
-									public void handle(MouseEvent e) {
+										@Override
+								public void handle(MouseEvent e) {
 										newClass.getScene().setCursor(Cursor.DEFAULT);
 									}
 								});
@@ -190,6 +189,7 @@ public class Main extends Application {
 								newClass.setOnMousePressed(new EventHandler<MouseEvent>() {
 									@Override
 									public void handle(MouseEvent e) {
+										
 										if (data.safeToSave()) {
 											data.saveUndoState();
 											data.clearRedoState();
@@ -200,6 +200,8 @@ public class Main extends Application {
 										delta.x = e.getX();
 										delta.y = e.getY();
 										newClass.getScene().setCursor(Cursor.MOVE);
+										
+
 									}
 								});
 
@@ -219,17 +221,21 @@ public class Main extends Application {
 											window.redo.setDisable(false);
 										else
 											window.redo.setDisable(true);
+										
 									}
 								});
 
 								/*****************************
 								 * MAKE DRAGGABLE/SELECTABLE
 								 *****************************/
-
+								
 								// Makes the class block draggable
 								newClass.setOnMouseDragged(new EventHandler<MouseEvent>() {
 									@Override
 									public void handle(MouseEvent e) {
+										
+										if (!data.isLinkable())
+										{
 										// set stored X and Y positions
 										added.setXPos((int) (newClass.getLayoutX() + e.getX() - delta.x));
 										added.setYPos((int) (newClass.getLayoutY() + e.getY() - delta.y));
@@ -248,6 +254,15 @@ public class Main extends Application {
 												(int) (added.getYPos() + e.getY() - delta.y),
 												(int) (added.getYPos() + (newClass.getHeight()) + e.getY() - delta.y));
 										newClass.getNode().updateLink();
+										}
+										else
+										{
+											if (window.mainPanel.getChildren().contains(line))
+											{
+												line.setEndX(added.getXPos() + e.getX());
+												line.setEndY(added.getYPos() + e.getY());
+											}
+										}
 									}
 								});
 
@@ -268,8 +283,77 @@ public class Main extends Application {
 										} else if (e.getButton() == MouseButton.SECONDARY) {
 											classContextMenu.show(newClass, e.getScreenX(), e.getScreenY());
 										}
+
 									}
 								});
+						
+						     
+								/****************
+								 * DRAG TO LINK *
+								 ****************/
+								
+								//	Sets linkSrc to wherever the drag started, creates line
+						        newClass.setOnDragDetected(new EventHandler<MouseEvent>() {
+									@Override
+									public void handle(MouseEvent e) {
+										newClass.startFullDrag();
+										
+										if (data.isLinkable())
+										{
+											linkSrc = added.getIndex();
+											
+											//line = new Line(added.getXPos() + added.getWidth()/2, added.getYPos() + added.getHeight()/2, e.getX() - delta.x, e.getY() - delta.y);
+											line = new Line(added.getXPos() + e.getX(), added.getYPos() + e.getY(), added.getXPos() + e.getX(), added.getYPos() + e.getY());
+											line.setStroke(Color.GRAY);
+											line.getStrokeDashArray().addAll(3.0);
+											window.mainPanel.getChildren().add(line);
+											line.toBack();
+										}
+									}
+						        });
+						        
+						        //	Sets destination and brings up new link editor
+						        newClass.setOnMouseDragReleased(new EventHandler<MouseEvent>() {
+									@Override
+									public void handle(MouseEvent e) {
+										if (data.isLinkable())
+										{
+											if (linkSrc != added.getIndex() && linkSrc != -1)
+											{	
+												// Create link window, with filled in src/dest
+												window.mainPanel.getChildren().remove(line);
+												NewLinkWindow dialog = new NewLinkWindow(-1, data);
+												dialog.setSrc(linkSrc);
+												dialog.setDest(added.getIndex());
+												dialog.initModality(Modality.APPLICATION_MODAL);
+												dialog.show();
+											}
+
+											//	Reset src variable
+											linkSrc = -1;
+											
+											updateButtons();
+										}										
+									}
+						        });
+						        
+						        
+						        //	Handles erasing temp line on mouse release
+						        window.addEventFilter(MouseEvent.MOUSE_RELEASED, new EventHandler<MouseEvent>(){
+									@Override
+									public void handle(MouseEvent e) {
+				
+										if (window.mainPanel.getChildren().contains(line))
+										{
+											window.mainPanel.getChildren().remove(line);
+											window.applyCss();
+											
+										}
+										
+										//	Reset src variable
+										linkSrc = -1;
+									}
+						        });
 
 								// Display class
 								addClass(newClass);
@@ -298,9 +382,7 @@ public class Main extends Application {
 									for (int i = 0; i != bound; ++i) {
 										if (data.getLinkModel(i).getSource() == pivot
 												|| data.getLinkModel(i).getDest() == pivot) {
-											window.removeLink(data.getLink(i));
 											data.removeLinkModel(i);
-											data.removeLink(i);
 											--bound;
 											--i;
 										}
@@ -368,52 +450,189 @@ public class Main extends Application {
 										data.getClass(destIndex).getNode(), added.getLabel(), added.getType(), srcMulti,
 										destMulti);
 
+								/*****************************
+								 * SET UP LISTENERS
+								 *****************************/
+
+								// Label listener
+								added.getLabelProp().addListener(new ChangeListener<String>() {
+									@Override
+									public void changed(ObservableValue<? extends String> observable, String oldValue,
+											String newValue) {
+										newLink.setLabel(newValue);
+										
+										updateButtons();
+									}
+								});
+
+								// Src Min listener
+								added.getSourceMinProp().addListener(new ChangeListener<Number>() {
+									@Override
+									public void changed(ObservableValue<? extends Number> observable, Number oldValue,
+											Number newValue) {
+										newLink.setSrcMultiplicity(
+												stringifyMulti((int) newValue, added.getSourceMax()));
+										
+										updateButtons();
+									}
+								});
+
+								// Src Max listener
+								added.getSourceMaxProp().addListener(new ChangeListener<Number>() {
+									@Override
+									public void changed(ObservableValue<? extends Number> observable, Number oldValue,
+											Number newValue) {
+										newLink.setSrcMultiplicity(
+												stringifyMulti(added.getSourceMin(), (int) newValue));
+										
+										updateButtons();
+									}
+								});
+
+								// Dest Min listener
+								added.getDestMinProp().addListener(new ChangeListener<Number>() {
+									@Override
+									public void changed(ObservableValue<? extends Number> observable, Number oldValue,
+											Number newValue) {
+										newLink.setDestMultiplicity(stringifyMulti((int) newValue, added.getDestMax()));
+										
+										updateButtons();
+									}
+								});
+
+								// Dest Max listener
+								added.getDestMaxProp().addListener(new ChangeListener<Number>() {
+									@Override
+									public void changed(ObservableValue<? extends Number> observable, Number oldValue,
+											Number newValue) {
+										newLink.setDestMultiplicity(stringifyMulti(added.getDestMin(), (int) newValue));
+										
+										updateButtons();
+									}
+								});
+
+								// Type listener
+								added.getTypeProp().addListener(new ChangeListener<Number>() {
+									@Override
+									public void changed(ObservableValue<? extends Number> observable, Number oldValue,
+											Number newValue) {
+										newLink.setType((int) newValue);
+										
+										updateButtons();
+									}
+								});
+
+								// Source X position listener
 								data.getClass(srcIndex).getNode().getXProperty()
 										.addListener(new ChangeListener<Number>() {
 											@Override
 											public void changed(ObservableValue<? extends Number> observable,
 													Number oldValue, Number newValue) {
 												newLink.setStartX((int) newValue);
+												
+												updateButtons();
 											}
 										});
 
+								// Source Y position listener
 								data.getClass(srcIndex).getNode().getYProperty()
 										.addListener(new ChangeListener<Number>() {
 											@Override
 											public void changed(ObservableValue<? extends Number> observable,
 													Number oldValue, Number newValue) {
 												newLink.setStartY((int) newValue);
+												
+												updateButtons();
 											}
 										});
 
+								// Dest X Position listener
 								data.getClass(destIndex).getNode().getXProperty()
 										.addListener(new ChangeListener<Number>() {
 											@Override
 											public void changed(ObservableValue<? extends Number> observable,
 													Number oldValue, Number newValue) {
 												newLink.setEndX((int) newValue);
+												
+												updateButtons();
 											}
 										});
 
+								// Dest Y position listener
 								data.getClass(destIndex).getNode().getYProperty()
 										.addListener(new ChangeListener<Number>() {
 											@Override
 											public void changed(ObservableValue<? extends Number> observable,
 													Number oldValue, Number newValue) {
 												newLink.setEndY((int) newValue);
+												
+												updateButtons();
 											}
 										});
 
+								/*****************************
+								 * CURSOR MODIFICATIONS
+								 *****************************/
+
+								// Turns the cursor into a hand over draggable elements
+								newLink.setOnMouseEntered(new EventHandler<MouseEvent>() {
+									@Override
+									public void handle(MouseEvent e) {
+										if (!e.isPrimaryButtonDown()) {
+											newLink.getScene().setCursor(Cursor.HAND);
+										}
+									}
+								});
+
+								// Turns the cursor normal after leaving a draggable element
+								newLink.setOnMouseExited(new EventHandler<MouseEvent>() {
+									@Override
+									public void handle(MouseEvent e) {
+										newLink.getScene().setCursor(Cursor.DEFAULT);
+									}
+								});
+
+								// Makes the link selectable
+								newLink.setOnMouseClicked(new EventHandler<MouseEvent>() {
+									@Override
+									public void handle(MouseEvent e) {
+										// Check for double click coming from primary mouse button
+										if (e.getButton().equals(MouseButton.PRIMARY)) {
+											if (e.getClickCount() == 2) {
+												// Launch link edit window
+												NewLinkWindow dialog = new NewLinkWindow(added.getIndex(), data);
+												dialog.initModality(Modality.APPLICATION_MODAL);
+												dialog.show();
+											}
+											e.consume();
+										}
+									}
+								});
+
+								// Display Link
 								addLink(newLink);
 								newLink.toBack();
 
 								newLink.updateLine();
 							}
 						} else if (c.wasRemoved()) {
+							for (LinkModel removed : c.getRemoved()) {
+								if (!data.isClearing()) {
+									int pivot = removed.getIndex();
+
+									data.getLink(pivot).warnLinkNodes();
+									window.remove(data.getLink(pivot));
+									data.removeLink(pivot);
+									
+									updateButtons();
+								}
+							}
 						}
+
 					}
 				}
 			}
+
 
 			/**
 			 * Take special flag values and mutate the output string based on their values (
@@ -461,8 +680,25 @@ public class Main extends Application {
 
 		public Delta() {
 		}
+
 	}
 
+	/**
+	 * Update the redo and undo buttons on the ProgramWindow (they may have to be dimmed or lit)
+	 * 
+	 */
+	private void updateButtons() {
+		if (!data.isUndoEmpty())
+			window.undo.setDisable(false);
+		else
+			window.undo.setDisable(true);
+		if (!data.isRedoEmpty())
+			window.redo.setDisable(false);
+		else
+			window.redo.setDisable(true);
+
+	}
+	
 	/**
 	 * Snaps the given values to a grid
 	 * 
