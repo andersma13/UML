@@ -1,6 +1,5 @@
 package application.objects;
 
-import javafx.scene.paint.Color;
 import application.objects.Link;
 import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
@@ -36,7 +35,12 @@ public class Arrow extends Path {
 
 		if (linkType == 4) {
 			strokeProperty().bind(fillProperty());
-			setFill(Color.BLACK);
+			this.getStyleClass().add("arrowFilled");
+		}
+		else
+		{
+			strokeProperty().unbind();
+			this.getStyleClass().add("arrowBlank");
 		}
 	}
 
@@ -45,10 +49,12 @@ public class Arrow extends Path {
 
 		if (linkType == 4) {
 			strokeProperty().bind(fillProperty());
-			setFill(Color.BLACK);
+			this.getStyleClass().remove("arrowBlank");
+			this.getStyleClass().add("arrowFilled");
 		} else {
 			strokeProperty().unbind();
-			setFill(Color.WHITE);
+			this.getStyleClass().remove("arrowFilled");
+			this.getStyleClass().add("arrowBlank");
 		}
 
 		redrawing = true;

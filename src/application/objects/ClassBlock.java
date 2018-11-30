@@ -147,6 +147,7 @@ public class ClassBlock extends VBox {
 		 */
 		public Panel() {
 			this.getChildren().add(text);
+			text.getStyleClass().add("textColor");
 		}
 
 		/**

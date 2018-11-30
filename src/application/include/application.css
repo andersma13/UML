@@ -1,10 +1,7 @@
 .mainPanel
 {
-	-fx-background-image: url("\nogrid.png");
 	-fx-background-size: 40px;
-	-fx-background-color: darkgray;
 	-fx-background-repeat: repeat;
-	-fx-border-color: lightgrey, darkgrey;
 	-fx-border-width: 1, 0 1.5 1.5 0; 
 	-fx-min-height: 661;
 	-fx-min-width: 1151;
@@ -14,27 +11,21 @@
 .classBlock
 {
 	-fx-grid-lines-visible: true;
-	-fx-background-color: black, white ;
     -fx-background-insets: 1, 0 1 1 0 ;
-	-fx-border-color: black;
 	-fx-min-width: 100;
 }
 
 .classBlockTitle
 {
-	-fx-background-color: black, white ;
-    -fx-background-insets: 0, 0 1 1 0 ;
+    
 	-fx-text-alignment: center;
 	-fx-alignment: center;
-	-fx-fill: pink;
 	-fx-min-width: 100%;
 	-fx-padding: 2;	
 }
 
 .classBlockPanel
 {
-	-fx-background-color: black, white ;
-    -fx-background-insets: 0, 0 1 1 0 ;
     -fx-padding: 2;	
 }
 
@@ -42,6 +33,12 @@
 {
 	-fx-max-height: 30;
 	-fx-min-width: 99;
+}
+
+.toolbarButtonsHalf
+{
+	-fx-max-height: 30;
+	-fx-min-width: 49.5;
 }
 
 .left
