@@ -59,6 +59,7 @@ public class ProgramWindow extends Stage {
 	public MenuItem normal = new MenuItem("Normal");
 	public MenuItem night = new MenuItem("Night Mode");
 	public MenuItem h4ck3r = new MenuItem("h4ck3r m0d3");
+	public MenuItem winxp = new MenuItem("Windows XP");
 	
 	// Define tool panel elements
 	public Button newClass = new Button("New class...");
@@ -96,7 +97,7 @@ public class ProgramWindow extends Stage {
 		// Construct Menu bar
 		file.getItems().addAll(save, load, export);
 		edit.getItems().addAll(clear, clearLinks);
-		skins.getItems().addAll(normal, night, h4ck3r);
+		skins.getItems().addAll(normal, night, h4ck3r, winxp);
 		view.getItems().add(skins);
 		menu.getMenus().addAll(file, edit, view);
 		
@@ -285,6 +286,18 @@ public class ProgramWindow extends Stage {
 			}
 		};
 		
+		EventHandler<ActionEvent> winXPEvent = new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent e) {
+				color = 3;
+				data.prepClassBlocks();
+				becomeStylish(scene);
+				applyCss();
+				data.refreshClassBlocks();
+				data.refreshLines();
+			}
+		};
+		
 		// Apply handlers
 		newClass.setOnAction(newClassEvent);
 		linkMode.setOnAction(toggleLinkEvent);
@@ -313,6 +326,7 @@ public class ProgramWindow extends Stage {
 		normal.setOnAction(normalEvent);
 		night.setOnAction(nightEvent);
 		h4ck3r.setOnAction(h4ck3rEvent);
+		winxp.setOnAction(winXPEvent);
 
 		redo.setDisable(true);
 		undo.setDisable(true);
@@ -341,6 +355,7 @@ public class ProgramWindow extends Stage {
 			case 0 : scene.getStylesheets().add(getClass().getResource("/application/include/normal.css").toExternalForm()); break;
 			case 1 : scene.getStylesheets().add(getClass().getResource("/application/include/night.css").toExternalForm()); break;
 			case 2 : scene.getStylesheets().add(getClass().getResource("/application/include/h4ck3r.css").toExternalForm()); break;
+			case 3 : scene.getStylesheets().add(getClass().getResource("/application/include/WinXP.css").toExternalForm()); break;
 		}
 	}
 
