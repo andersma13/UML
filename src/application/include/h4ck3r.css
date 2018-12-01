@@ -118,14 +118,14 @@
 	-fx-text-fill: limegreen;
 }
 
+.menu-item:hover .label
+{
+	-fx-text-fill: black !important;
+}
+
 .menu-item:hover
 {
 	-fx-background-color: limegreen;
-}
-
-.menu-item:hover .label
-{
-	-fx-text-fill: black;
 }
 
 .menu .label

@@ -92,7 +92,11 @@ public class ProgramWindow extends Stage {
 		export.getStyleClass().add("menuColors");
 		clear.getStyleClass().add("menuColors");
 		clearLinks.getStyleClass().add("menuColors");
-		
+		skins.getStyleClass().add("menuColors");
+		normal.getStyleClass().add("menuColors");
+		night.getStyleClass().add("menuColors");
+		h4ck3r.getStyleClass().add("menuColors");
+		winxp.getStyleClass().add("menuColors");
 		
 		// Construct Menu bar
 		file.getItems().addAll(save, load, export);
