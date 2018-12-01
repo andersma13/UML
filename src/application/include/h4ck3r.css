@@ -72,7 +72,8 @@
 .toolbarButtonsColor:selected
 {
 	-fx-background-insets: 0 0 -1 0,0,1;
-	-fx-background-color: lightgrey, darkgrey, black;
+	-fx-background-color: limegreen;
+	-fx-text-fill: black;
 }
 
 .menu-bar
