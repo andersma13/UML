@@ -1,7 +1,7 @@
 .mainPanel
 {
-  -fx-background-image: url("\winxp.png");
-  /*-fx-background-size: 1920px;*/
+  -fx-background-image: url("\noxp.png");
+  -fx-background-size: 1920px;
   -fx-background-color: darkgray;
   -fx-border-color: lightgrey, darkgrey;
 }

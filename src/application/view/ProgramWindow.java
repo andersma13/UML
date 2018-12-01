@@ -337,8 +337,8 @@ public class ProgramWindow extends Stage {
 		root.setCenter(center);
 		root.getCenter().getStyleClass().add("pad");
 		
-		mainPanel.prefHeightProperty().bind(scene.heightProperty());
-		mainPanel.prefWidthProperty().bind(scene.widthProperty());
+		//mainPanel.prefHeightProperty().bind(scene.heightProperty());
+		//mainPanel.prefWidthProperty().bind(scene.widthProperty());
 		
 		scene.getStylesheets().add(getClass().getResource("/application/include/application.css").toExternalForm());
 		scene.getStylesheets().add(getClass().getResource("/application/include/normal.css").toExternalForm());
