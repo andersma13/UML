@@ -766,8 +766,40 @@ public class Model {
 	public void removeClassModel(int i) {
 		classList.remove(i);
 
+		refreshLines();
+	}
+	
+	/**
+	 * Refresh all lines, arrowheads, labels, etc for each Line
+	 * 
+	 */
+	public void refreshLines() {
 		for (Link link : links)
 			link.updateLine();
+	}
+	
+	/**
+	 * Remove the current width & height of each ClassBlock to prepare for updating line connectivity (before CSS change)
+	 * 
+	 */
+	public void prepClassBlocks() {
+		for (ClassBlock classy: classes)
+			classy.prepWidthHeight();
+	}
+	
+	
+	/**
+	 * Refresh the width & heights of each ClassBlock for proper line connectivity (after CSS change)
+	 * 
+	 */
+	public void refreshClassBlocks() {
+		for (int i=0;i<classes.size();i++)
+		{
+			classes.get(i).initWidthHeight();
+			classes.get(i).getNode().setBounds((int) (classList.get(i).getXPos()),
+					(int) (classList.get(i).getXPos() + classes.get(i).getWidth()), (int) (classList.get(i).getYPos()),
+					(int) (classList.get(i).getYPos() + classes.get(i).getHeight()));	
+		}
 	}
 
 	/**

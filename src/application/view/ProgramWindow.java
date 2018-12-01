@@ -253,7 +253,11 @@ public class ProgramWindow extends Stage {
 			@Override
 			public void handle(ActionEvent e) {
 				color = 0;
+				data.prepClassBlocks();
 				becomeStylish(scene);
+				applyCss();
+				data.refreshClassBlocks();
+				data.refreshLines();
 			}
 		};
 		
@@ -261,7 +265,11 @@ public class ProgramWindow extends Stage {
 			@Override
 			public void handle(ActionEvent e) {
 				color = 1;
+				data.prepClassBlocks();
 				becomeStylish(scene);
+				applyCss();
+				data.refreshClassBlocks();
+				data.refreshLines();
 			}
 		};
 		
@@ -269,7 +277,11 @@ public class ProgramWindow extends Stage {
 			/*CRASH*/ @Override
 			public void handle(ActionEvent e) {
 				color = 2;
+				data.prepClassBlocks();
 				becomeStylish(scene);
+				applyCss();
+				data.refreshClassBlocks();
+				data.refreshLines();
 			}
 		};
 		
@@ -314,8 +326,8 @@ public class ProgramWindow extends Stage {
 		mainPanel.prefHeightProperty().bind(scene.heightProperty());
 		mainPanel.prefWidthProperty().bind(scene.widthProperty());
 		
-		scene.getStylesheets().add("/application/include/application.css");
-		scene.getStylesheets().add("/application/include/normal.css");
+		scene.getStylesheets().add(getClass().getResource("/application/include/application.css").toExternalForm());
+		scene.getStylesheets().add(getClass().getResource("/application/include/normal.css").toExternalForm());
 		
 		this.setScene(scene);
 	}
@@ -323,12 +335,12 @@ public class ProgramWindow extends Stage {
 	public void becomeStylish(Scene scene)
 	{
 		scene.getStylesheets().clear();
-		scene.getStylesheets().add("/application/include/application.css");
+		scene.getStylesheets().add(getClass().getResource("/application/include/application.css").toExternalForm());
 		switch(color)
 		{
-			case 0 : scene.getStylesheets().add("/application/include/normal.css"); break;
-			case 1 : scene.getStylesheets().add("/application/include/night.css"); break;
-			case 2 : scene.getStylesheets().add("/application/include/h4ck3r.css"); break;
+			case 0 : scene.getStylesheets().add(getClass().getResource("/application/include/normal.css").toExternalForm()); break;
+			case 1 : scene.getStylesheets().add(getClass().getResource("/application/include/night.css").toExternalForm()); break;
+			case 2 : scene.getStylesheets().add(getClass().getResource("/application/include/h4ck3r.css").toExternalForm()); break;
 		}
 	}
 
