@@ -133,6 +133,18 @@ public class ClassBlock extends VBox {
 		node.setX(node.getX() + (int) (this.getWidth() / 2));
 		node.setY(node.getY() + (int) (this.getHeight() / 2));
 	}
+	
+	/**
+	 * Remove the width & height from the LinkNode
+	 * 
+	 * Prerequisite before refreshing the Width & Height. Must be completed before the CSS is altered or the ClassBlock dimensions otherwise change.
+	 * 
+	 */
+	public void prepWidthHeight() {
+		node.setX(node.getX() - (int) (this.getWidth() / 2));
+		node.setY(node.getY() - (int) (this.getHeight() / 2));
+	}
+	
 
 	/**
 	 * Panels to be used in the Class Block object. Pretty straightforward.
@@ -147,6 +159,7 @@ public class ClassBlock extends VBox {
 		 */
 		public Panel() {
 			this.getChildren().add(text);
+			text.getStyleClass().add("textColor");
 		}
 
 		/**

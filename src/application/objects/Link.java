@@ -66,6 +66,7 @@ public class Link extends Line {
 		source = src;
 		destination = dest;
 		label = new Label(labelText);
+		label.getStyleClass().add("textColor");
 		//HERE
 		arrow = new Arrow(arrowType);
 		srcMultiplicity = new Multiplicity(sourceMultiplicity);

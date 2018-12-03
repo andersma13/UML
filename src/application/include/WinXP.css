@@ -1,0 +1,46 @@
+.mainPanel
+{
+  -fx-background-image: url("\noxp.png");
+  -fx-background-size: 1920px;
+  -fx-background-color: darkgray;
+  -fx-border-color: lightgrey, darkgrey;
+}
+
+.classBlock
+{
+	-fx-background-color: black, white ;
+	-fx-border-color: black;
+}
+
+.classBlockTitle
+{
+	-fx-background-insets: 0, 0 1 1 0 ;
+	-fx-background-color: black, white ;
+	-fx-fill: pink;
+}
+
+.classBlockPanel
+{
+	-fx-background-insets: 0, 0 1 1 0 ;
+	-fx-background-color: black, white ;
+}
+
+.text
+{
+	-fx-text-fill: black;
+}
+
+.link
+{
+	-fx-stroke: black;
+}
+
+.arrowFilled
+{
+	-fx-fill: black;
+} 
+
+.arrowEmpty
+{
+	-fx-fill: white;
+}

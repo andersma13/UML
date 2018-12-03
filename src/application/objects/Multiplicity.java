@@ -9,7 +9,7 @@ public class Multiplicity extends Text {
 	private double currentY;
 
 	public Multiplicity(String type) {
-		this.getStyleClass().add("multiplicity");
+		this.getStyleClass().addAll("multiplicity", "textColor");
 
 		multiType = type;
 		this.setText(multiType);

@@ -14,7 +14,6 @@ import javafx.event.EventHandler;
 import javafx.print.PageLayout;
 import javafx.print.PageOrientation;
 import javafx.print.Paper;
-import javafx.print.PrintQuality;
 import javafx.print.Printer;
 import javafx.print.PrinterJob;
 import javafx.scene.Scene;
@@ -27,7 +26,6 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
@@ -39,6 +37,7 @@ public class ProgramWindow extends Stage {
 	final private double DEFAULT_HEIGHT = 720.0;
 	final private double DEFAULT_WIDTH = 1280.0;
 	private Model data;
+	private int color = 0;
 
 	// Main Window elements
 	private BorderPane root = new BorderPane();
@@ -50,12 +49,18 @@ public class ProgramWindow extends Stage {
 	// Define menu elements
 	private Menu file = new Menu("File");
 	private Menu edit = new Menu("Edit");
+	private Menu view = new Menu("View");
 	public MenuItem save = new MenuItem("Save...");
 	public MenuItem load = new MenuItem("Load...");
 	public MenuItem export = new MenuItem("Export...");
 	public MenuItem clear = new MenuItem("Clear elements");
 	public MenuItem clearLinks = new MenuItem("Clear links");
-
+	public Menu skins = new Menu("Skins...");
+	public MenuItem normal = new MenuItem("Normal");
+	public MenuItem night = new MenuItem("Night Mode");
+	public MenuItem h4ck3r = new MenuItem("h4ck3r m0d3");
+	public MenuItem winxp = new MenuItem("Windows XP");
+	
 	// Define tool panel elements
 	public Button newClass = new Button("New class...");
 	// public Button removeClass = new Button("Delete...");
@@ -69,27 +74,43 @@ public class ProgramWindow extends Stage {
 
 	public ProgramWindow(Model dataIn) {
 		Stage ref = this;
+		Scene scene = new Scene(root, DEFAULT_WIDTH, DEFAULT_HEIGHT);
+		
 		ref.setTitle("teamTeam UML Designer Pro [registered version]");
 		data = dataIn;
 		this.setMinHeight(DEFAULT_HEIGHT);
 		this.setMinWidth(DEFAULT_WIDTH);
 		center.setContent(mainPanel);
 		root.getStyleClass().add("root");
+		center.getStyleClass().add("center");
 		mainPanel.getStyleClass().add("mainPanel");
+		menu.getStyleClass().add("menuColors");
+		file.getStyleClass().add("menuColors");
+		edit.getStyleClass().add("menuColors");
+		save.getStyleClass().add("menuColors");
+		load.getStyleClass().add("menuColors");
+		export.getStyleClass().add("menuColors");
+		clear.getStyleClass().add("menuColors");
+		clearLinks.getStyleClass().add("menuColors");
+		skins.getStyleClass().add("menuColors");
+		normal.getStyleClass().add("menuColors");
+		night.getStyleClass().add("menuColors");
+		h4ck3r.getStyleClass().add("menuColors");
+		winxp.getStyleClass().add("menuColors");
 		
 		// Construct Menu bar
-		file.getItems().add(save);
-		file.getItems().add(load);
-		file.getItems().add(export);
-		edit.getItems().add(clear);
-		edit.getItems().add(clearLinks);
-		menu.getMenus().add(file);
-		menu.getMenus().add(edit);
-
+		file.getItems().addAll(save, load, export);
+		edit.getItems().addAll(clear, clearLinks);
+		skins.getItems().addAll(normal, night, h4ck3r, winxp);
+		view.getItems().add(skins);
+		menu.getMenus().addAll(file, edit, view);
+		
 		// Construct tool panel		
-		newClass.getStyleClass().add("toolbarButtons");
-		undo.getStyleClass().add("toolbarButtons");
-		redo.getStyleClass().add("toolbarButtons");
+		newClass.getStyleClass().addAll("toolbarButtons", "toolbarButtonsColor");
+		dragMode.getStyleClass().addAll("toolbarButtonsHalf", "toolbarButtonsColor");
+		linkMode.getStyleClass().addAll("toolbarButtonsHalf", "toolbarButtonsColor");
+		undo.getStyleClass().addAll("toolbarButtons", "toolbarButtonsColor");
+		redo.getStyleClass().addAll("toolbarButtons", "toolbarButtonsColor");
 		
 		tools.add(newClass, 0, 0, 2, 1);
 		tools.add(dragMode, 0, 2);
@@ -110,8 +131,6 @@ public class ProgramWindow extends Stage {
 			}
 		};
 		
-		
-
 		// Creates a new link dialog upon click
 		EventHandler<ActionEvent> toggleLinkEvent = new EventHandler<ActionEvent>() {
 			@Override
@@ -121,7 +140,6 @@ public class ProgramWindow extends Stage {
 			}
 		};
 		
-
 		// Creates a new link dialog upon click
 		EventHandler<ActionEvent> toggleDragEvent = new EventHandler<ActionEvent>() {
 			@Override
@@ -130,7 +148,6 @@ public class ProgramWindow extends Stage {
 				linkMode.setSelected(!linkMode.isSelected());
 			}
 		};
-
 
 		// Clears the main panel upon click
 		EventHandler<ActionEvent> clearEvent = new EventHandler<ActionEvent>() {
@@ -237,6 +254,54 @@ public class ProgramWindow extends Stage {
 			}
 		};
 
+		EventHandler<ActionEvent> normalEvent = new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent e) {
+				color = 0;
+				data.prepClassBlocks();
+				becomeStylish(scene);
+				applyCss();
+				data.refreshClassBlocks();
+				data.refreshLines();
+			}
+		};
+		
+		EventHandler<ActionEvent> nightEvent = new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent e) {
+				color = 1;
+				data.prepClassBlocks();
+				becomeStylish(scene);
+				applyCss();
+				data.refreshClassBlocks();
+				data.refreshLines();
+			}
+		};
+		
+		EventHandler<ActionEvent> h4ck3rEvent = new EventHandler<ActionEvent>() {
+			/*CRASH*/ @Override
+			public void handle(ActionEvent e) {
+				color = 2;
+				data.prepClassBlocks();
+				becomeStylish(scene);
+				applyCss();
+				data.refreshClassBlocks();
+				data.refreshLines();
+			}
+		};
+		
+		EventHandler<ActionEvent> winXPEvent = new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent e) {
+				color = 3;
+				data.prepClassBlocks();
+				becomeStylish(scene);
+				applyCss();
+				data.refreshClassBlocks();
+				data.refreshLines();
+			}
+		};
+		
 		// Apply handlers
 		newClass.setOnAction(newClassEvent);
 		linkMode.setOnAction(toggleLinkEvent);
@@ -262,6 +327,10 @@ public class ProgramWindow extends Stage {
 		save.setOnAction(saveEvent);
 		load.setOnAction(loadEvent);
 		export.setOnAction(exportEvent);
+		normal.setOnAction(normalEvent);
+		night.setOnAction(nightEvent);
+		h4ck3r.setOnAction(h4ck3rEvent);
+		winxp.setOnAction(winXPEvent);
 
 		redo.setDisable(true);
 		undo.setDisable(true);
@@ -271,9 +340,27 @@ public class ProgramWindow extends Stage {
 		root.setLeft(tools);
 		root.setCenter(center);
 		root.getCenter().getStyleClass().add("pad");
-		Scene scene = new Scene(root, DEFAULT_WIDTH, DEFAULT_HEIGHT);
+		
+		//mainPanel.prefHeightProperty().bind(scene.heightProperty());
+		//mainPanel.prefWidthProperty().bind(scene.widthProperty());
+		
 		scene.getStylesheets().add(getClass().getResource("/application/include/application.css").toExternalForm());
+		scene.getStylesheets().add(getClass().getResource("/application/include/normal.css").toExternalForm());
+		
 		this.setScene(scene);
+	}
+	
+	public void becomeStylish(Scene scene)
+	{
+		scene.getStylesheets().clear();
+		scene.getStylesheets().add(getClass().getResource("/application/include/application.css").toExternalForm());
+		switch(color)
+		{
+			case 0 : scene.getStylesheets().add(getClass().getResource("/application/include/normal.css").toExternalForm()); break;
+			case 1 : scene.getStylesheets().add(getClass().getResource("/application/include/night.css").toExternalForm()); break;
+			case 2 : scene.getStylesheets().add(getClass().getResource("/application/include/h4ck3r.css").toExternalForm()); break;
+			case 3 : scene.getStylesheets().add(getClass().getResource("/application/include/WinXP.css").toExternalForm()); break;
+		}
 	}
 
 	/**

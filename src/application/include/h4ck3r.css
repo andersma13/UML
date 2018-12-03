@@ -1,0 +1,141 @@
+.mainPanel
+{
+	-fx-background-color: black;
+	-fx-border-color: #222222, #555555;
+}
+
+.center
+{
+	-fx-background-color: #222222;
+	-fx-border-color: black;
+}
+
+.classBlock
+{
+	
+}
+
+.classBlockTitle
+{
+	-fx-background-insets: 0, 1 2 2 1 ;
+	-fx-background-color: limegreen, black;
+}
+
+.classBlockPanel
+{
+	-fx-background-insets: 0, 1 2 2 1 ;
+	-fx-background-color: limegreen, black;
+}
+
+.textColor
+{
+	-fx-fill: limegreen;
+	-fx-font-family: monospace;
+}
+
+.link
+{
+	-fx-stroke: limegreen;
+}
+
+.arrowFilled
+{
+	-fx-fill: limegreen;
+} 
+
+.arrowEmpty
+{
+	-fx-fill: black;
+}
+
+.toolbarButtons
+{
+	-fx-max-height: 30;
+	-fx-min-width: 114;
+}
+
+.toolbarButtonsHalf
+{
+	-fx-max-height: 30;
+	-fx-min-width: 57;
+}
+
+
+.toolbarButtonsColor
+{
+	-fx-background-insets: 0 0 -1 0,0,1;
+	-fx-background-color: lightgrey, darkgrey, black;
+	-fx-text-fill: limegreen;
+	-fx-font-family: monospace;
+}
+
+.toolbarButtonsColor:selected
+{
+	-fx-background-insets: 0 0 -1 0,0,1;
+	-fx-background-color: limegreen;
+	-fx-text-fill: black;
+}
+
+.menu-bar
+{
+	-fx-background-insets: 0 0 -1 0,0,1;
+	-fx-background-color: black;
+}
+
+.menu-button:hover
+{
+	-fx-background-color: limegreen;
+}
+
+.menu-button:hover .label
+{
+	-fx-text-fill: black;
+}
+
+.menu-button:showing
+{
+	-fx-background-color: limegreen;
+}
+
+.menu-button:showing .label
+{
+	-fx-text-fill: black;
+}
+
+.menu-button:showing .menu-item .label
+{
+	-fx-text-fill: limegreen;
+}
+
+.menu-item
+{
+	-fx-background-insets: 0 0 -1 0,0,1;
+	-fx-background-color: black;
+	-fx-text-fill: limegreen;
+}
+
+.menu-item .label
+{
+	-fx-text-fill: limegreen;
+}
+
+.menu-item:hover .label
+{
+	-fx-text-fill: black !important;
+}
+
+.menu-item:hover
+{
+	-fx-background-color: limegreen;
+}
+
+.menu .label
+{
+	-fx-font-family: monospace;
+	-fx-text-fill: limegreen;
+}
+
+.root
+{
+	-fx-background-color: black;
+}

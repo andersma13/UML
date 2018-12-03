@@ -37,16 +37,7 @@ public class NewLinkWindow extends Stage {
 			"Aggregate", "Composition");
 	private ComboBox<String> newLinkArrow = new ComboBox<String>(options);
 
-	// Filter input for integral values
-	private UnaryOperator<Change> integers = change -> {
-
-		String text = change.getText();
-		return (text.matches("[0-9]*") ? change : null);
-
-	};
-
 	private UnaryOperator<Change> multiplicities = change -> {
-
 		String text = change.getText();
 		return (text.matches("\\*|[0-9]*") ? change : null);
 	};

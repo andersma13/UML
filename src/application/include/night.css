@@ -1,0 +1,99 @@
+.mainPanel
+{
+	-fx-background-color: #222222;
+	-fx-border-color: #222222, #555555;
+}
+
+.center
+{
+	-fx-background-color: #555555, #555555 ;
+	-fx-border-color: black;
+}
+
+.classBlock
+{
+	
+}
+
+.classBlockTitle
+{
+	-fx-background-insets: 0, 1 2 2 1 ;
+	-fx-background-color: lightgrey, black;
+}
+
+.classBlockPanel
+{
+	-fx-background-insets: 0, 1 2 2 1 ;
+	-fx-background-color: lightgrey, black;
+}
+
+.textColor
+{
+	-fx-fill: white;
+}
+
+.link
+{
+	-fx-stroke: white;
+}
+
+.arrowFilled
+{
+	-fx-fill: white;
+} 
+
+.arrowEmpty
+{
+	-fx-fill: black;
+}
+
+.toolbarButtonsColor
+{
+	-fx-background-insets: 0 0 -1 0,0,1;
+	-fx-background-color: lightgrey, darkgrey, #333333;
+	-fx-text-fill: white;
+}
+
+.toolbarButtonsColor:selected
+{
+	-fx-background-insets: 0 0 -1 0,0,1;
+	-fx-background-color: lightgrey, darkgrey, black;
+}
+
+.menu-bar
+{
+	-fx-background-insets: 0 0 -1 0,0,1;
+	-fx-background-color: #444444;
+}
+
+.menu-button:hover
+{
+	-fx-background-color: #004953;
+}
+
+.menu-button:showing
+{
+	-fx-background-color: #004953;
+}
+
+.menu-item
+{
+	-fx-background-insets: 0 0 -1 0,0,1;
+	-fx-background-color: #444444;
+}
+
+.menu-item:hover
+{
+	-fx-background-color: #004953;
+}
+
+.menu .label
+{
+	
+	-fx-text-fill: white;
+}
+
+.root
+{
+	-fx-background-color: #444444;
+}
